@@ -22,15 +22,15 @@ javascript runtime for windows , based on **chakra**
 
 
 | filename | host | arch  | usage |
-| ------| ------ | ------ |------ | ------ | ------ 
-| js.exe  | console | i386  | js.exe [options] [--eval script | script.js] [arguments]|  
-| js64.exe  | console | amd64  | js64.exe [options] [--eval script | script.js] [arguments]|  
+| ------| ------ | ------ |------ | 
+| js.exe  | console | i386  | js.exe [options] [--eval script | script.js] [arguments] 
+| js64.exe  | console | amd64  | js64.exe [options] [--eval script | script.js] [arguments] 
 | jsw.exe  | window | i386  | jsw.exe [options] [--eval script | script.js] [arguments]|  
-| jsw64.exe  | window | amd64  | jsw64.exe [options] [--eval script | script.js] [arguments]|  
-| jsida.plw  | IDA | i386  | [options] [--eval script | script.js] [arguments]|  
-| jsida.p64  | IDA | amd64  | [options] [--eval script | script.js] [arguments]|  
-| jswd.dll  | windbg | i386  | !js [options] [--eval script | script.js] [arguments]|  
-| jswd64.dll  | windbg | amd64  | !js [options] [--eval script | script.js] [arguments]|  
+| jsw64.exe  | window | amd64  | jsw64.exe [options] [--eval script | script.js] [arguments]  
+| jsida.plw  | IDA | i386  | [options] [--eval script | script.js] [arguments]  
+| jsida.p64  | IDA | amd64  | [options] [--eval script | script.js] [arguments]  
+| jswd.dll  | windbg | i386  | !js [options] [--eval script | script.js] [arguments] 
+| jswd64.dll  | windbg | amd64  | !js [options] [--eval script | script.js] [arguments]  
 
 
 ## usage
@@ -116,9 +116,7 @@ and you will got
 ```
 
 
-
-
-## the pre-version is used for kernel fuzz
+## the pre-version is used for kernel fuzz ( self use , not-published)
 [javascript kernel fuzz](https://github.com/tinysec/public/tree/master/FuzzWindowsKernelViaJavascript)
 
 
