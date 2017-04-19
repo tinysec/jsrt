@@ -119,7 +119,7 @@ and you will got
 ## history
 JSRT project had two version ,
 * the pre-version is self use , not-published , it was written between 2015-07 ~ 2016-09
-* the current version is going to public binay release , support  some compatible to other bindings. 
+* the current version is going to public release , support  some compatible to other bindings. 
 
 
 ## the pre-version is used for kernel fuzz ( self use , not-published)
