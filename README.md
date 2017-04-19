@@ -1,5 +1,8 @@
-# jsrt
-javascript runtime for windows , based on **chakra**
+# the javascript runtime ( JSRT ) project
+
+* javascript runtime for windows , based on **chakra**
+* author: TinySec( @TinySecEx )
+
 
 ## maybe JSRT is the best friend for binary hacker.
 
@@ -18,16 +21,13 @@ javascript runtime for windows , based on **chakra**
 
 ## native support feature
 * 64-bit number
-* buffer
+* Buffer
 * host full memory access , and support both GC and manual memory manager.
 * c-like printf and sprintf
-* ffi
-* console , window , cgi , ida , windbg
+* ffi , support some windows type , full windows api access
 * serialize and unserialize
 * fuzz and exploit help
-* full windows api access
 * re-entry support for windbg and ida mode
-* i386 , wow64 , amd64
 * portable from windows xp ~ windows 10 rs2
 * small dist.
 * extern sqlite3 , distorm3 , libcurl
@@ -113,7 +113,13 @@ and you will got
 0x0001011C -> IME|
 0x02630B5A -> IME|
 0x015A074C -> IME|
+..........
 ```
+
+## history
+JSRT project had two version ,
+* the pre-version is self use , not-published , it was written between 2015-07 ~ 2016-09
+* the current version is going to public binay release , support  some compatible to other bindings. 
 
 
 ## the pre-version is used for kernel fuzz ( self use , not-published)
