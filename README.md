@@ -1,7 +1,7 @@
 # the javascript runtime ( JSRT ) project
 
 * javascript runtime for windows , based on **chakra**
-* author: TinySec( @TinySecEx )
+* author: TinySec( <a href="https://twitter.com/TinySecEx" target="_blank">@TinySecEx</a> )
 
 
 ## maybe JSRT is the best friend for binary hacker.
