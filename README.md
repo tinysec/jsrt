@@ -82,7 +82,7 @@ function enumRoutine( hWnd , lParam )
 
 function main(  )
 {
-	var lpEnumFunc = ffi.thunk( "BOOL CALLBACK EnumWindowsProc(_In_ HWND   hwnd,_In_ LPARAM lParam);" ,  enumRoutine  );
+	var lpEnumFunc = ffi.thunk( enumRoutine , "BOOL CALLBACK EnumWindowsProc(_In_ HWND   hwnd,_In_ LPARAM lParam);"   );
 
 	fnEnumWindows( lpEnumFunc  , 0 );
 
