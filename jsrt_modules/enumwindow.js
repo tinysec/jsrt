@@ -1,5 +1,3 @@
-
-const assert = require("assert");
 const ffi = require("ffi");
 
 var hUser32 = ffi.getModuleHandle( "user32.dll" );
