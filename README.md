@@ -13,7 +13,8 @@ javascript runtime for windows , based on **chakra**
 | jsida.p64  | IDA | amd64  | [options] [--eval script or script.js] [arguments]  
 | jswd.dll  | windbg | i386  | !js [options] [--eval script or script.js] [arguments] 
 | jswd64.dll  | windbg | amd64  | !js [options] [--eval script or script.js] [arguments]  
-
+| jsk.sys  | kernel | i386  | TODO , support kernel access
+| jsk64.sys  | kernel | amd64  | TODO , support kernel access
 
 ## native support feature
 * 64-bit number
@@ -29,7 +30,7 @@ javascript runtime for windows , based on **chakra**
 * i386 , wow64 , amd64
 * portable from windows xp ~ windows 10 rs2
 * small dist.
-* build-in sqlite3 , distorm3
+* extern sqlite3 , distorm3 , libcurl
 * anything you want for binary hack.
 
 ## usage
