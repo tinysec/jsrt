@@ -18,7 +18,20 @@ javascript runtime for windows , based on **chakra**
 * portable from windows xp ~ windows 10 rs2
 * small dist.
 * build-in sqlite3 , distorm3
-* 
+* anything you want for binary hack.
+
+
+| filename | host | arch  | usage |
+| ------| ------ | ------ |------ | ------ | ------ 
+| js.exe  | console | i386  | js.exe [options] [--eval script | script.js] [arguments]|  
+| js64.exe  | console | amd64  | js64.exe [options] [--eval script | script.js] [arguments]|  
+| jsw.exe  | window | i386  | jsw.exe [options] [--eval script | script.js] [arguments]|  
+| jsw64.exe  | window | amd64  | jsw64.exe [options] [--eval script | script.js] [arguments]|  
+| jsida.plw  | IDA | i386  | [options] [--eval script | script.js] [arguments]|  
+| jsida.p64  | IDA | amd64  | [options] [--eval script | script.js] [arguments]|  
+| jswd.dll  | windbg | i386  | !js [options] [--eval script | script.js] [arguments]|  
+| jswd64.dll  | windbg | amd64  | !js [options] [--eval script | script.js] [arguments]|  
+
 
 ## usage
 ```javascript
