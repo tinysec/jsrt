@@ -2,7 +2,7 @@
 
 * javascript runtime for windows , based on **chakra**
 * author: TinySec( <a href="https://twitter.com/TinySecEx" target="_blank">@TinySecEx</a> )
-
+* latest-release: <a href="https://github.com/tinysec/jsrt/releases/tag/v0.0.2.0" target="_blank">V 0.0.2.0</a> 
 
 ## maybe JSRT is the best friend for binary hacker.
 
