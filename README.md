@@ -1,4 +1,4 @@
-# PREPARE TO RELEASE
+# PREPARE TO RELEASE , COMING SOON!
 
 # the javascript runtime ( JSRT ) project
 
