@@ -62,6 +62,10 @@ enum windows
 ```javascript
 const ffi = require("ffi");
 
+const printf = require("cprintf").printf;
+const sprintf = require("cprintf").sprintf;
+const KdPrint = require("cprintf").KdPrint;
+
 var hUser32 = ffi.loadLibrary( "user32.dll" );
 var fnEnumWindows = ffi.bindModule( hUser32 ,  "BOOL WINAPI EnumWindows(_In_ void* lpEnumFunc,_In_ LPARAM      lParam); "  );
 var fnGetClassNameA = ffi.bindModule( hUser32 ,  "int WINAPI GetClassNameA(_In_  HWND   hWnd,_Out_ LPTSTR lpClassName,_In_  int    nMaxCount);"  );
