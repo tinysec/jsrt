@@ -32,11 +32,9 @@
 * c-like printf and sprintf
 * ffi , support some windows type , full windows api access
 * serialize and unserialize
-* fuzz and exploit help
 * re-entry support for windbg and ida mode
 * portable from windows xp ~ windows 10 rs2
 * small dist.
-* extern sqlite3 , distorm3 , libcurl
 * anything you want for binary hack.
 
 ## usage
