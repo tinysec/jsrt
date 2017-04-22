@@ -125,6 +125,11 @@ and you will got
 ..........
 ```
 
+## todolist
+* firefox style ctypes
+* c-style struct and union handle
+* kernel support
+
 ## history
 JSRT project had two version ,
 * the pre-version is self use , not-published , it was written between 2015-07 ~ 2016-09
