@@ -53,6 +53,7 @@ JSRT_MODULE_PATH		common jsrt module search path
 JSRT_IDA_MODULE_PATH		jsrt-ida module search path
 JSRT_WINDBG_MODULE_PATH		jsrt-windbg module search path
 ```
+![jsrt](jsrt.jpg)
 
 ## example
 enum windows
