@@ -1,0 +1,449 @@
+'use strict';
+
+
+function cast2Number64(arg_1) 
+{
+    if ('object' == typeof arg_1) 
+	{
+        if (arg_1) 
+		{
+            if (arg_1 instanceof Number64) 
+			{
+                return arg_1;
+            }
+        }
+    }
+
+    return Number64.apply(this, arguments);
+}
+
+function Number64(arg_1, arg_2)
+{
+    if (!(this instanceof Number64)) 
+	{
+        return new Number64(arg_1, arg_2);
+    }
+
+    var argv = Array.prototype.slice.call(arguments);
+    var self = this;
+
+    self.__TYPE__ = "Number64";
+    self.hexText = "0x0000000000000000";
+
+    if (0 == argv.length) 
+	{
+
+    }
+    else 
+	{
+        if (
+            (NaN === argv[0])
+            || (Infinity === argv[0])
+            || (undefined === argv[0])
+            || (null === argv[0])
+            || (false === argv[0])
+        ) {
+            //nop
+        }
+        else if ('number' == typeof argv[0]) 
+		{
+            self.hexText = process.reserved.bindings.Number64_toString(argv[0], 16);
+        }
+        else if ('boolean' == typeof argv[0]) 
+		{
+            if (argv[0]) 
+			{
+                self.hexText = "0x0000000000000001";
+            }
+            else 
+			{
+                //nop
+            }
+        }
+        else if ('string' == typeof argv[0]) 
+		{
+            var input_text = argv[0].toLowerCase().trim();
+            var nRadix = 10;
+
+            if (0 == input_text.length) 
+			{
+                throw new Error("invalid param");
+            }
+
+            if ('h' == input_text.charAt(input_text.length - 1)) 
+			{
+                nRadix = 16;
+
+                input_text = input_text.substring(0, input_text.length - 1);
+            }
+
+            if (0 == input_text.indexOf('0x')) 
+			{
+                nRadix = 16;
+            }
+            else 
+			{
+                nRadix = 10;
+            }
+
+            if (16 == nRadix) 
+			{
+                if (0 != input_text.indexOf('0x')) 
+				{
+                    input_text = '0x' + input_text;
+                }
+            }
+
+            self.hexText = process.reserved.bindings.Number64_fromString(input_text, nRadix);
+        }
+        else if ('object' == typeof argv[0]) 
+		{
+            if (argv[0] instanceof Number64) 
+			{
+                self.hexText = argv[0].hexText;
+            }
+            else 
+			{
+                throw new Error("invalid param");
+            }
+        }
+        else 
+		{
+            throw new Error("invalid param");
+        }
+    }
+
+    Object.defineProperty(
+        this,
+        "HighPart",
+        {
+            get: function () {
+                var HighPartText = "0x" + this.hexText.substring(0, 10);
+                return parseInt(HighPartText)
+            }
+        }
+    );
+
+    Object.defineProperty(
+        this,
+        "LowPart",
+        {
+            get: function () {
+                var LowPartText = "0x" + this.hexText.substring(10, 18);
+                return parseInt(LowPartText);
+            }
+        }
+    );
+}
+
+
+Number64.isNumber64 = function (obj)
+ {
+    if (!obj) 
+	{
+        return false;
+    }
+
+    if ("object" == typeof obj) 
+	{
+        if ("Number64" == obj.__TYPE__) 
+		{
+            return true;
+        }
+    }
+
+    return false;
+}
+
+Number64.prototype.toString = function (arg_radix) 
+{
+    var radix = arg_radix || 10;
+
+    if (16 == radix) {
+        return this.hexText.substring(2);
+    }
+    else {
+        return process.reserved.bindings.Number64_toString(this.hexText, 10);
+    }
+}
+
+Number64.prototype.toRadixString = function (arg_radix)
+ {
+    var radix = arg_radix || 10;
+
+    if (16 == radix) {
+        return this.hexText.substring(2);
+    }
+    else {
+        return process.reserved.bindings.Number64_toString(this.hexText, 10);
+    }
+}
+
+Number64.prototype.toJSNumber = function () 
+{
+    return process.reserved.bindings.Number64_toJSNumber(this.hexText);
+}
+
+Number64.prototype.toNumber = function () 
+{
+    return process.reserved.bindings.Number64_toJSNumber(this.hexText);
+}
+
+Number64.prototype.isZero = function () 
+{
+    return (0 == this.compare(0));
+}
+
+Number64.prototype.isNegative = function () 
+{
+    return (0 > this.signedCompare(0));
+}
+
+Number64.prototype.equals = function (arg_other) 
+{
+    return (0 == this.compare(arg_other));
+}
+
+Number64.prototype.notEquals = function (arg_other) 
+{
+    return (0 != this.compare(arg_other));
+}
+
+Number64.prototype.lessThan = function (arg_other) 
+{
+    return (0 > this.compare(arg_other));
+}
+
+
+Number64.prototype.lessThanOrEqual = function (arg_other)
+ {
+    return (0 >= this.compare(arg_other));
+}
+
+Number64.prototype.greaterThan = function (arg_other) 
+{
+    return (0 < this.compare(arg_other));
+}
+
+
+Number64.prototype.greaterThanOrEqual = function (arg_other) 
+{
+    return (0 <= this.compare(arg_other));
+}
+
+Number64.greaterThanOrEqual = function Number64_greaterThanOrEqual(value, other) 
+{
+    return Number64(value).greaterThanOrEqual(other);
+}
+
+Number64.prototype.compare = function (arg_other) 
+{
+    return process.reserved.bindings.Number64_cmp(this.hexText, cast2Number64(arg_other).hexText);
+}
+Number64.prototype.cmp = Number64.prototype.compare;
+
+
+Number64.prototype.signedCompare = function (arg_other) 
+{
+    return process.reserved.bindings.Number64_scmp(this.hexText, cast2Number64(arg_other).hexText);
+}
+Number64.prototype.scmp = Number64.prototype.signedCompare;
+
+
+Number64.prototype.add = function (arg_other)
+ {
+    this.hexText = process.reserved.bindings.Number64_add(this.hexText, cast2Number64(arg_other).hexText);
+
+    return this;
+}
+
+Number64.prototype.sub = function (arg_other) 
+{
+    this.hexText = process.reserved.bindings.Number64_sub(this.hexText, cast2Number64(arg_other).hexText);
+
+    return this;
+}
+
+Number64.prototype.mul = function (arg_other)
+ {
+    this.hexText = process.reserved.bindings.Number64_mul(this.hexText, cast2Number64(arg_other).hexText);
+
+    return this;
+}
+
+Number64.prototype.div = function (arg_other)
+ {
+    this.hexText = process.reserved.bindings.Number64_div(this.hexText, cast2Number64(arg_other).hexText);
+
+    return this;
+}
+
+Number64.prototype.mod = function (arg_other) 
+{
+    this.hexText = process.reserved.bindings.Number64_mod(this.hexText, cast2Number64(arg_other).hexText);
+
+    return this;
+}
+
+Number64.prototype.not = function (arg_other) 
+{
+    this.hexText = process.reserved.bindings.Number64_not(this.hexText, cast2Number64(arg_other).hexText);
+
+    return this;
+}
+
+
+Number64.prototype.and = function (arg_other) 
+{
+    this.hexText = process.reserved.bindings.Number64_and(this.hexText, cast2Number64(arg_other).hexText);
+
+    return this;
+}
+
+Number64.prototype.or = function (arg_other) 
+{
+    this.hexText = process.reserved.bindings.Number64_or(this.hexText, cast2Number64(arg_other).hexText);
+
+    return this;
+}
+
+Number64.prototype.xor = function (arg_other) 
+{
+    this.hexText = process.reserved.bindings.Number64_xor(this.hexText, cast2Number64(arg_other).hexText);
+
+    return this;
+}
+
+Number64.prototype.shl = function (arg_other) 
+{
+    this.hexText = process.reserved.bindings.Number64_shl(this.hexText, cast2Number64(arg_other).hexText);
+
+    return this;
+}
+Number64.prototype.shiftLeft = Number64.prototype.shl;
+
+
+Number64.prototype.shr = function (arg_other) 
+{
+    this.hexText = process.reserved.bindings.Number64_shr(this.hexText, cast2Number64(arg_other).hexText);
+
+    return this;
+}
+Number64.prototype.shiftRight = Number64.prototype.shr;
+
+Number64.prototype.isNUMBER32 = function () 
+{
+    return (0 == parseInt(this.hexText.substring(0, 10)));
+}
+Number64.prototype.isNUMBER32 = Number64.prototype.isNUMBER32;
+
+
+Number64.prototype.cast2NUMBER32 = function () 
+{
+    return this.and("0x00000000FFFFFFFF");
+}
+Number64.prototype.cast2NUMBER32 = Number64.prototype.cast2NUMBER32;
+
+// cast
+Number64.prototype.toInt8 = function () 
+{
+    return process.reserved.bindings.Number64_toInt8(this.hexText);
+}
+
+Number64.prototype.toUInt8 = function () 
+{
+    return process.reserved.bindings.Number64_toUInt8(this.hexText);
+}
+
+Number64.prototype.toInt16LE = function () 
+{
+    return process.reserved.bindings.Number64_toInt16LE(this.hexText);
+}
+
+Number64.prototype.toInt16BE = function () 
+{
+    return process.reserved.bindings.Number64_toInt16BE(this.hexText);
+}
+
+Number64.prototype.toUInt16LE = function () 
+{
+    return process.reserved.bindings.Number64_toUInt16LE(this.hexText);
+}
+
+Number64.prototype.toUInt16BE = function () 
+{
+    return process.reserved.bindings.Number64_toUInt16BE(this.hexText);
+}
+
+
+Number64.prototype.toInt32LE = function () 
+{
+    return process.reserved.bindings.Number64_toInt32LE(this.hexText);
+}
+
+Number64.prototype.toInt32BE = function () 
+{
+    return process.reserved.bindings.Number64_toInt32BE(this.hexText);
+}
+
+Number64.prototype.toUInt32LE = function () 
+{
+    return process.reserved.bindings.Number64_toUInt32LE(this.hexText);
+}
+
+Number64.prototype.toUInt32BE = function () 
+{
+    return process.reserved.bindings.Number64_toUInt32BE(this.hexText);
+}
+
+
+Number64.prototype.toFloatLE = function () 
+{
+    return process.reserved.bindings.Number64_toFloatLE(this.hexText);
+}
+
+Number64.prototype.toFloatBE = function () 
+{
+    return process.reserved.bindings.Number64_toFloatBE(this.hexText);
+}
+
+Number64.prototype.toDoubleLE = function () 
+{
+    return process.reserved.bindings.Number64_toDoubleLE(this.hexText);
+}
+
+Number64.prototype.toDoubleBE = function () 
+{
+    return process.reserved.bindings.Number64_toDoubleBE(this.hexText);
+}
+
+// swap
+
+Number64.swap16 = function Number64_swap16(value) 
+{
+    return process.reserved.bindings.Number64_swap16(Number64(16).hexText);
+}
+
+Number64.swap32 = function Number64_swap32(value) 
+{
+    return process.reserved.bindings.Number64_swap32(Number64(16).hexText);
+}
+
+Number64.swap64 = function Number64_swap64(value) 
+{
+    return Number64(process.reserved.bindings.Number64_swap64(Number64(16).hexText));
+}
+
+module.exports = Number64;
+
+function main(  )
+{
+	
+	
+	return 0;
+}
+
+if ( !module.parent )
+{
+	main();
+}
