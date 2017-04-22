@@ -24,6 +24,9 @@
 | jsk.sys  | kernel | i386  | TODO , support kernel access
 | jsk64.sys  | kernel | amd64  | TODO , support kernel access
 
+notice that , all other dll files under i386/amd64 is just optional ,
+just  compatible to my first version.
+
 ## native support feature
 * 64-bit number
 * Buffer
