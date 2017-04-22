@@ -45,7 +45,7 @@
 
 ## usage
 ```javascript
-Usage: js [options] [--eval script | script.js] [arguments]
+Usage: js [options] [--eval script or script.js] [arguments]
 
 Options: 
  --version	show version
@@ -55,9 +55,13 @@ Options:
 
 
 Environment: 
+JSRT_SYSTEM_MODULE_PATH		system jsrt module search path
 JSRT_MODULE_PATH		common jsrt module search path
 JSRT_IDA_MODULE_PATH		jsrt-ida module search path
 JSRT_WINDBG_MODULE_PATH		jsrt-windbg module search path
+
+
+more info is at https://github.com/tinysec/jsrt
 ```
 ![jsrt](jsrt.jpg)
 
