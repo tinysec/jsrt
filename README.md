@@ -36,6 +36,13 @@
 * small dist.
 * anything you want for binary hack.
 
+## todolist
+* firefox style ctypes
+* c-style struct and union handle
+* kernel support
+* more documents.
+
+
 ## usage
 ```javascript
 Usage: js [options] [--eval script | script.js] [arguments]
@@ -124,10 +131,7 @@ and you will got
 ..........
 ```
 
-## todolist
-* firefox style ctypes
-* c-style struct and union handle
-* kernel support
+
 
 ## history
 JSRT project had two version ,
