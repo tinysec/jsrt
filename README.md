@@ -4,7 +4,7 @@
 * author: TinySec( <a href="https://twitter.com/TinySecEx" target="_blank">@TinySecEx</a> )
 * latest-release: <a href="https://github.com/tinysec/jsrt/releases/tag/v0.0.2.0" target="_blank">0.0.2.0</a> 
 * JSRT is  friend for binary hacker , special for windows.
-* this versio is a public new version , fill free to open issue.
+* this version is a public new version , fill free to open issue.
 
 ## DOCUMENTS
 <a href="https://github.com/tinysec/jsrt/wiki" target="_blank">https://github.com/tinysec/jsrt/wiki</a> 
