@@ -596,8 +596,8 @@ Buffer.prototype.fill = function ( arg_value, arg_offset, arg_end )
         param_end = arguments[2];
     }
 
-    assert( ((param_offset >= 0) && (offset <= this.length)), "invalid offset" );
-    assert( (( param_end >= param_offset) && (end <= this.length)), "invalid end" );
+    assert( ((param_offset >= 0) && (param_offset <= this.length)), "invalid offset" );
+    assert( (( param_end >= param_offset) && (param_end <= this.length)), "invalid end" );
 
     process.reserved.bindings.buffer_fill( this.address, param_offset, param_end , param_value );
 
