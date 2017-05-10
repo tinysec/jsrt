@@ -1341,7 +1341,7 @@ function _inspect_Number64(input, level) {
         strTab += '\t';
     }
 
-    return strTab + input.toString(16);
+    return strTab + "0x" + input.toString(16);
 }
 
 function _inspect_moment(input, level) {

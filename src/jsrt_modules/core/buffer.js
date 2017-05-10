@@ -18,7 +18,7 @@ process.reserved.tables.bufferTable = {};
 
 function add_to_buffer_table( address, length ) 
 {
-    var address_text = Number64(address).toString(16);
+    var address_text = '0x' + Number64(address).toString(16);
 
 	assert( 0 != length , "invalid buffer length" );
 
@@ -336,7 +336,7 @@ Buffer.prototype.free = function()
     }
 
 
-    var address_text = sprintf("%s", this.address);
+    var address_text = sprintf( "%s" , this.address );
 
 	var bufferNode = process.reserved.tables.bufferTable[ address_text ];
 
@@ -868,6 +868,8 @@ Buffer.prototype.toString = function ( arg_encoding, arg_start, arg_end )
     var param_codepage = 0;
     var param_start = 0;
     var param_end = this.length;
+	
+	var helperText = '';
 
 
     if (arguments.length >= 1) 
@@ -937,21 +939,27 @@ Buffer.prototype.toString = function ( arg_encoding, arg_start, arg_end )
     else if ("base64" == encoding) 
 	{
         // CRYPT_STRING_BASE64
-        return process.reserved.bindings.buffer_toBinaryString( this.address, 1 , param_start , param_end );
+        helperText =  process.reserved.bindings.buffer_toBinaryString( this.address, 1 , param_start , param_end );
     }
     else 
 	{
         // specail for unicode
         if (1200 == param_codepage) 
 		{
-            return process.reserved.bindings.buffer_toWString(this.address, param_start, param_end );
+            helperText =  process.reserved.bindings.buffer_toWString(this.address, param_start, param_end );
         }
         else 
 		{
-            return process.reserved.bindings.buffer_toString(this.address, param_codepage , param_start , param_end );
+            helperText = process.reserved.bindings.buffer_toString(this.address, param_codepage , param_start , param_end );
         }
     }
-
+	
+	if ( !helperText )
+	{
+		return "";
+	}
+	
+	return helperText;
 }
 
 Buffer.prototype.write = function ( arg_string , arg_offset, arg_length, arg_encoding ) 

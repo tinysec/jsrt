@@ -203,6 +203,9 @@ var WIN_TYPE_TO_FFI_TYPE_TABLE = {
     // typedef
     "BOOL": "long",
     "BOOLEAN": "uchar",
+		
+	"NTSTATUS": "long",
+
 
     "COLORREF": "ulong",
 	
@@ -635,6 +638,11 @@ function ffi_cleanDeclare(arg_declareText)
 	{
         return item.trim();
     });
+	
+	declareHeadArray = _.filter(declareHeadArray, function (item) 
+	{
+        return (item.length != 0 );
+    });
 
     // arg declare and ; array
     var tempArray4 = tempArray1[1].split(")");
@@ -676,7 +684,7 @@ function ffi_cleanDeclare(arg_declareText)
 	}
 	else
 	{
-		throw new Error("invalid declare");
+		throw new Error(sprintf("invalid declare head array length , %s" , declareHeadArray ) );
 	}
 	
 	if ( 0 == rawArgvDeclares.length )
@@ -1804,14 +1812,7 @@ function ffi_loadAndBatchBind( moduleName , arg_declares )
 
 	_.each( arg_declares , function( declareText ) 
 	{
-		try 
-		{
-			declareInfo = ffi_parseDeclare( declareText );
-		}
-		catch (err) 
-		{
-			throw new Error(sprintf("parse declare %s error %s\n", declareText, err.message));
-		}	
+		declareInfo = ffi_parseDeclare( declareText );
 		
 		assert( declareInfo.name );
 		
