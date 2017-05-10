@@ -793,7 +793,7 @@ function system_moduleInformation()
 
 	return moduleArray;
 }
-exports.system_moduleInformation = system_moduleInformation;
+exports.moduleInformation = system_moduleInformation;
 
 
 
