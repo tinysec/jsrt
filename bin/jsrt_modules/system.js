@@ -1,0 +1,643 @@
+const assert = require("assert");
+const _ = require("underscore");
+
+const printf = require("cprintf").printf;
+const sprintf = require("cprintf").sprintf;
+const KdPrint = require("cprintf").KdPrint;
+
+const path = require("path");
+
+const ffi = require("ffi");
+
+var ffi_ntdll = ffi.loadAndBatchBind("ntdll.dll" , [
+
+	"NTSTATUS __stdcall NtQuerySystemInformation(_In_  ULONG SystemInformationClass , _Inout_   PVOID SystemInformation , _In_ ULONG SystemInformationLength , _Out_opt_ PULONG ReturnLength );" 
+
+]);
+
+
+function helper_querySystemInfomation( SystemInformationClass , param_initSize )
+{	
+	var lpBuffer = null;
+	var pnBufferLength = Buffer.alloc( 8 ).fill( 0 );
+	
+	var lpTestBuffer = null;
+	var nTestSize = param_initSize || 0;
+	var status = 0;
+	
+	var ReturnLength = 0;
+	
+	
+	do
+	{
+		if ( 0 != nTestSize )
+		{
+			lpTestBuffer = Buffer.alloc( nTestSize ).fill( 0 );
+		}
+			
+		pnBufferLength.writeUInt32LE( nTestSize );
+		
+		ffi_ntdll.NtQuerySystemInformation( SystemInformationClass , lpTestBuffer , nTestSize , pnBufferLength );
+			
+		ReturnLength = pnBufferLength.readUInt32LE( 0 );
+			
+		if ( 0 == ReturnLength )
+		{
+			break;
+		}
+		
+		lpBuffer = Buffer.alloc( ReturnLength ).fill( 0 );
+		
+		pnBufferLength.writeUInt32LE( ReturnLength );
+		
+		status = ffi_ntdll.NtQuerySystemInformation( SystemInformationClass , lpBuffer , ReturnLength , pnBufferLength );
+		if ( 0 != status )
+		{
+			lpBuffer.free();
+			lpBuffer = null;
+		}
+		
+	}while(false);
+	
+
+	pnBufferLength.free();
+	pnBufferLength = null;
+	
+	if ( lpTestBuffer )
+	{
+		lpTestBuffer.free();
+		lpTestBuffer = null;
+	}
+
+	return lpBuffer;
+}
+
+function helper_querySystemInfomation2( SystemInformationClass , param_initSize )
+{	
+	var lpBuffer = null;
+	var pnBufferLength = Buffer.alloc( 8 ).fill( 0 );
+	
+	var lpTestBuffer = null;
+	var nTestSize = param_initSize || 0;
+	var status = 0;
+	
+	var ReturnLength = 0;
+	
+	
+	do
+	{
+		while( 1 )
+		{
+			lpTestBuffer = Buffer.alloc( nTestSize ).fill( 0 );
+	
+			pnBufferLength.writeUInt32LE( nTestSize );
+			
+			status = ffi_ntdll.NtQuerySystemInformation( SystemInformationClass , lpTestBuffer , nTestSize , pnBufferLength );
+			if ( 0 == status )
+			{
+				ReturnLength = pnBufferLength.readUInt32LE();
+				
+				lpBuffer = lpTestBuffer.slice( 0 , ReturnLength );
+				
+				break;
+			}
+			
+			if ( lpTestBuffer )
+			{
+				lpTestBuffer.free();
+				lpTestBuffer = null;
+			}
+		
+			//nTestSize += 1024 * 200;
+			
+			nTestSize = nTestSize * 2;
+		}
+		
+	}while(false);
+	
+	pnBufferLength.free();
+	pnBufferLength = null;
+	
+	if ( lpTestBuffer )
+	{
+		lpTestBuffer.free();
+		lpTestBuffer = null;
+	}
+
+	return lpBuffer;
+}
+
+
+function system_processInfomation()
+{
+	var lpBuffer = null;
+	
+	var entryBaseOffset = 0;
+	var NextEntryOffset = 0;
+	
+	var stProcessNode = {};
+	var processArray = [];
+	
+	lpBuffer = helper_querySystemInfomation( 5 );
+	if ( !lpBuffer )
+	{
+		return processArray;
+	}
+	
+	// init offsets
+	var offset_SYSTEM_PROCESS_INFORMATION_NumberOfThreads = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_WorkingSetPrivateSize = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_HardFaultCount = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_NumberOfThreadsHighWatermark = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_CycleTime = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_CreateTime = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_UserTime = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_KernelTime = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_ImageName = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_BasePriority = 0x48;	
+
+	var offset_SYSTEM_PROCESS_INFORMATION_UniqueProcessId = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_InheritedFromUniqueProcessId = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_HandleCount = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_SessionId = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_UniqueProcessKey = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_PeakVirtualSize = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_VirtualSize = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_PageFaultCount = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_PeakWorkingSetSize = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_WorkingSetSize = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_QuotaPeakPagedPoolUsage = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_QuotaPagedPoolUsage = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_QuotaPeakNonPagedPoolUsage = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_QuotaNonPagedPoolUsage = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_PagefileUsage = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_PeakPagefileUsage = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_PrivatePageCount = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_ReadOperationCount = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_WriteOperationCount = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_OtherOperationCount = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_ReadTransferCount = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_WriteTransferCount = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_OtherTransferCount = 0x00;
+		
+	var offset_SYSTEM_PROCESS_INFORMATION_Threads = 0x00;
+	
+	if ( 'x64' == process.arch )
+	{
+		offset_SYSTEM_PROCESS_INFORMATION_NumberOfThreads = 0x00;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_WorkingSetPrivateSize = 0x00;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_HardFaultCount = 0x00;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_NumberOfThreadsHighWatermark = 0x00;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_CycleTime = 0x00;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_CreateTime = 0x00;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_UserTime = 0x00;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_KernelTime = 0x00;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_ImageName = 0x38;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_BasePriority = 0x48;	
+
+		offset_SYSTEM_PROCESS_INFORMATION_UniqueProcessId = 0x4C;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_InheritedFromUniqueProcessId = 0x50;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_HandleCount = 0x58;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_SessionId = 0x5C;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_UniqueProcessKey = 0x60;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_PeakVirtualSize = 0x68;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_VirtualSize = 0x70;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_PageFaultCount = 0x78;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_PeakWorkingSetSize = 0x80;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_WorkingSetSize = 0x88;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_QuotaPeakPagedPoolUsage = 0x90;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_QuotaPagedPoolUsage = 0x98;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_QuotaPeakNonPagedPoolUsage = 0xA0;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_QuotaNonPagedPoolUsage = 0xA8;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_PagefileUsage = 0xB0;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_PeakPagefileUsage = 0xB8;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_PrivatePageCount = 0xC0;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_ReadOperationCount = 0xC8;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_WriteOperationCount = 0xD0;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_OtherOperationCount = 0xD8;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_ReadTransferCount = 0xE0;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_WriteTransferCount = 0xE8;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_OtherTransferCount = 0xF0;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_Threads = 0xF8;
+	}
+	else
+	{
+		offset_SYSTEM_PROCESS_INFORMATION_NumberOfThreads = 0x04;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_WorkingSetPrivateSize = 0x08;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_HardFaultCount = 0x10;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_NumberOfThreadsHighWatermark = 0x14;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_CycleTime = 0x18;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_CreateTime = 0x20;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_UserTime = 0x28;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_KernelTime = 0x30;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_ImageName = 0x38;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_BasePriority = 0x40;	
+
+		offset_SYSTEM_PROCESS_INFORMATION_UniqueProcessId = 0x44;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_InheritedFromUniqueProcessId = 0x48;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_HandleCount = 0x4C;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_SessionId = 0x50;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_UniqueProcessKey = 0x54;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_PeakVirtualSize = 0x58;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_VirtualSize = 0x5C;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_PageFaultCount = 0x60;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_PeakWorkingSetSize = 0x64;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_WorkingSetSize = 0x68;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_QuotaPeakPagedPoolUsage = 0x6C;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_QuotaPagedPoolUsage = 0x70;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_QuotaPeakNonPagedPoolUsage = 0x74;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_QuotaNonPagedPoolUsage = 0x78;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_PagefileUsage = 0x7C;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_PeakPagefileUsage = 0x80;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_PrivatePageCount = 0x84;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_ReadOperationCount = 0x88;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_WriteOperationCount = 0x90;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_OtherOperationCount = 0x98;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_ReadTransferCount = 0xA0;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_WriteTransferCount = 0xA8;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_OtherTransferCount = 0xB0;
+		
+		offset_SYSTEM_PROCESS_INFORMATION_Threads = 0xB0;
+	}
+		
+	while( 1 )
+	{
+		stProcessNode = {};
+		
+		NextEntryOffset = lpBuffer.readUInt32LE( entryBaseOffset + 0 );
+		
+		if ( 'x64' == process.arch )
+		{
+			stProcessNode.NumberOfThreads =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_NumberOfThreads );
+	
+			stProcessNode.ImageName =  lpBuffer.readUNICODE_STRING( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_ImageName );
+			
+			stProcessNode.BasePriority =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_BasePriority );
+			
+			stProcessNode.UniqueProcessId =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_UniqueProcessId );
+			
+			stProcessNode.InheritedFromUniqueProcessId =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_InheritedFromUniqueProcessId );
+			
+			stProcessNode.HandleCount =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_HandleCount );
+			
+			stProcessNode.SessionId =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_SessionId );
+			
+			stProcessNode.UniqueProcessKey =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_UniqueProcessKey );
+			
+			stProcessNode.PeakVirtualSize =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_PeakVirtualSize );
+			
+			stProcessNode.VirtualSize =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_VirtualSize );
+			
+			stProcessNode.PageFaultCount =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_PageFaultCount );
+			
+			stProcessNode.PeakWorkingSetSize =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_PeakWorkingSetSize );
+			
+			stProcessNode.WorkingSetSize =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_WorkingSetSize );
+			
+			stProcessNode.QuotaPeakPagedPoolUsage =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_QuotaPeakPagedPoolUsage );
+			
+			stProcessNode.QuotaPagedPoolUsage =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_QuotaPagedPoolUsage );
+			
+			stProcessNode.QuotaPeakNonPagedPoolUsage =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_QuotaPeakNonPagedPoolUsage );
+			
+			stProcessNode.QuotaNonPagedPoolUsage =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_QuotaNonPagedPoolUsage );
+			
+			stProcessNode.PagefileUsage =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_PagefileUsage );
+			
+			stProcessNode.PeakPagefileUsage =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_PeakPagefileUsage );
+			
+			stProcessNode.PrivatePageCount =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_PrivatePageCount );
+			
+			stProcessNode.ReadOperationCount =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_ReadOperationCount );
+			
+			stProcessNode.WriteOperationCount =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_WriteOperationCount );
+			
+			stProcessNode.OtherOperationCount =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_OtherOperationCount );
+			
+			stProcessNode.ReadTransferCount =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_ReadTransferCount );
+			
+			stProcessNode.WriteTransferCount =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_WriteTransferCount );
+			
+			stProcessNode.OtherTransferCount =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_OtherTransferCount );
+		}
+		else
+		{
+			stProcessNode.NumberOfThreads =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_NumberOfThreads );
+	
+			stProcessNode.ImageName =  lpBuffer.readUNICODE_STRING( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_ImageName );
+			
+			stProcessNode.BasePriority =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_BasePriority );
+			
+			stProcessNode.UniqueProcessId =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_UniqueProcessId );
+			
+			stProcessNode.InheritedFromUniqueProcessId =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_InheritedFromUniqueProcessId );
+			
+			stProcessNode.HandleCount =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_HandleCount );
+			
+			stProcessNode.SessionId =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_SessionId );
+			
+			stProcessNode.UniqueProcessKey =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_UniqueProcessKey );
+			
+			stProcessNode.PeakVirtualSize =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_PeakVirtualSize );
+			
+			stProcessNode.VirtualSize =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_VirtualSize );
+			
+			stProcessNode.PageFaultCount =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_PageFaultCount );
+			
+			stProcessNode.PeakWorkingSetSize =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_PeakWorkingSetSize );
+			
+			stProcessNode.WorkingSetSize =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_WorkingSetSize );
+			
+			stProcessNode.QuotaPeakPagedPoolUsage =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_QuotaPeakPagedPoolUsage );
+			
+			stProcessNode.QuotaPagedPoolUsage =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_QuotaPagedPoolUsage );
+			
+			stProcessNode.QuotaPeakNonPagedPoolUsage =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_QuotaPeakNonPagedPoolUsage );
+			
+			stProcessNode.QuotaNonPagedPoolUsage =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_QuotaNonPagedPoolUsage );
+			
+			stProcessNode.PagefileUsage =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_PagefileUsage );
+			
+			stProcessNode.PeakPagefileUsage =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_PeakPagefileUsage );
+			
+			stProcessNode.PrivatePageCount =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_PrivatePageCount );
+			
+			stProcessNode.ReadOperationCount =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_ReadOperationCount );
+			
+			stProcessNode.WriteOperationCount =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_WriteOperationCount );
+			
+			stProcessNode.OtherOperationCount =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_OtherOperationCount );
+			
+			stProcessNode.ReadTransferCount =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_ReadTransferCount );
+			
+			stProcessNode.WriteTransferCount =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_WriteTransferCount );
+			
+			stProcessNode.OtherTransferCount =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_OtherTransferCount );
+		}
+
+		// push node 
+		processArray.push( stProcessNode ); 
+		
+		entryBaseOffset += NextEntryOffset;
+		
+		if ( 0 == NextEntryOffset )
+		{
+			break;
+		}
+	}
+	
+	if ( lpBuffer )
+	{
+		lpBuffer.free();
+		lpBuffer = null;
+	}
+
+	return processArray;
+}
+exports.processInfomation = system_processInfomation;
+
+
+function system_handleInfomation()
+{
+	var lpBuffer = null;
+	
+	var entryBaseOffset = 0;
+
+	var stHandleNode = {};
+	var handleArray = [];
+	
+	var NumberOfHandles = 0;
+	var entryIndex = 0;
+	
+	lpBuffer = helper_querySystemInfomation2( 16 , 1024 * 100 );
+	if ( !lpBuffer )
+	{
+		return handleArray;
+	}
+	
+	// init offsets
+	var offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_UniqueProcessId = 0x00;
+		
+	var offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_CreatorBackTraceIndex = 0x00;
+		
+	var offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_ObjectTypeIndex = 0x00;
+		
+	var offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_HandleAttributes = 0x00;
+		
+	var offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_HandleValue = 0x00;
+		
+	var offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_Object = 0x00;
+		
+	var offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_GrantedAccess = 0x00;
+	
+	var sizeof_SYSTEM_HANDLE_TABLE_ENTRY_INFO = 0;
+
+	
+	if ( 'x64' == process.arch )
+	{
+		offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_UniqueProcessId = 0x00;
+		
+		offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_CreatorBackTraceIndex = 0x02;
+		
+		offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_ObjectTypeIndex = 0x04;
+		
+		offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_HandleAttributes = 0x05;
+		
+		offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_HandleValue= 0x06;
+		
+		offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_Object = 0x08;
+		
+		offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_GrantedAccess = 0x10;
+		
+		sizeof_SYSTEM_HANDLE_TABLE_ENTRY_INFO = 0x14;
+	}
+	else
+	{
+		offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_UniqueProcessId = 0x00;
+		
+		offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_CreatorBackTraceIndex = 0x02;
+		
+		offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_ObjectTypeIndex = 0x04;
+		
+		offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_HandleAttributes = 0x05;
+		
+		offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_HandleValue= 0x06;
+		
+		offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_Object = 0x08;
+		
+		offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_GrantedAccess = 0x0C;
+		
+		sizeof_SYSTEM_HANDLE_TABLE_ENTRY_INFO = 0x10;
+	}
+	
+	if ( 'x64' == process.arch )
+	{
+		entryBaseOffset = 8;
+	}
+	else
+	{
+		entryBaseOffset = 4;
+	}
+	
+	NumberOfHandles = lpBuffer.readUInt32LE( 0 );
+		
+	for ( entryIndex = 0; entryIndex < NumberOfHandles; entryIndex++ )
+	{
+		if ( 'x64' == process.arch )
+		{
+			entryBaseOffset = 8 + entryIndex * sizeof_SYSTEM_HANDLE_TABLE_ENTRY_INFO;
+		}
+		else
+		{
+			entryBaseOffset = 4 + entryIndex * sizeof_SYSTEM_HANDLE_TABLE_ENTRY_INFO;
+		}
+		
+		stHandleNode = {};
+		
+		stHandleNode.UniqueProcessId =  lpBuffer.readUInt16LE( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_UniqueProcessId );
+	
+		stHandleNode.CreatorBackTraceIndex =  lpBuffer.readUInt16LE( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_CreatorBackTraceIndex );
+			
+		stHandleNode.ObjectTypeIndex =  lpBuffer.readUInt8( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_ObjectTypeIndex );
+			
+		stHandleNode.HandleAttributes =  lpBuffer.readUInt8( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_HandleAttributes );
+			
+		stHandleNode.HandleValue =  lpBuffer.readUInt16LE( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_HandleValue );
+			
+		if ( 'x64' == process.arch )
+		{
+			stHandleNode.ObjectAddress =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_Object );
+		}
+		else
+		{
+			stHandleNode.ObjectAddress =  Number64( lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_Object ) );
+		}
+			
+		stHandleNode.GrantedAccess =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_GrantedAccess );
+			
+
+		// push node 
+		handleArray.push( stHandleNode ); 
+		
+		if ( entryIndex > 10 )
+		{
+			break;
+		}
+	}
+	
+	if ( lpBuffer )
+	{
+		lpBuffer.free();
+		lpBuffer = null;
+	}
+
+	return handleArray;
+}
+exports.handleInfomation = system_handleInfomation;
+
+function main(  )
+{
+	
+	printf( system_handleInfomation() );
+	
+	return 0;
+}
+
+if ( !module.parent )
+{
+	main();
+}

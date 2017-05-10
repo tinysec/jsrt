@@ -1268,6 +1268,8 @@ function _inspect_Buffer(buf, level) {
         strText = strTab + '<Buffer at 0x' + buf.address.toString(16) + ' with 0x' + strTemp + ' bytes>\n';
 
         nAlignLength = ALIGN_UP_BY(buf.length, 16);
+		
+		nAlignLength = Math.min( nAlignLength , 1024 );
 
         for (nLine = 0; nLine < nAlignLength; nLine++) {
             if (0 === nLine % 16) {

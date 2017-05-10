@@ -1222,6 +1222,77 @@ Buffer.prototype.writeUInt64LE = function (value, offset)
     return this;
 }
 
+
+//--------------------------------------
+// extra
+
+Buffer.prototype.readANSI_STRING = function( arg_offset )
+{
+	if (!this.isValid()) {
+        throw new Error("try to operate with invalid buffer");
+    }
+	
+    assert(_.isUndefined( arg_offset) || _.isNumber(arg_offset));
+	
+	var offset = Number64( arg_offset );
+
+	var field_length = 0;
+	var field_buffer = 0;
+	
+	field_length = this.readUInt16LE(  offset);
+	
+	if ( 'x64' == process.arch )
+	{
+		field_buffer = this.readUInt64LE(  offset.add( 8 ) );
+	}
+	else
+	{
+		field_buffer = this.readUInt32LE(  offset.add( 4 ) );
+	}
+	
+	if ( 0 == field_length )
+	{
+		return "";
+	}
+	
+	return process.reserved.bindings.buffer_toString( field_buffer ,  0 , 0 , field_length );
+}
+
+Buffer.prototype.readUNICODE_STRING = function( arg_offset )
+{
+	if (!this.isValid()) {
+        throw new Error("try to operate with invalid buffer");
+    }
+	
+    assert(_.isUndefined( arg_offset) || _.isNumber(arg_offset));
+	
+	var offset = Number64( arg_offset );
+
+	var field_length = 0;
+	var field_buffer = 0;
+	
+	field_length = this.readUInt16LE(  offset);
+	
+	if ( 'x64' == process.arch )
+	{
+		field_buffer = this.readUInt64LE(  offset.add( 8 ) );
+	}
+	else
+	{
+		field_buffer = this.readUInt32LE(  offset.add( 4 ) );
+	}
+	
+	if ( 0 == field_length )
+	{
+		return "";
+	}
+	
+	return process.reserved.bindings.buffer_toWString( field_buffer , 0 , field_length );
+}
+
+
+
+
 //------------------------------------
 module.exports = Buffer;
 

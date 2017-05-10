@@ -275,7 +275,7 @@ function os_uptime()
 	}
 	else
 	{
-		return ULONG64( ffi_kernel32.GetTickCount() );
+		return Number64( ffi_kernel32.GetTickCount() );
 	}
 }
 exports.uptime = os_uptime;
