@@ -43,11 +43,15 @@ Module._cache = {};
 
 const BUILDIN_MODULE_NAME_TABLE = [
     "assert",
-    "underscore" ,
+	"base" ,
+	"cprintf" ,
 	"ffi" ,
-	"fs" , 
+	"fs" ,
+	"host" ,
 	"path" ,
-	"serialize" 
+	"os" ,
+	"serialize" ,
+    "underscore" 
 ];
 
 function stripBOM(content) 

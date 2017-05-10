@@ -564,15 +564,6 @@ function system_handleInfomation()
 		sizeof_SYSTEM_HANDLE_TABLE_ENTRY_INFO = 0x10;
 	}
 	
-	if ( 'x64' == process.arch )
-	{
-		entryBaseOffset = 8;
-	}
-	else
-	{
-		entryBaseOffset = 4;
-	}
-	
 	NumberOfHandles = lpBuffer.readUInt32LE( 0 );
 		
 	for ( entryIndex = 0; entryIndex < NumberOfHandles; entryIndex++ )
@@ -598,25 +589,13 @@ function system_handleInfomation()
 			
 		stHandleNode.HandleValue =  lpBuffer.readUInt16LE( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_HandleValue );
 			
-		if ( 'x64' == process.arch )
-		{
-			stHandleNode.ObjectAddress =  lpBuffer.readUInt64LE( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_Object );
-		}
-		else
-		{
-			stHandleNode.ObjectAddress =  Number64( lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_Object ) );
-		}
-			
+		stHandleNode.ObjectAddress =  lpBuffer.readULONG_PTR( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_Object );
+
 		stHandleNode.GrantedAccess =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_GrantedAccess );
 			
 
 		// push node 
 		handleArray.push( stHandleNode ); 
-		
-		if ( entryIndex > 10 )
-		{
-			break;
-		}
 	}
 	
 	if ( lpBuffer )
@@ -629,11 +608,199 @@ function system_handleInfomation()
 }
 exports.handleInfomation = system_handleInfomation;
 
+
+function fix_module_path(  arg_src_path )
+{
+    if ( 0 == arg_src_path.length )
+    {
+        return arg_src_path;
+    }
+
+    var windows_folder = process.env["SystemRoot"];
+
+    var windows_folder_lower = windows_folder.toLowerCase();
+  
+    var src_path = arg_src_path.replace(/\//g , "\\\\");
+    var src_path_lower = src_path.toLowerCase();
+    var dest_path = '';
+
+    if ( 0 == src_path_lower.indexOf( '\\systemroot\\') )
+    {
+        dest_path = windows_folder + src_path.substring( 11 , src_path.length );
+    }
+    else if ( 0 == src_path_lower.indexOf( '\\??\\') )
+    {
+        dest_path = src_path.substring( 4 , src_path.length );
+    }
+    else if ( 0 == src_path_lower.indexOf( '\\\\?\\') )
+    {
+        dest_path = src_path.substring( 4 , src_path.length );
+    }
+    else if ( 0 == src_path_lower.indexOf( '\\windows\\') )
+    {
+        dest_path = windows_folder + src_path.substring( 8 , src_path.length );
+    }
+    else if ( 0 == src_path_lower.indexOf( '\\program files\\') )
+    {
+        dest_path = process.env["SystemDrive"] + src_path;
+    }
+    else
+    {
+        dest_path = src_path;
+    }
+   
+    return dest_path;
+}
+
+function system_moduleInformation()
+{
+	var lpBuffer = null;
+	
+	var entryBaseOffset = 0;
+
+	var stModuleNode = {};
+	var moduleArray = [];
+	
+	var NumberOfModules = 0;
+	var entryIndex = 0;
+	
+	lpBuffer = helper_querySystemInfomation2( 11 , 1024 * 10 );
+	if ( !lpBuffer )
+	{
+		return moduleArray;
+	}
+	
+	// init offsets
+	var offset_RTL_PROCESS_MODULE_INFORMATION_Section = 0x00;
+		
+	var offset_RTL_PROCESS_MODULE_INFORMATION_MappedBase = 0x00;
+		
+	var offset_RTL_PROCESS_MODULE_INFORMATION_ImageBase = 0x00;
+		
+	var offset_RTL_PROCESS_MODULE_INFORMATION_ImageSize = 0x00;
+		
+	var offset_RTL_PROCESS_MODULE_INFORMATION_Flags = 0x00;
+		
+	var offset_RTL_PROCESS_MODULE_INFORMATION_LoadOrderIndex = 0x00;
+		
+	var offset_RTL_PROCESS_MODULE_INFORMATION_InitOrderIndex = 0x00;
+	
+	var offset_RTL_PROCESS_MODULE_INFORMATION_LoadCount = 0x00;
+	
+	var offset_RTL_PROCESS_MODULE_INFORMATION_OffsetToFileName = 0x00;
+	
+	var offset_RTL_PROCESS_MODULE_INFORMATION_FullPathName = 0x00;
+	
+	var sizeof_RTL_PROCESS_MODULE_INFORMATION = 0;
+
+	
+	if ( 'x64' == process.arch )
+	{
+		offset_RTL_PROCESS_MODULE_INFORMATION_Section = 0x00;
+		
+		offset_RTL_PROCESS_MODULE_INFORMATION_MappedBase = 0x08;
+		
+		offset_RTL_PROCESS_MODULE_INFORMATION_ImageBase = 0x10;
+		
+		offset_RTL_PROCESS_MODULE_INFORMATION_ImageSize = 0x18;
+		
+		offset_RTL_PROCESS_MODULE_INFORMATION_Flags = 0x1C;
+		
+		offset_RTL_PROCESS_MODULE_INFORMATION_LoadOrderIndex = 0x20;
+		
+		offset_RTL_PROCESS_MODULE_INFORMATION_InitOrderIndex = 0x22;
+		
+		offset_RTL_PROCESS_MODULE_INFORMATION_LoadCount= 0x24;
+		
+		offset_RTL_PROCESS_MODULE_INFORMATION_OffsetToFileName = 0x26;
+		
+		offset_RTL_PROCESS_MODULE_INFORMATION_FullPathName = 0x28;
+		
+		sizeof_RTL_PROCESS_MODULE_INFORMATION = 0x128;
+	}
+	else
+	{
+		offset_RTL_PROCESS_MODULE_INFORMATION_Section = 0x00;
+		
+		offset_RTL_PROCESS_MODULE_INFORMATION_MappedBase = 0x04;
+		
+		offset_RTL_PROCESS_MODULE_INFORMATION_ImageBase = 0x08;
+		
+		offset_RTL_PROCESS_MODULE_INFORMATION_ImageSize = 0x0C;
+		
+		offset_RTL_PROCESS_MODULE_INFORMATION_Flags = 0x10;
+		
+		offset_RTL_PROCESS_MODULE_INFORMATION_LoadOrderIndex = 0x14;
+		
+		offset_RTL_PROCESS_MODULE_INFORMATION_InitOrderIndex = 0x16;
+		
+		offset_RTL_PROCESS_MODULE_INFORMATION_LoadCount= 0x18;
+		
+		offset_RTL_PROCESS_MODULE_INFORMATION_OffsetToFileName = 0x1A;
+		
+		offset_RTL_PROCESS_MODULE_INFORMATION_FullPathName = 0x1C;
+		
+		sizeof_RTL_PROCESS_MODULE_INFORMATION = 0x11C;
+	}
+	
+
+	NumberOfModules = lpBuffer.readUInt32LE( 0 );
+		
+	for ( entryIndex = 0; entryIndex < NumberOfModules; entryIndex++ )
+	{
+		if ( 'x64' == process.arch )
+		{
+			entryBaseOffset = 8 + entryIndex * sizeof_RTL_PROCESS_MODULE_INFORMATION;
+		}
+		else
+		{
+			entryBaseOffset = 4 + entryIndex * sizeof_RTL_PROCESS_MODULE_INFORMATION;
+		}
+		
+		stModuleNode = {};
+		
+		//stModuleNode.Section =  lpBuffer.readULONG_PTR( entryBaseOffset + offset_RTL_PROCESS_MODULE_INFORMATION_Section );
+	
+		//stModuleNode.MappedBase =  lpBuffer.readULONG_PTR( entryBaseOffset + offset_RTL_PROCESS_MODULE_INFORMATION_MappedBase );
+			
+		stModuleNode.ImageBase =  lpBuffer.readULONG_PTR( entryBaseOffset + offset_RTL_PROCESS_MODULE_INFORMATION_ImageBase );
+			
+		stModuleNode.ImageSize =  lpBuffer.readUInt32LE( entryBaseOffset + offset_RTL_PROCESS_MODULE_INFORMATION_ImageSize );
+			
+		stModuleNode.Flags =  lpBuffer.readUInt32LE( entryBaseOffset + offset_RTL_PROCESS_MODULE_INFORMATION_Flags );
+		
+		stModuleNode.LoadOrderIndex =  lpBuffer.readUInt16LE( entryBaseOffset + offset_RTL_PROCESS_MODULE_INFORMATION_LoadOrderIndex );
+		
+		//stModuleNode.InitOrderIndex =  lpBuffer.readUInt16LE( entryBaseOffset + offset_RTL_PROCESS_MODULE_INFORMATION_InitOrderIndex );
+		
+		stModuleNode.LoadCount =  lpBuffer.readUInt16LE( entryBaseOffset + offset_RTL_PROCESS_MODULE_INFORMATION_LoadCount );
+		
+		//stModuleNode.OffsetToFileName =  lpBuffer.readUInt16LE( entryBaseOffset + offset_RTL_PROCESS_MODULE_INFORMATION_OffsetToFileName );
+		
+		stModuleNode.FullPathName =  lpBuffer.toString( 'ascii' , entryBaseOffset + offset_RTL_PROCESS_MODULE_INFORMATION_FullPathName , entryBaseOffset + offset_RTL_PROCESS_MODULE_INFORMATION_FullPathName + 256 );
+		
+		stModuleNode.FullPathName = fix_module_path( stModuleNode.FullPathName );
+		
+		// push node 
+		moduleArray.push( stModuleNode ); 
+	}
+	
+	if ( lpBuffer )
+	{
+		lpBuffer.free();
+		lpBuffer = null;
+	}
+
+	return moduleArray;
+}
+exports.system_moduleInformation = system_moduleInformation;
+
+
+
 function main(  )
 {
 	
-	printf( system_handleInfomation() );
-	
+
 	return 0;
 }
 

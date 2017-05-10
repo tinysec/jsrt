@@ -496,13 +496,13 @@ function writeInt64LE( arg_address , arg_offset  , arg_value )
 	{
 		address = Number64( arguments[0] );
 		offset = 0;
-		value = LONG64( arguments[1] );
+		value = Number64( arguments[1] );
 	}
 	else if ( 3 == arguments.length )
 	{
 		address = Number64( arguments[0] );
 		offset = Number64( arguments[1] );
-		value = LONG64( arguments[2] );
+		value = Number64( arguments[2] );
 	}
 		
 	return process.reserved.bindings.host_writeInt64LE( address , offset , value );
@@ -521,13 +521,13 @@ function writeInt64BE( arg_address , arg_offset  , arg_value )
 	{
 		address = Number64( arguments[0] );
 		offset = 0;
-		value = LONG64( arguments[1] );
+		value = Number64( arguments[1] );
 	}
 	else if ( 3 == arguments.length )
 	{
 		address = Number64( arguments[0] );
 		offset = Number64( arguments[1] );
-		value = LONG64( arguments[2] );
+		value = Number64( arguments[2] );
 	}
 		
 	return process.reserved.bindings.host_writeInt64BE( address , offset , value );

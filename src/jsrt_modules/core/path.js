@@ -46,12 +46,22 @@ function path_normalize(src_path)
 exports.normalize = path_normalize;
 
 
-function path_basename( ) 
+function path_basename( arg_src_path ) 
 {
+	var src_path = path_normalize( arg_src_path );
 	
-
+	src_path = path_removeBackslash( src_path );
+	
+	var lastPos = src_path.lastIndexOf('\\');
+	
+	if ( -1 == lastPos )
+	{
+		return "";
+	}
+	
+	return src_path.substring( lastPos + 1 ,  src_path.length );
 }
-//exports.basename = path_basename;
+exports.basename = path_basename;
 
 function path_dirname(arg_src_path) 
 {
@@ -109,7 +119,7 @@ function path_folderExists(arg_src_path)
     assert(_.isString(arg_src_path));
 
     if (0 == arg_src_path.length)
-		{
+	{
         return false;
     }
 
@@ -232,7 +242,7 @@ exports.combine = path_combine;
 
 function main(  )
 {
-	console.log( path_resolve( "1.txt") );
+	console.log( path_basename("c://") );
 	
 	return 0;
 }

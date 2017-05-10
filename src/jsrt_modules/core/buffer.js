@@ -777,7 +777,7 @@ Buffer.prototype.readInt64BE = function (offset)
     }
     assert(_.isUndefined(offset) || _.isNumber(offset));
 	
-    return LONG64(process.reserved.bindings.buffer_readInt64BE(this.address, offset || 0));
+    return Number64(process.reserved.bindings.buffer_readInt64BE(this.address, offset || 0));
 }
 
 Buffer.prototype.readInt64LE = function (offset) 
@@ -787,7 +787,7 @@ Buffer.prototype.readInt64LE = function (offset)
     }
 
     assert(_.isUndefined(offset) || _.isNumber(offset));
-    return LONG64(process.reserved.bindings.buffer_readInt64LE(this.address, offset || 0));
+    return Number64(process.reserved.bindings.buffer_readInt64LE(this.address, offset || 0));
 }
 
 Buffer.prototype.readUInt64BE = function (offset) 
@@ -1175,7 +1175,7 @@ Buffer.prototype.writeInt64BE = function (value, offset)
 
     assert((_.isUndefined(offset) || _.isNumber(offset)), "invalid offset");
 
-    process.reserved.bindings.buffer_writeInt64BE(this.address, offset || 0, LONG64(value));
+    process.reserved.bindings.buffer_writeInt64BE(this.address, offset || 0, Number64(value));
 
     return this;
 }
@@ -1189,7 +1189,7 @@ Buffer.prototype.writeInt64LE = function (value, offset)
 
     assert((_.isUndefined(offset) || _.isNumber(offset)), "invalid offset");
 
-    process.reserved.bindings.buffer_writeInt64LE(this.address, offset || 0, LONG64(value));
+    process.reserved.bindings.buffer_writeInt64LE(this.address, offset || 0, Number64(value));
 
     return this;
 }
@@ -1313,6 +1313,24 @@ process.reserved.dumpBufferLeaks = function dumpBufferLeaks()
 }
 
 
+Buffer.prototype.readULONG_PTR = function (offset) 
+{
+    if (!this.isValid()) 
+	{
+        throw new Error("try to operate with invalid buffer");
+    }
+
+    assert(_.isUndefined(offset) || _.isNumber(offset));
+	
+	if ( 'x64' == process.arch )
+	{
+		return process.reserved.bindings.buffer_readUInt64LE(this.address, offset || 0);
+	}
+	else
+	{
+		return Number64( process.reserved.bindings.buffer_readUInt32LE(this.address, offset || 0) );
+	}
+}
 
 
 //------------------------------------
