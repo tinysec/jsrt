@@ -148,6 +148,18 @@
 
         // wow64
         process.wow64 = process.reserved.bootContext.wow64;
+		
+		// OS info
+		process.OSMajorVersion = process.reserved.bootContext.OSMajorVersion;
+		process.OSMinorVersion = process.reserved.bootContext.OSMinorVersion;
+		process.OSBuildNumber = process.reserved.bootContext.OSBuildNumber;
+		process.OSServicePackMajor = process.reserved.bootContext.OSServicePackMajor;
+		process.OSServicePackMinor = process.reserved.bootContext.OSServicePackMinor;
+		process.OSPlatformId = process.reserved.bootContext.OSPlatformId;
+		process.OSSuiteMask = process.reserved.bootContext.OSSuiteMask;
+		process.OSProductType = process.reserved.bootContext.OSProductType;
+		
+		process.OSArch = process.reserved.bootContext.OSArch;
 
         // compiledArch
         process.compiledArch = process.reserved.bootContext.compiledArch;
@@ -177,7 +189,7 @@
 
         // currentDirectory
         process.currentDirectory = process.reserved.bootContext.currentDirectory;
-
+		
         // env
         process.env = process.reserved.bootContext.env;
 
@@ -261,8 +273,6 @@
             base.HIBYTE(base.LOWORD(process.versionNumber)),
             base.LOBYTE(base.LOWORD(process.versionNumber))
         );
-		
-		
 		
 		process.reserved.NativeModule = NativeModule;
 		

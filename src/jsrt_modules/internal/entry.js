@@ -273,9 +273,6 @@
             }
         }
 		
-		//KdPrint( "execArgv = %s\n", process.execArgv );
-        //KdPrint( "execArgs = %s\n", process.execArgs );
-		
         // update verbose
         if (_.has(process.execArgs, "verbose")) 
 		{
@@ -291,6 +288,9 @@
             process.verbose = process.execArgs.verbose || false;
         }
 		
+		
+		KdPrint( "execArgv = %s\n", process.execArgv );
+        KdPrint( "execArgs = %s\n", process.execArgs );
 		
 		//
 		// convert argv to args

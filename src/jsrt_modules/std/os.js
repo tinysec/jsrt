@@ -241,9 +241,10 @@ function os_version()
 	lpVersionInfo.free();
 	lpVersionInfo = null;
 	
+
 	return versionInfo;
 }
-exports.version = os_version;
+exports.version = os_version();
 
 
 function os_tmpdir()
