@@ -146,7 +146,7 @@
 		
 		rawCmdline = process.reserved.entryContext.rawCmdline;
 		
-		delete process.reserved.entryContext;
+		process.reserved.entryContext = {};
 
         // reset
 		
