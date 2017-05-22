@@ -9,6 +9,8 @@
     const _ = require("underscore");
 
     const Module = require("Module");
+	
+	const base = require("base");
 
     var EXEC_ARG_OPTION_TABLE = [
         {
@@ -36,16 +38,7 @@
         }
     ];
 
-    function cmdlineToArgv(arg_cmdline) 
-	{
-        if (0 == arg_cmdline.length) 
-		{
-            return [];
-        }
-
-        return process.reserved.bindings.host_cmdlineToArgv(arg_cmdline);
-    }
-
+   
 
     function findArgOption(name) 
 	{
@@ -156,10 +149,14 @@
 		delete process.reserved.entryContext;
 
         // reset
+		
+		process.argv = [process.execPath];
+		process.args = {};
+		
         process.execArgv = [];
         process.execArgs = {};
-        process.argv = [process.execPath];
-
+		
+        
 
         if ("ida" == process.hostType) 
 		{
@@ -180,7 +177,7 @@
             return;
         }
 
-        rawArgv = cmdlineToArgv(rawCmdline);
+        rawArgv = base.cmdlineToArgv(rawCmdline);
 
         if (0 == rawArgv.length) 
 		{
@@ -242,6 +239,11 @@
                 argKey = argItem.substring(2, argEqualPos).toLowerCase();
                 argValue = argItem.substring(argEqualPos + 1, argItem.length);
             }
+			
+			if ( !argKey )
+			{
+				continue;
+			}
 
             argOption = findArgOption(argKey);
 
@@ -270,9 +272,10 @@
                 process.execArgs[argKey] = true;
             }
         }
-
-        KdPrint("process.execArgs = %s\n", process.execArgs);
-
+		
+		//KdPrint( "execArgv = %s\n", process.execArgv );
+        //KdPrint( "execArgs = %s\n", process.execArgs );
+		
         // update verbose
         if (_.has(process.execArgs, "verbose")) 
 		{
@@ -287,9 +290,36 @@
 
             process.verbose = process.execArgs.verbose || false;
         }
+		
+		
+		//
+		// convert argv to args
+        for (index = 2; index < process.argv.length; index++) 
+		{
+            argItem = process.argv[index];
 
-        KdPrint("execArgv = %s\n", process.execArgv);
-        KdPrint("argv = %s\n", process.argv);
+            argEqualPos = argItem.indexOf("=");
+
+            if (-1 == argEqualPos) 
+			{
+                argKey = argItem.substring(2, argItem.length).toLowerCase();
+                argValue = "";
+            }
+            else 
+			{
+                argKey = argItem.substring(2, argEqualPos).toLowerCase();
+                argValue = argItem.substring(argEqualPos + 1, argItem.length);
+            }
+			
+			if ( argKey )
+			{
+				process.args[argKey] = argValue;
+			}
+        }
+		
+		// KdPrint("argv = %s\n", process.argv );
+       // KdPrint("args = %s\n", process.args );
+		
 
         // --version
         if (process.execArgs.version) 

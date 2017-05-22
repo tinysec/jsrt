@@ -222,13 +222,15 @@
 	{
 		// zero-depends
         pre_init_process();
+		
+		__GLOBAL["host"] = {};
 
 		__GLOBAL["console"] = {};
 
 		const Number64 = NativeModule.require("number64");
 		__GLOBAL["Number64"] = Number64;
 		
-		const base = NativeModule.require("core/base");
+		const base = NativeModule.require("base");
 
 		const printf = NativeModule.require("cprintf").printf;
         const sprintf = NativeModule.require("cprintf").sprintf;

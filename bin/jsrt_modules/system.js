@@ -589,7 +589,7 @@ function system_handleInfomation()
 			
 		stHandleNode.HandleValue =  lpBuffer.readUInt16LE( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_HandleValue );
 			
-		stHandleNode.ObjectAddress =  lpBuffer.readULONG_PTR( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_Object );
+		stHandleNode.ObjectAddress =  lpBuffer.readNativePointer( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_Object );
 
 		stHandleNode.GrantedAccess =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_GrantedAccess );
 			
@@ -759,11 +759,8 @@ function system_moduleInformation()
 		
 		stModuleNode = {};
 		
-		//stModuleNode.Section =  lpBuffer.readULONG_PTR( entryBaseOffset + offset_RTL_PROCESS_MODULE_INFORMATION_Section );
-	
-		//stModuleNode.MappedBase =  lpBuffer.readULONG_PTR( entryBaseOffset + offset_RTL_PROCESS_MODULE_INFORMATION_MappedBase );
-			
-		stModuleNode.ImageBase =  lpBuffer.readULONG_PTR( entryBaseOffset + offset_RTL_PROCESS_MODULE_INFORMATION_ImageBase );
+
+		stModuleNode.ImageBase =  lpBuffer.readNativePointer( entryBaseOffset + offset_RTL_PROCESS_MODULE_INFORMATION_ImageBase );
 			
 		stModuleNode.ImageSize =  lpBuffer.readUInt32LE( entryBaseOffset + offset_RTL_PROCESS_MODULE_INFORMATION_ImageSize );
 			
@@ -799,6 +796,7 @@ exports.moduleInformation = system_moduleInformation;
 
 function main(  )
 {
+	
 	
 
 	return 0;

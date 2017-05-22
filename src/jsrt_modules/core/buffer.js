@@ -2,7 +2,7 @@
 
 const _ = require("underscore");
 const assert = require("assert");
-const base = require("core/base");
+const base = require("base");
 
 const printf = require("cprintf").printf;
 const sprintf = require("cprintf").sprintf;
@@ -232,6 +232,8 @@ Buffer.from = function Buffer_from( arg_string , arg_encoding )
 	var helper = null;
 	var NewBuffer = null;
 	var index = 0;
+	
+	
 
     assert( (arguments.length > 0), "arguments must not empty");
 
@@ -241,9 +243,19 @@ Buffer.from = function Buffer_from( arg_string , arg_encoding )
 
         if (arguments.length >= 2) 
 		{
-            assert(_.isString( arguments[1] ), "encoding must be string");
-
-            if ( "hex" == arguments[1] ) 
+			
+			var param_encoding = '';
+			
+			if ( _.isString( arguments[1] ) )
+			{
+				param_encoding = arguments[1];
+			}
+			else
+			{
+				param_encoding = 'ascii';
+			}
+	
+            if ( "hex" == param_encoding ) 
 			{
 				// CRYPT_STRING_HEX
                 helper = process.reserved.bindings.buffer_fromBinaryString( arguments[0] , 4 );
@@ -255,7 +267,7 @@ Buffer.from = function Buffer_from( arg_string , arg_encoding )
 				return Buffer.attachNative( helper.address , helper.length );
 				
             }
-            else if ( "base64" == arguments[1] ) 
+            else if ( "base64" == param_encoding ) 
 			{
                 // CRYPT_STRING_BASE64
                 helper = process.reserved.bindings.buffer_fromBinaryString( arguments[0] , 1 );
@@ -268,7 +280,7 @@ Buffer.from = function Buffer_from( arg_string , arg_encoding )
             }
             else 
 			{
-                param_codepage = encoding2codepage( arguments[1] );
+                param_codepage = encoding2codepage( param_encoding );
 
                 if (1200 == param_codepage) 
 				{
@@ -962,12 +974,71 @@ Buffer.prototype.toString = function ( arg_encoding, arg_start, arg_end )
 	return helperText;
 }
 
+// buf.write(string[, offset[, length]][, encoding])
 Buffer.prototype.write = function ( arg_string , arg_offset, arg_length, arg_encoding ) 
 {
     if (!this.isValid()) 
 	{
         throw new Error("try to operate with invalid buffer");
     }
+	
+	assert( _.isString(arg_string) , "invalid arg_string" );
+	assert( ( arg_string.length != 0 ) , "invalid arg_string" );
+	
+	var param_lpStringBuffer = null;
+	var param_offset = 0;
+	var param_bytes = 0; //  How many bytes to write. Default: buf.length - offset
+	
+	if ( 1 == arguments.length  )
+	{
+		param_lpStringBuffer = Buffer.from( arg_string , 'ascii' );
+		
+		assert( ( param_lpStringBuffer.length <= this.length ) , "buffer is too small" );
+		
+		param_bytes = Math.min( param_lpStringBuffer.length , this.length );
+	}
+	else if ( 2 == arguments.length  )
+	{
+		param_lpStringBuffer = Buffer.from( arg_string , arguments[1] );
+		
+		assert( ( param_lpStringBuffer.length <= this.length ) , "buffer is too small" );
+		
+		param_bytes = Math.min( param_lpStringBuffer.length , this.length );
+	}
+	else if ( 3 == arguments.length  )
+	{
+		param_lpStringBuffer = Buffer.from( arg_string , arguments[2] );
+		
+		param_offset = arguments[1];
+		
+		assert(  _.isNumber( param_offset ) , "invalid offset" );
+		assert(  ( param_offset <= this.length ) , "invalid offset" );
+		
+		assert( ( param_lpStringBuffer.length <= ( this.length - param_offset ) ) , "buffer is too small" );
+		
+		param_bytes = Math.min( param_lpStringBuffer.length ,   ( this.length - param_offset ) );
+	}
+	else if ( 4 == arguments.length  )
+	{
+		param_lpStringBuffer = Buffer.from( arg_string , arguments[3] );
+		
+		param_offset = arguments[1];
+		
+		assert(  _.isNumber( param_offset ) , "invalid offset" );
+		assert(  ( param_offset <= this.length ) , "invalid offset" );
+		
+		assert( ( param_lpStringBuffer.length <= ( this.length - param_offset ) ) , "buffer is too small" );
+
+		param_bytes = Math.min( param_lpStringBuffer.length ,   ( this.length - param_offset ) , arguments[2] );
+	}
+
+	// arg_target_address ,  arg_source_address , arg_target_start , arg_source_start , arg_source_end
+	process.reserved.bindings.buffer_copy(  this.address , param_lpStringBuffer.address, param_offset, 0 , param_bytes );
+	
+	param_lpStringBuffer.free();
+	param_lpStringBuffer = null;
+	
+	return param_bytes;
 }
 
 Buffer.prototype.writeDoubleBE = function (value, offset) 
@@ -1121,7 +1192,7 @@ Buffer.prototype.writeInt32BE = function (value, offset)
     assert(_.isNumber(value), "value must be number");
     assert((_.isUndefined(offset) || _.isNumber(offset)), "invalid offset");
 
-    process.reserved.bindings.buffer_writeInt32BE(this.address, offset || 0, value);
+    process.reserved.bindings.buffer_writeInt32BE(this.address, offset || 0, Number64(value) );
     return this;
 }
 
@@ -1135,7 +1206,7 @@ Buffer.prototype.writeInt32LE = function (value, offset)
     assert(_.isNumber(value), "value must be number");
     assert((_.isUndefined(offset) || _.isNumber(offset)), "invalid offset");
 
-    process.reserved.bindings.buffer_writeInt32LE(this.address, offset || 0, value);
+    process.reserved.bindings.buffer_writeInt32LE(this.address, offset || 0, Number64(value) );
     return this;
 }
 
@@ -1149,7 +1220,7 @@ Buffer.prototype.writeUInt32BE = function (value, offset)
     assert(_.isNumber(value), "value must be number");
     assert((_.isUndefined(offset) || _.isNumber(offset)), "invalid offset");
 
-    process.reserved.bindings.buffer_writeUInt32BE(this.address, offset || 0, value);
+    process.reserved.bindings.buffer_writeUInt32BE(this.address, offset || 0, Number64(value) );
     return this;
 }
 
@@ -1162,7 +1233,7 @@ Buffer.prototype.writeUInt32LE = function (value, offset) {
     assert(_.isNumber(value), "value must be number");
     assert((_.isUndefined(offset) || _.isNumber(offset)), "invalid offset");
 
-    process.reserved.bindings.buffer_writeUInt32LE(this.address, offset || 0, value);
+    process.reserved.bindings.buffer_writeUInt32LE(this.address, offset || 0, Number64(value) );
     return this;
 }
 
@@ -1175,7 +1246,7 @@ Buffer.prototype.writeInt64BE = function (value, offset)
 
     assert((_.isUndefined(offset) || _.isNumber(offset)), "invalid offset");
 
-    process.reserved.bindings.buffer_writeInt64BE(this.address, offset || 0, Number64(value));
+    process.reserved.bindings.buffer_writeInt64BE(this.address, offset || 0, Number64(value) );
 
     return this;
 }
@@ -1312,6 +1383,27 @@ process.reserved.dumpBufferLeaks = function dumpBufferLeaks()
     }
 }
 
+Buffer.prototype.writeULONG_PTR = function (value, offset) 
+{
+    if (!this.isValid()) 
+	{
+        throw new Error("try to operate with invalid buffer");
+    }
+
+    assert((_.isUndefined(offset) || _.isNumber(offset)), "invalid offset");
+
+	if ( 'x64' == process.arch )
+	{
+		process.reserved.bindings.buffer_writeUInt64LE(this.address, offset || 0, Number64(value));
+	}
+	else
+	{
+		process.reserved.bindings.buffer_writeUInt32LE(this.address, offset || 0, Number64(value) );
+	}
+
+    return this;
+}
+Buffer.prototype.writePointer = Buffer.prototype.writeULONG_PTR;
 
 Buffer.prototype.readULONG_PTR = function (offset) 
 {
@@ -1324,12 +1416,71 @@ Buffer.prototype.readULONG_PTR = function (offset)
 	
 	if ( 'x64' == process.arch )
 	{
-		return process.reserved.bindings.buffer_readUInt64LE(this.address, offset || 0);
+		return Number64( process.reserved.bindings.buffer_readUInt64LE(this.address, offset || 0) );
 	}
 	else
 	{
 		return Number64( process.reserved.bindings.buffer_readUInt32LE(this.address, offset || 0) );
 	}
+}
+Buffer.prototype.readPointer = Buffer.prototype.readULONG_PTR;
+
+// as wow64 , will read 8bytes
+// as x64 will read 8 bytes
+// as ia32 will read 4 bytes
+Buffer.prototype.readNativePointer = function (offset) 
+{
+    if (!this.isValid()) 
+	{
+        throw new Error("try to operate with invalid buffer");
+    }
+
+    assert(_.isUndefined(offset) || _.isNumber(offset));
+	
+	if ( 'x64' == process.arch )
+	{
+		return Number64( process.reserved.bindings.buffer_readUInt64LE(this.address, offset || 0) );
+	}
+	else
+	{
+		if ( process.wow64 )
+		{
+			return Number64( process.reserved.bindings.buffer_readUInt64LE(this.address, offset || 0) );
+		}
+		else
+		{
+			return Number64( process.reserved.bindings.buffer_readUInt32LE(this.address, offset || 0) );
+		}
+		
+	}
+}
+
+Buffer.prototype.writeNativePointer = function (value, offset) 
+{
+    if (!this.isValid()) 
+	{
+        throw new Error("try to operate with invalid buffer");
+    }
+
+    assert((_.isUndefined(offset) || _.isNumber(offset)), "invalid offset");
+
+	if ( 'x64' == process.arch )
+	{
+		process.reserved.bindings.buffer_writeUInt64LE(this.address, offset || 0, Number64(value));
+	}
+	else
+	{
+		if ( process.wow64 )
+		{
+			process.reserved.bindings.buffer_writeUInt64LE(this.address, offset || 0, Number64(value) );
+		}
+		else
+		{
+			process.reserved.bindings.buffer_writeUInt32LE(this.address, offset || 0, Number64(value) );
+		}
+	}
+
+    return this;
 }
 
 

@@ -120,10 +120,22 @@ function encoding2codepage(arg_encoding)
 }
 exports.encoding2codepage = encoding2codepage;
 
+function cmdlineToArgv( arg_cmdline ) 
+{
+    if (0 == arg_cmdline.length) 
+	{
+         return [];
+    }
 
+    return process.reserved.bindings.host_cmdlineToArgv(arg_cmdline);
+}
+exports.cmdlineToArgv = cmdlineToArgv;
 
-
-
+function escapeDoubleQuotes(str)
+{
+    return str.replace(/\\([\s\S])|(")/g, "\\$1$2");
+}
+exports.escapeDoubleQuotes = escapeDoubleQuotes;
 
 function main(  )
 {

@@ -42,16 +42,22 @@ function Module(id, parent) {
 Module._cache = {};
 
 const BUILDIN_MODULE_NAME_TABLE = [
+	
+	// std
+	"pdb" ,
+	
+	
+	// core
     "assert",
 	"base" ,
 	"cprintf" ,
 	"ffi" ,
 	"fs" ,
-	"host" ,
 	"path" ,
 	"os" ,
 	"serialize" ,
     "underscore" 
+	
 ];
 
 function stripBOM(content) 

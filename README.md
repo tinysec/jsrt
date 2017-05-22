@@ -35,7 +35,7 @@
 * ffi , support some windows type , full windows api access
 * serialize and unserialize
 * re-entry support for windbg and ida mode
-* portable from windows xp ~ windows 10 rs2
+* portable from **windows xp ~ windows 10 rs2**
 * small dist.
 * anything you want for binary hack.
 
@@ -67,6 +67,10 @@ JSRT_WINDBG_MODULE_PATH		jsrt-windbg module search path
 more info is at https://github.com/tinysec/jsrt
 ```
 ![jsrt](jsrt.jpg)
+
+## xp ~ win10 rs2 support !!
+![xp_support](xp.png)
+
 
 ## example
 enum windows

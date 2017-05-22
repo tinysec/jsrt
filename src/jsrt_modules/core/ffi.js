@@ -65,6 +65,7 @@ var WIN_TYPE_TO_FFI_TYPE_TABLE = {
     "LONG": "long",
     "ULONG": "ulong",
 
+	"DWORD64": "ulonglong",
     "QWORD": "ulonglong",
     "LONG64": "longlong",
     "ULONG64": "ulonglong",
@@ -154,6 +155,9 @@ var WIN_TYPE_TO_FFI_TYPE_TABLE = {
 
     "LPFLOAT": "buffer",
     "LPDOUBLE": "buffer",
+	
+	"LPBOOL" : "buffer" ,
+	"PBOOL" : "buffer" ,
 
     // string
     "LPCTSTR": "wstring",
@@ -176,10 +180,12 @@ var WIN_TYPE_TO_FFI_TYPE_TABLE = {
     "PWSTR": "buffer",
 
     // handle
-    "PVOID": "buffer",
-    "LPVOID": "buffer",
-    "PPVOID": "buffer",
-    "HANDLE": "handle",
+    "PVOID" : "buffer",
+    "LPVOID" : "buffer",
+	"PCVOID" : "buffer" ,
+	"LPCVOID" : "buffer" ,
+    "PPVOID" : "buffer",
+    "HANDLE" : "handle",
     "PHANDLE": "buffer",
 
     "HACCEL": "handle",
@@ -212,6 +218,9 @@ var WIN_TYPE_TO_FFI_TYPE_TABLE = {
 	 // struct pointer buffer
     "LPMSG" : "buffer" ,
 	"LPSECURITY_ATTRIBUTES" : "buffer" ,
+	"LPSTARTUPINFO" : "buffer" ,
+	"LPPROCESS_INFORMATION" : "buffer" ,
+	"LPOVERLAPPED" : "buffer" ,
 	
 };
 
@@ -222,16 +231,19 @@ var WIN_STACK_TYPE_TO_FFI_STACK_TYPE_TABLE = {
 
 
 var EMPTY_MARCO_ARRAY = [
+
+	 "_Inout_opt_",
+	  
+	 "_Outptr_opt_" ,
     
     "_Inout_",
   
     "_Outptr_",
 
     "_In_opt_",
-    "_Inout_opt_",
+  
     "_Out_opt_",
-    "_Outptr_opt_" ,
-	
+   
 	"_In_",
 	 "_Out_",
 
@@ -442,6 +454,11 @@ function _lex_arg_type(temp_argDeclare)
 	{
         return (item.length != 0);
     });
+	
+	itemArray = _.filter(itemArray, function (item) 
+	{
+        return ( item.toLowerCase() != "const" );
+    });
 
     if (0 == itemArray.length) 
 	{
@@ -467,6 +484,25 @@ function _lex_arg_type(temp_argDeclare)
 
         mainType += "*";
     }
+	
+	if ( itemArray.length >= 2 )
+	{
+		for ( index = 0; index < itemArray[1].length; index++ )
+		{
+			if ( '*' == itemArray[1].charAt(0) )
+			{
+				itemArray[1] = itemArray[1].substring(1 );
+				mainType += "*";
+				index = 0;
+				continue;
+			}
+			else
+			{
+				break;
+			}		
+		}
+		
+	}
 
     return mainType;
 }
@@ -605,12 +641,15 @@ function _lexDeclare(arg_declareText)
             });
         }
     }
-    else {
+    else 
+	{
         // remove empty marcos
         lexInfo.argTypes = _.map(rawArgvDeclares, function (item) 
 		{
             return _lex_arg_type(item.trim());
         });
+		
+		
     }
 
     return lexInfo;
@@ -725,7 +764,7 @@ function ffi_parseDeclare(arg_declareText)
     var lexInfo = _lexDeclare(declareText);
 
     // return type
-    if (_.has(WIN_TYPE_TO_FFI_TYPE_TABLE, lexInfo.returnType)) 
+    if (_.has(WIN_TYPE_TO_FFI_TYPE_TABLE, lexInfo.returnType) ) 
 	{
         lexInfo.returnType = WIN_TYPE_TO_FFI_TYPE_TABLE[lexInfo.returnType];
     }
@@ -733,14 +772,19 @@ function ffi_parseDeclare(arg_declareText)
 	{
         // nop
     }
-    else {
+	else if (_.has(ENUM_TABLE_FFI_VALUE_TYPE, lexInfo.returnType.toLowerCase() ) ) 
+	{
+        lexInfo.returnType = lexInfo.returnType.toLowerCase();
+    }
+    else 
+	{
         if (-1 != lexInfo.returnType.indexOf("*")) 
 		{
             lexInfo.returnType = "buffer";
         }
         else 
 		{
-            throw new Error(sprintf("unknown return type %s", lexInfo.returnType));
+            throw new Error(sprintf("unknown return type %s", lexInfo.returnType) );
         }
     }
 
@@ -765,8 +809,7 @@ function ffi_parseDeclare(arg_declareText)
         }
 
     }
-
-
+		
     // argTypes
     lexInfo.argTypes = _.map(lexInfo.argTypes, function (item) 
 	{
@@ -784,8 +827,9 @@ function ffi_parseDeclare(arg_declareText)
 			{
                 return "buffer";
             }
-            else {
-                throw new Error(sprintf("unknown arg type %s", item));
+            else 
+			{
+                throw new Error(sprintf("unknown arg type %s of %s", item , arg_declareText) );
             }
         }
     });
@@ -1059,7 +1103,7 @@ function _castTo_string(argValue)
 {
     if (_.isNull(argValue)) 
 	{
-        return "null"
+        return null;
     }
     else if (_.isString(argValue)) 
 	{
@@ -1075,7 +1119,7 @@ function _castTo_wstring(argValue)
 {
     if (_.isNull(argValue)) 
 	{
-        return "null"
+        return null;
     }
     else if (_.isString(argValue)) 
 	{
@@ -1133,7 +1177,7 @@ function rawArgsToTypedArgs(argTypes, rawArgs)
 	{
         return [];
     }
-
+	
     // calc needed rawArgs length
     for (typeIndex = 0; typeIndex < argTypes.length; typeIndex++) 
 	{
@@ -1364,7 +1408,7 @@ function rawArgsToTypedArgs(argTypes, rawArgs)
         else if ("wstring" == argTypes[typeIndex])
 		{
             helperValue = process.reserved.bindings.buffer_toString(Number64(rawArgs[rawIndex]), 1200, 0, -1);
-
+			
             typedArgv.push(helperValue);
 
             rawIndex++;
@@ -1472,6 +1516,11 @@ function ffi_getProcAddress(arg_imagebase, arg_name)
 }
 exports.getProcAddress = ffi_getProcAddress;
 
+function ffi_getLastError(arg_name) 
+{
+	return process.reserved.bindings.ffi_getLastError();
+}
+exports.getLastError = ffi_getLastError;
 
 function ffi_bindFromRoutineAddressAndDeclareInfo(arg_address, declareInfo) 
 {
@@ -1533,7 +1582,7 @@ function ffi_bindFromRoutineAddressAndDeclareInfo(arg_address, declareInfo)
         if (invokeArgv.length != declareInfo.argTypes.length) {
             throw new Error(sprintf("ffi routine require %d args but only recv %d", declareInfo.argTypes.length, invokeArgv.length));
         }
-
+		
         var userArgvIndex = 0;
         for (userArgvIndex = 0; userArgvIndex < declareInfo.argTypes.length; userArgvIndex++) 
 		{
@@ -1827,8 +1876,8 @@ exports.loadAndBatchBind = ffi_loadAndBatchBind;
 
 function main(  )
 {
-	
-	
+
+
 	return 0;
 }
 

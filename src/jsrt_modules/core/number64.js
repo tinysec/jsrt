@@ -331,18 +331,15 @@ Number64.prototype.shr = function (arg_other)
 }
 Number64.prototype.shiftRight = Number64.prototype.shr;
 
-Number64.prototype.isNUMBER32 = function () 
+Number64.prototype.isNumber32 = function () 
 {
     return (0 == parseInt(this.hexText.substring(0, 10)));
 }
-Number64.prototype.isNUMBER32 = Number64.prototype.isNUMBER32;
 
-
-Number64.prototype.cast2NUMBER32 = function () 
+Number64.prototype.cast2Number32 = function () 
 {
     return this.and("0x00000000FFFFFFFF");
 }
-Number64.prototype.cast2NUMBER32 = Number64.prototype.cast2NUMBER32;
 
 // cast
 Number64.prototype.toInt8 = function () 
