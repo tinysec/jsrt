@@ -43,9 +43,6 @@ Module._cache = {};
 
 const BUILDIN_MODULE_NAME_TABLE = [
 	
-	// std
-	"pdb" ,
-	
 	
 	// core
     "assert",
@@ -54,10 +51,20 @@ const BUILDIN_MODULE_NAME_TABLE = [
 	"ffi" ,
 	"fs" ,
 	"path" ,
-	"os" ,
 	"serialize" ,
-    "underscore" 
+    "underscore" , 
 	
+	
+	// std
+	"pdb" ,
+	"os" ,
+	"child_process" ,
+	
+	// 3rd
+	"capstone" ,
+	"keystone" ,
+	"unicorn" 
+
 ];
 
 function stripBOM(content) 

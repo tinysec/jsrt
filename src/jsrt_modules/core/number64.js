@@ -159,10 +159,12 @@ Number64.prototype.toString = function (arg_radix)
 {
     var radix = arg_radix || 10;
 
-    if (16 == radix) {
+    if (16 == radix) 
+	{
         return this.hexText.substring(2);
     }
-    else {
+    else 
+	{
         return process.reserved.bindings.Number64_toString(this.hexText, 10);
     }
 }

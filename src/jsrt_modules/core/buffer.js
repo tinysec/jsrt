@@ -66,9 +66,8 @@ function Buffer()
         else if (_.isString(arguments[0])) 
 		{
             throw new Error("Deprecated usage" );
-
         }
-        else if (_.isArray(arguments[0])) 
+		else if (_.isArray(arguments[0]))
 		{
             throw new Error("Deprecated usage" );
         }
@@ -997,6 +996,49 @@ Buffer.prototype.toString = function ( arg_encoding, arg_start, arg_end )
 	}
 	
 	return helperText;
+}
+
+Buffer.prototype.toArray = function ( arg_start, arg_end ) 
+{
+    if (!this.isValid()) 
+	{
+        throw new Error("try to operate with invalid buffer");
+    }
+
+    var param_start = 0;
+    var param_end = this.length;
+
+    if (arguments.length >= 1) 
+	{
+        assert(_.isNumber( arguments[0] ), "start must be number");
+        param_start = arguments[0];
+    }
+
+    if (arguments.length >= 2) 
+	{
+        assert(_.isNumber( arguments[1] ), "end must be number");
+        param_end = arguments[1];
+    }
+
+	assert( param_start >= 0 );
+	assert( param_end >= param_start , "end offset must large then start" );
+		
+	assert( param_end <= this.length );
+
+	if ( param_end == param_start )
+	{
+		return [];
+	}
+	
+	var helper = [];
+	var index = 0;
+	
+	for ( index = param_start; index < param_end; index++ )
+	{
+		helper.push( this.readUInt8( index ) );
+	}
+
+	return helper;
 }
 
 // buf.write(string[, offset[, length]][, encoding])
