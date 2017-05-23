@@ -226,6 +226,31 @@ Buffer.attachNative = function( arg_address , arg_length )
     return pNewBuf;
 }
 
+Buffer.attach = function( arg_address , arg_length ) 
+{
+    assert(arguments.length >= 1 , "invalid arguments" );
+
+    var param_address = Number64( arg_address );
+    var param_length = 0;
+
+    if (2 == arguments.length) 
+	{
+        param_length = arguments[1];
+    }
+    else if (3 == arguments.length) 
+	{
+        param_length = arguments[2];
+    }
+
+    assert(_.isNumber(param_length) , "invalid buffer length" );
+
+    var pNewBuf = null;
+
+    pNewBuf = new Buffer(param_length , param_address );
+
+    return pNewBuf;
+}
+
 Buffer.from = function Buffer_from( arg_string , arg_encoding ) 
 {
     var param_codepage = 0;
@@ -1424,6 +1449,7 @@ Buffer.prototype.readULONG_PTR = function (offset)
 	}
 }
 Buffer.prototype.readPointer = Buffer.prototype.readULONG_PTR;
+
 
 // as wow64 , will read 8bytes
 // as x64 will read 8 bytes

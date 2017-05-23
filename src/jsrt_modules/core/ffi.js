@@ -36,7 +36,9 @@ var ENUM_TABLE_FFI_VALUE_TYPE = {
     "string": 15,
     "wstring": 16,
 
-    "void": 17
+    "void": 17 ,
+	
+	"VOID" : 17
 };
 
 var ENUM_TABLE_FFI_STACK_TYPE = {
@@ -45,10 +47,12 @@ var ENUM_TABLE_FFI_STACK_TYPE = {
 };
 
 var WIN_TYPE_TO_FFI_TYPE_TABLE = {
+	"byte": "uchar",
     "BYTE": "uchar",
     "CHAR": "char",
     "UCHAR": "uchar",
 
+	"word": "ushort",
     "WORD": "ushort",
     "SHORT": "short",
     "USHORT": "ushort",
@@ -67,8 +71,10 @@ var WIN_TYPE_TO_FFI_TYPE_TABLE = {
 
 	"DWORD64": "ulonglong",
     "QWORD": "ulonglong",
+	
     "LONG64": "longlong",
     "ULONG64": "ulonglong",
+	
     "LONGLONG": "longlong",
     "ULONGLONG": "ulonglong",
 
@@ -207,6 +213,7 @@ var WIN_TYPE_TO_FFI_TYPE_TABLE = {
 
 
     // typedef
+	"bool" : "uchar" ,
     "BOOL": "long",
     "BOOLEAN": "uchar",
 		
@@ -221,6 +228,9 @@ var WIN_TYPE_TO_FFI_TYPE_TABLE = {
 	"LPSTARTUPINFO" : "buffer" ,
 	"LPPROCESS_INFORMATION" : "buffer" ,
 	"LPOVERLAPPED" : "buffer" ,
+	
+	
+	
 	
 };
 
@@ -772,10 +782,6 @@ function ffi_parseDeclare(arg_declareText)
 	{
         // nop
     }
-	else if (_.has(ENUM_TABLE_FFI_VALUE_TYPE, lexInfo.returnType.toLowerCase() ) ) 
-	{
-        lexInfo.returnType = lexInfo.returnType.toLowerCase();
-    }
     else 
 	{
         if (-1 != lexInfo.returnType.indexOf("*")) 
@@ -813,11 +819,11 @@ function ffi_parseDeclare(arg_declareText)
     // argTypes
     lexInfo.argTypes = _.map(lexInfo.argTypes, function (item) 
 	{
-        if (_.has(WIN_TYPE_TO_FFI_TYPE_TABLE, item)) 
+        if (_.has(WIN_TYPE_TO_FFI_TYPE_TABLE, item) ) 
 		{
             return WIN_TYPE_TO_FFI_TYPE_TABLE[item];
         }
-        else if (_.has(ENUM_TABLE_FFI_VALUE_TYPE, item)) 
+        else if ( _.has(ENUM_TABLE_FFI_VALUE_TYPE, item) ) 
 		{
             return item;
         }
@@ -1331,7 +1337,7 @@ function rawArgsToTypedArgs(argTypes, rawArgs)
 
             if ("x64" != process.arch) 
 			{
-                helperValue.cast2NUMBER32();
+                helperValue.cast2Number32();
             }
 
             typedArgv.push(helperValue);
@@ -1344,7 +1350,7 @@ function rawArgsToTypedArgs(argTypes, rawArgs)
 
             if ("x64" != process.arch) 
 			{
-                helperValue.cast2NUMBER32();
+                helperValue.cast2Number32();
             }
 
             typedArgv.push(helperValue);
@@ -1358,7 +1364,7 @@ function rawArgsToTypedArgs(argTypes, rawArgs)
 
             if ("x64" != process.arch) 
 			{
-                helperValue.cast2NUMBER32();
+                helperValue.cast2Number32();
             }
 
             typedArgv.push(helperValue);
@@ -1371,7 +1377,7 @@ function rawArgsToTypedArgs(argTypes, rawArgs)
 
             if ("x64" != process.arch) 
 			{
-                helperValue.cast2NUMBER32();
+                helperValue.cast2Number32();
             }
 
             typedArgv.push(helperValue);
@@ -1459,7 +1465,7 @@ function _fixRawValueToTypedValue(returnType, rawValue)
 
         if ("x64" != process.arch) 
 		{
-            value64.cast2NUMBER32();
+            value64.cast2Number32();
         }
 
         return value64;

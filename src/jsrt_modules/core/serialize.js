@@ -286,7 +286,7 @@ function unserialize_to_Number64(input)
 
     if ('n4' == input.t) 
 	{
-        return Number64(input.v).cast2NUMBER32();
+        return Number64(input.v).cast2Number32();
     }
     else {
         return Number64(input.v);

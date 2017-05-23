@@ -12,12 +12,6 @@ const path = require("path");
 
 const ffi = require("ffi");
 
-
-
-
-
-
-
 var ffi_kernel32 = ffi.loadAndBatchBind("kernel32.dll" , [
 	"BOOL WINAPI CreateProcessW(_In_opt_    LPCWSTR  lpApplicationName,_Inout_opt_ LPWSTR  lpCommandLine,_In_opt_  LPSECURITY_ATTRIBUTES lpProcessAttributes, _In_opt_    LPSECURITY_ATTRIBUTES lpThreadAttributes,_In_  BOOL bInheritHandles,_In_  DWORD dwCreationFlags,_In_opt_    LPVOID  pEnvironment,_In_opt_    LPCWSTR  lpCurrentDirectory,_In_ LPSTARTUPINFO lpStartupInfo,_Out_ LPPROCESS_INFORMATION lpProcessInformation);" ,
 	
@@ -101,9 +95,6 @@ function buildSearchPaths()
     return searchPaths;
 }
 
-
-
-
 function resolveFile(arg_name) 
 {
     var searchPaths = [];
@@ -154,10 +145,6 @@ function resolveFile(arg_name)
 
     return;
 }
-
-
-
-
 
 function envTable2Block( table , arg_encoding )
 {
@@ -221,7 +208,6 @@ function envTable2Block( table , arg_encoding )
 	
 	return lpEnvironment;
 }
-
 
 
 function help_child_process_spawn( param_commandline , param_options )
@@ -726,112 +712,18 @@ function help_child_process_spawn( param_commandline , param_options )
 		// method kill
 		ChildProcess.kill = function( exitCode )
 		{
-			// hStdInput
-			if ( ChildProcess.hStdInputReadPipe ) 
-			{
-				ffi_kernel32.CloseHandle( ChildProcess.hStdInputReadPipe ) ;
-				ChildProcess.hStdInputReadPipe = null;
-			}
-			
-			if ( ChildProcess.hStdInputWritePipe ) 
-			{
-				ffi_kernel32.CloseHandle( ChildProcess.hStdInputWritePipe ) ;
-				ChildProcess.hStdInputWritePipe = null;
-			}
-			
-			// hStdOutput
-			if ( ChildProcess.hStdOutputReadPipe ) 
-			{
-				ffi_kernel32.CloseHandle( ChildProcess.hStdOutputReadPipe ) ;
-				ChildProcess.hStdOutputReadPipe = null;
-			}
-			
-			if ( ChildProcess.hStdOutputWritePipe ) 
-			{
-				ffi_kernel32.CloseHandle( ChildProcess.hStdOutputWritePipe ) ;
-				ChildProcess.hStdOutputWritePipe = null;
-			}
-			
-			// hStdError
-			if ( ChildProcess.hStdErrorReadPipe ) 
-			{
-				ffi_kernel32.CloseHandle( ChildProcess.hStdErrorReadPipe ) ;
-				ChildProcess.hStdErrorReadPipe = null;
-			}
-			
-			if ( ChildProcess.hStdErrorWritePipe ) 
-			{
-				ffi_kernel32.CloseHandle( ChildProcess.hStdErrorWritePipe ) ;
-				ChildProcess.hStdErrorWritePipe = null;
-			}
-			
-			// hThread
-			if ( ChildProcess.hThread )
-			{
-				ffi_kernel32.CloseHandle( ChildProcess.hThread ) ;
-				ChildProcess.hThread = null;
-			}
-			
 			// hProcess
 			if ( ChildProcess.hProcess )
 			{
 				ffi_kernel32.TerminateProcess( ChildProcess.hProcess ,  exitCode || 0 ) ;
-				
-				ffi_kernel32.CloseHandle( ChildProcess.hProcess ) ;
-				ChildProcess.hProcess = null;
 			}
+			
+			help_close_handles( ChildProcess );
 		}
 		
 		ChildProcess.waitForExit = function( dwMilliseconds )
 		{
 			var waitCode = ChildProcess.wait( dwMilliseconds );
-			
-			
-			// hStdInput
-			if ( ChildProcess.hStdInputReadPipe ) 
-			{
-				ffi_kernel32.CloseHandle( ChildProcess.hStdInputReadPipe ) ;
-				ChildProcess.hStdInputReadPipe = null;
-			}
-			
-			if ( ChildProcess.hStdInputWritePipe ) 
-			{
-				ffi_kernel32.CloseHandle( ChildProcess.hStdInputWritePipe ) ;
-				ChildProcess.hStdInputWritePipe = null;
-			}
-			
-			// hStdOutput
-			if ( ChildProcess.hStdOutputReadPipe ) 
-			{
-				ffi_kernel32.CloseHandle( ChildProcess.hStdOutputReadPipe ) ;
-				ChildProcess.hStdOutputReadPipe = null;
-			}
-			
-			if ( ChildProcess.hStdOutputWritePipe ) 
-			{
-				ffi_kernel32.CloseHandle( ChildProcess.hStdOutputWritePipe ) ;
-				ChildProcess.hStdOutputWritePipe = null;
-			}
-			
-			// hStdError
-			if ( ChildProcess.hStdErrorReadPipe ) 
-			{
-				ffi_kernel32.CloseHandle( ChildProcess.hStdErrorReadPipe ) ;
-				ChildProcess.hStdErrorReadPipe = null;
-			}
-			
-			if ( ChildProcess.hStdErrorWritePipe ) 
-			{
-				ffi_kernel32.CloseHandle( ChildProcess.hStdErrorWritePipe ) ;
-				ChildProcess.hStdErrorWritePipe = null;
-			}
-			
-			// hThread
-			if ( ChildProcess.hThread )
-			{
-				ffi_kernel32.CloseHandle( ChildProcess.hThread ) ;
-				ChildProcess.hThread = null;
-			}
 			
 			// hProcess
 			if ( ChildProcess.hProcess )
@@ -840,10 +732,9 @@ function help_child_process_spawn( param_commandline , param_options )
 				{
 					ffi_kernel32.TerminateProcess( ChildProcess.hProcess ,  waitCode || 0 ) ;
 				}
-		
-				ffi_kernel32.CloseHandle( ChildProcess.hProcess ) ;
-				ChildProcess.hProcess = null;
 			}
+			
+			help_close_handles( ChildProcess );
 			
 			return waitCode;
 		}
@@ -909,57 +800,7 @@ function help_child_process_spawn( param_commandline , param_options )
 	if ( !bFinalFlag )
 	{
 		// hStdInput
-		if ( ChildProcess.hStdInputReadPipe ) 
-		{
-			ffi_kernel32.CloseHandle( ChildProcess.hStdInputReadPipe ) ;
-			ChildProcess.hStdInputReadPipe = null;
-		}
-		
-		if ( ChildProcess.hStdInputWritePipe ) 
-		{
-			ffi_kernel32.CloseHandle( ChildProcess.hStdInputWritePipe ) ;
-			ChildProcess.hStdInputWritePipe = null;
-		}
-		
-		// hStdOutput
-		if ( ChildProcess.hStdOutputReadPipe ) 
-		{
-			ffi_kernel32.CloseHandle( ChildProcess.hStdOutputReadPipe ) ;
-			ChildProcess.hStdOutputReadPipe = null;
-		}
-		
-		if ( ChildProcess.hStdOutputWritePipe ) 
-		{
-			ffi_kernel32.CloseHandle( ChildProcess.hStdOutputWritePipe ) ;
-			ChildProcess.hStdOutputWritePipe = null;
-		}
-		
-		// hStdError
-		if ( ChildProcess.hStdErrorReadPipe ) 
-		{
-			ffi_kernel32.CloseHandle( ChildProcess.hStdErrorReadPipe ) ;
-			ChildProcess.hStdErrorReadPipe = null;
-		}
-		
-		if ( ChildProcess.hStdErrorWritePipe ) 
-		{
-			ffi_kernel32.CloseHandle( ChildProcess.hStdErrorWritePipe ) ;
-			ChildProcess.hStdErrorWritePipe = null;
-		}
-		
-		// hProcess
-		if ( ChildProcess.hProcess )
-		{
-			ffi_kernel32.CloseHandle( ChildProcess.hProcess ) ;
-			ChildProcess.hProcess = null;
-		}
-		
-		// hThread
-		if ( ChildProcess.hThread )
-		{
-			ffi_kernel32.CloseHandle( ChildProcess.hThread ) ;
-			ChildProcess.hThread = null;
-		}
+		help_close_handles( ChildProcess );
 		
 		ChildProcess = null;
 	}
@@ -1226,6 +1067,63 @@ function help_child_process_capture( child , arg_options )
 	
 }
 
+function help_close_handles( child )
+{
+	// hStdInput
+	if ( child.hStdInputReadPipe ) 
+	{
+		ffi_kernel32.CloseHandle( child.hStdInputReadPipe ) ;
+		child.hStdInputReadPipe = null;
+	}
+		
+	if ( child.hStdInputWritePipe ) 
+	{
+		ffi_kernel32.CloseHandle( child.hStdInputWritePipe ) ;
+		child.hStdInputWritePipe = null;
+	}
+		
+	// hStdOutput
+	if ( child.hStdOutputReadPipe ) 
+	{
+		ffi_kernel32.CloseHandle( child.hStdOutputReadPipe ) ;
+		child.hStdOutputReadPipe = null;
+	}
+		
+	if ( child.hStdOutputWritePipe ) 
+	{
+		ffi_kernel32.CloseHandle( child.hStdOutputWritePipe ) ;
+		child.hStdOutputWritePipe = null;
+	}
+		
+	// hStdError
+	if ( child.hStdErrorReadPipe ) 
+	{
+		ffi_kernel32.CloseHandle( child.hStdErrorReadPipe ) ;
+		child.hStdErrorReadPipe = null;
+	}
+		
+	if ( child.hStdErrorWritePipe ) 
+	{
+		ffi_kernel32.CloseHandle( child.hStdErrorWritePipe ) ;
+		child.hStdErrorWritePipe = null;
+	}
+		
+	// hProcess
+	if ( child.hProcess )
+	{
+		ffi_kernel32.CloseHandle( child.hProcess ) ;
+		child.hProcess = null;
+	}
+		
+	// hThread
+	if ( child.hThread )
+	{
+		ffi_kernel32.CloseHandle( child.hThread ) ;
+		child.hThread = null;
+	}
+
+}
+
 
 
 // winExec
@@ -1251,45 +1149,6 @@ function spawnSync( commandline , arg_options )
 	{
 		capture = help_child_process_capture( child , arg_options);
 	
-		// hStdInput
-		if ( child.hStdInputReadPipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdInputReadPipe ) ;
-			child.hStdInputReadPipe = null;
-		}
-		
-		if ( child.hStdInputWritePipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdInputWritePipe ) ;
-			child.hStdInputWritePipe = null;
-		}
-		
-		// hStdOutput
-		if ( child.hStdOutputReadPipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdOutputReadPipe ) ;
-			child.hStdOutputReadPipe = null;
-		}
-		
-		if ( child.hStdOutputWritePipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdOutputWritePipe ) ;
-			child.hStdOutputWritePipe = null;
-		}
-		
-		// hStdError
-		if ( child.hStdErrorReadPipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdErrorReadPipe ) ;
-			child.hStdErrorReadPipe = null;
-		}
-		
-		if ( child.hStdErrorWritePipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdErrorWritePipe ) ;
-			child.hStdErrorWritePipe = null;
-		}
-		
 		// hProcess
 		if ( child.hProcess )
 		{
@@ -1297,17 +1156,9 @@ function spawnSync( commandline , arg_options )
 			{
 				ffi_kernel32.TerminateProcess( child.hProcess , 258 );
 			}
-			
-			ffi_kernel32.CloseHandle( child.hProcess ) ;
-			child.hProcess = null;
 		}
-		
-		// hThread
-		if ( child.hThread )
-		{
-			ffi_kernel32.CloseHandle( child.hThread ) ;
-			child.hThread = null;
-		}
+
+		help_close_handles( child );
 		
 		child = null;
 	}
@@ -1323,19 +1174,8 @@ function system( commandline , timeout )
 	
 	if ( child )
 	{
-		// hProcess
-		if ( child.hProcess )
-		{
-			ffi_kernel32.CloseHandle( child.hProcess ) ;
-			child.hProcess = null;
-		}
 		
-		// hThread
-		if ( child.hThread )
-		{
-			ffi_kernel32.CloseHandle( child.hThread ) ;
-			child.hThread = null;
-		}
+		help_close_handles( child );
 		
 		child = null;
 		
@@ -1367,58 +1207,7 @@ function exec( commandline )
 	
 	if( child )
 	{
-		// hStdInput
-		if ( child.hStdInputReadPipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdInputReadPipe ) ;
-			child.hStdInputReadPipe = null;
-		}
-		
-		if ( child.hStdInputWritePipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdInputWritePipe ) ;
-			child.hStdInputWritePipe = null;
-		}
-		
-		// hStdOutput
-		if ( child.hStdOutputReadPipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdOutputReadPipe ) ;
-			child.hStdOutputReadPipe = null;
-		}
-		
-		if ( child.hStdOutputWritePipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdOutputWritePipe ) ;
-			child.hStdOutputWritePipe = null;
-		}
-		
-		// hStdError
-		if ( child.hStdErrorReadPipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdErrorReadPipe ) ;
-			child.hStdErrorReadPipe = null;
-		}
-		
-		if ( child.hStdErrorWritePipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdErrorWritePipe ) ;
-			child.hStdErrorWritePipe = null;
-		}
-		
-		// hProcess
-		if ( child.hProcess )
-		{
-			ffi_kernel32.CloseHandle( child.hProcess ) ;
-			child.hProcess = null;
-		}
-		
-		// hThread
-		if ( child.hThread )
-		{
-			ffi_kernel32.CloseHandle( child.hThread ) ;
-			child.hThread = null;
-		}
+		help_close_handles( child );
 		
 		child = null;
 		
@@ -1438,45 +1227,6 @@ function execSync( commandline , options )
 	if( child )
 	{
 		capture = help_child_process_capture( child , options);
-	
-		// hStdInput
-		if ( child.hStdInputReadPipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdInputReadPipe ) ;
-			child.hStdInputReadPipe = null;
-		}
-		
-		if ( child.hStdInputWritePipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdInputWritePipe ) ;
-			child.hStdInputWritePipe = null;
-		}
-		
-		// hStdOutput
-		if ( child.hStdOutputReadPipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdOutputReadPipe ) ;
-			child.hStdOutputReadPipe = null;
-		}
-		
-		if ( child.hStdOutputWritePipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdOutputWritePipe ) ;
-			child.hStdOutputWritePipe = null;
-		}
-		
-		// hStdError
-		if ( child.hStdErrorReadPipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdErrorReadPipe ) ;
-			child.hStdErrorReadPipe = null;
-		}
-		
-		if ( child.hStdErrorWritePipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdErrorWritePipe ) ;
-			child.hStdErrorWritePipe = null;
-		}
 		
 		// hProcess
 		if ( child.hProcess )
@@ -1485,17 +1235,9 @@ function execSync( commandline , options )
 			{
 				ffi_kernel32.TerminateProcess( child.hProcess , 258 );
 			}
-		
-			ffi_kernel32.CloseHandle( child.hProcess ) ;
-			child.hProcess = null;
 		}
 		
-		// hThread
-		if ( child.hThread )
-		{
-			ffi_kernel32.CloseHandle( child.hThread ) ;
-			child.hThread = null;
-		}
+		help_close_handles( child );
 		
 		child = null;
 	}
@@ -1512,58 +1254,7 @@ function shell_exec( commandline  )
 	
 	if ( child )
 	{
-		// hStdInput
-		if ( child.hStdInputReadPipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdInputReadPipe ) ;
-			child.hStdInputReadPipe = null;
-		}
-		
-		if ( child.hStdInputWritePipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdInputWritePipe ) ;
-			child.hStdInputWritePipe = null;
-		}
-		
-		// hStdOutput
-		if ( child.hStdOutputReadPipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdOutputReadPipe ) ;
-			child.hStdOutputReadPipe = null;
-		}
-		
-		if ( child.hStdOutputWritePipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdOutputWritePipe ) ;
-			child.hStdOutputWritePipe = null;
-		}
-		
-		// hStdError
-		if ( child.hStdErrorReadPipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdErrorReadPipe ) ;
-			child.hStdErrorReadPipe = null;
-		}
-		
-		if ( child.hStdErrorWritePipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdErrorWritePipe ) ;
-			child.hStdErrorWritePipe = null;
-		}
-		
-		// hProcess
-		if ( child.hProcess )
-		{
-			ffi_kernel32.CloseHandle( child.hProcess ) ;
-			child.hProcess = null;
-		}
-		
-		// hThread
-		if ( child.hThread )
-		{
-			ffi_kernel32.CloseHandle( child.hThread ) ;
-			child.hThread = null;
-		}
+		help_close_handles( child );
 		
 		child = null;
 		
@@ -1582,45 +1273,6 @@ function shell_execSync( commandline , options )
 	if( child )
 	{
 		capture = help_child_process_capture( child , options);
-	
-		// hStdInput
-		if ( child.hStdInputReadPipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdInputReadPipe ) ;
-			child.hStdInputReadPipe = null;
-		}
-		
-		if ( child.hStdInputWritePipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdInputWritePipe ) ;
-			child.hStdInputWritePipe = null;
-		}
-		
-		// hStdOutput
-		if ( child.hStdOutputReadPipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdOutputReadPipe ) ;
-			child.hStdOutputReadPipe = null;
-		}
-		
-		if ( child.hStdOutputWritePipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdOutputWritePipe ) ;
-			child.hStdOutputWritePipe = null;
-		}
-		
-		// hStdError
-		if ( child.hStdErrorReadPipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdErrorReadPipe ) ;
-			child.hStdErrorReadPipe = null;
-		}
-		
-		if ( child.hStdErrorWritePipe ) 
-		{
-			ffi_kernel32.CloseHandle( child.hStdErrorWritePipe ) ;
-			child.hStdErrorWritePipe = null;
-		}
 		
 		// hProcess
 		if ( child.hProcess )
@@ -1629,17 +1281,9 @@ function shell_execSync( commandline , options )
 			{
 				ffi_kernel32.TerminateProcess( child.hProcess , 258 );
 			}
-			
-			ffi_kernel32.CloseHandle( child.hProcess ) ;
-			child.hProcess = null;
 		}
 		
-		// hThread
-		if ( child.hThread )
-		{
-			ffi_kernel32.CloseHandle( child.hThread ) ;
-			child.hThread = null;
-		}
+		help_close_handles( child );
 		
 		child = null;
 	}
@@ -1650,17 +1294,6 @@ exports.shell_execSync = shell_execSync;
 
 function main(  )
 {
-	// var child = help_child_process_spawn("c:\\windows\\system32\\notepad.exe"  );
-	
-	//var child = help_child_process_spawn("c:\\windows\\system32\\tasklist.exe" , {shell : true}  );
-	
-	//printf( child );
-	
-	var a = execSync("notepad" , {timeout : 1000 } );
-	
-	printf( a );
-	
-	
 	return 0;
 }
 
