@@ -65,9 +65,13 @@ const BUILDIN_MODULE_NAME_TABLE = [
 	"keystone" ,
 	"unicorn" ,
 	
-	"sqlite3" 
+	"sqlite3" ,
+	
+	// win32
+	"authorization"
 
 ];
+process.buildInModules = BUILDIN_MODULE_NAME_TABLE;
 
 function stripBOM(content) 
 {

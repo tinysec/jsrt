@@ -38,7 +38,9 @@ var ENUM_TABLE_FFI_VALUE_TYPE = {
 
     "void": 17 ,
 	
-	"VOID" : 17
+	"VOID" : 17 ,
+	
+	"bool" : 18
 };
 
 var ENUM_TABLE_FFI_STACK_TYPE = {
@@ -213,9 +215,8 @@ var WIN_TYPE_TO_FFI_TYPE_TABLE = {
 
 
     // typedef
-	"bool" : "uchar" ,
-    "BOOL": "long",
-    "BOOLEAN": "uchar",
+    "BOOL": "bool",
+    "BOOLEAN": "bool",
 		
 	"NTSTATUS": "long",
 
@@ -1137,6 +1138,18 @@ function _castTo_wstring(argValue)
     }
 }
 
+function _castTo_bool(argValue) 
+{
+	if ( argValue )
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 var TYPE_CAST_TABLE = {
     "char": _castTo_char,
     "uchar": _castTo_uchar,
@@ -1161,7 +1174,9 @@ var TYPE_CAST_TABLE = {
     "double": _castTo_double,
 
     "string": _castTo_string,
-    "wstring": _castTo_wstring
+    "wstring": _castTo_wstring ,
+	
+	"bool" : _castTo_bool 
 };
 
 function _castJsValueToFFISupportValue(valueType, argValue) 
@@ -1260,6 +1275,10 @@ function rawArgsToTypedArgs(argTypes, rawArgs)
             neededRawArgc++;
         }
         else if ("wstring" == argTypes[typeIndex]) 
+		{
+            neededRawArgc++;
+        }
+		else if ("bool" == argTypes[typeIndex]) 
 		{
             neededRawArgc++;
         }
@@ -1419,6 +1438,11 @@ function rawArgsToTypedArgs(argTypes, rawArgs)
 
             rawIndex++;
         }
+		else if ("bool" == argTypes[typeIndex]) 
+		{
+            typedArgv.push( Number64(rawArgs[rawIndex]).toUInt8() ? true : false );
+            rawIndex++;
+        }
     }
 
     return typedArgv;
@@ -1440,6 +1464,7 @@ function _fixRawValueToTypedValue(returnType, rawValue)
         || ("double" == returnType)
         || ("string" == returnType)
         || ("wstring" == returnType)
+		|| ("bool" == returnType)
     ) {
         return rawValue;
     }

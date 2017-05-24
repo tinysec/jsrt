@@ -201,6 +201,11 @@ Number64.prototype.isNegative = function ()
     return (0 > this.signedCompare(0));
 }
 
+Number64.prototype.isZeroOrNegative = function () 
+{
+    return (0 >= this.signedCompare(0));
+}
+
 Number64.prototype.equals = function (arg_other) 
 {
     return (0 == this.compare(arg_other));
@@ -216,10 +221,19 @@ Number64.prototype.lessThan = function (arg_other)
     return (0 > this.compare(arg_other));
 }
 
+Number64.prototype.lessThanSigned = function (arg_other) 
+{
+    return (0 > this.signedCompare(arg_other));
+}
 
 Number64.prototype.lessThanOrEqual = function (arg_other)
- {
+{
     return (0 >= this.compare(arg_other));
+}
+
+Number64.prototype.lessThanOrEqualSigned = function (arg_other)
+{
+    return (0 >= this.signedCompare(arg_other));
 }
 
 Number64.prototype.greaterThan = function (arg_other) 
@@ -227,16 +241,21 @@ Number64.prototype.greaterThan = function (arg_other)
     return (0 < this.compare(arg_other));
 }
 
+Number64.prototype.greaterThanSigned = function (arg_other) 
+{
+    return (0 < this.signedCompare(arg_other));
+}
 
 Number64.prototype.greaterThanOrEqual = function (arg_other) 
 {
     return (0 <= this.compare(arg_other));
 }
 
-Number64.greaterThanOrEqual = function Number64_greaterThanOrEqual(value, other) 
+Number64.prototype.greaterThanOrEqualSigned = function (arg_other) 
 {
-    return Number64(value).greaterThanOrEqual(other);
+    return (0 <= this.signedCompare(arg_other));
 }
+
 
 Number64.prototype.compare = function (arg_other) 
 {
@@ -250,7 +269,7 @@ Number64.prototype.signedCompare = function (arg_other)
     return process.reserved.bindings.Number64_scmp(this.hexText, cast2Number64(arg_other).hexText);
 }
 Number64.prototype.scmp = Number64.prototype.signedCompare;
-
+Number64.prototype.compareSigned = Number64.prototype.signedCompare;
 
 Number64.prototype.add = function (arg_other)
  {
