@@ -63,7 +63,9 @@ const BUILDIN_MODULE_NAME_TABLE = [
 	// 3rd
 	"capstone" ,
 	"keystone" ,
-	"unicorn" 
+	"unicorn" ,
+	
+	"sqlite3" 
 
 ];
 

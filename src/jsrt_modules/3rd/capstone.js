@@ -632,7 +632,7 @@ function parse_inst_detail( hCapstone  , lpDetailBuffer , instAddress , instSize
 	// Architecture-specific instruction info
 	
 
-	var lpBufferx86 = Buffer.attach( lpDetailBuffer.address.add( 48 ) , 432 );
+	var lpBufferx86 = Buffer.attachUnsafe( lpDetailBuffer.address.add( 48 ) , 432 );
 	
 
 	instDetail.x86 = parse_inst_x86( hCapstone , lpBufferx86 , instAddress , instSize );
@@ -673,11 +673,11 @@ function cs_disasm_internal( hCapstone , codeBuffer , codeLength , codeBase )
 		
 		if ( 'x64' == process.arch )
 		{
-			lpInsnBuffer = Buffer.attach( lpInsnAddress , 240 );
+			lpInsnBuffer = Buffer.attachUnsafe( lpInsnAddress , 240 );
 		}
 		else
 		{
-			lpInsnBuffer = Buffer.attach( lpInsnAddress , 232 );
+			lpInsnBuffer = Buffer.attachUnsafe( lpInsnAddress , 232 );
 		}
 		
 		instNode = {};
@@ -710,7 +710,7 @@ function cs_disasm_internal( hCapstone , codeBuffer , codeLength , codeBase )
 		
 		if ( !lpDetailAddress.isZero() )
 		{
-			lpDetailBuffer = Buffer.attach( lpDetailAddress , 480 );
+			lpDetailBuffer = Buffer.attachUnsafe( lpDetailAddress , 480 );
 			
 			// parse detail
 			instNode.detail = parse_inst_detail( hCapstone , lpDetailBuffer , instNode.address , instNode.size );

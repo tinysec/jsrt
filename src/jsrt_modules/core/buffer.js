@@ -209,10 +209,6 @@ Buffer.attachNative = function( arg_address , arg_length )
 	{
         param_length = arguments[1];
     }
-    else if (3 == arguments.length) 
-	{
-        param_length = arguments[2];
-    }
 
     assert(_.isNumber(param_length) , "invalid buffer length" );
 
@@ -225,7 +221,7 @@ Buffer.attachNative = function( arg_address , arg_length )
     return pNewBuf;
 }
 
-Buffer.attach = function( arg_address , arg_length ) 
+Buffer.attachUnsafe = function( arg_address , arg_length ) 
 {
     assert(arguments.length >= 1 , "invalid arguments" );
 
@@ -236,10 +232,7 @@ Buffer.attach = function( arg_address , arg_length )
 	{
         param_length = arguments[1];
     }
-    else if (3 == arguments.length) 
-	{
-        param_length = arguments[2];
-    }
+
 
     assert(_.isNumber(param_length) , "invalid buffer length" );
 
@@ -892,6 +885,110 @@ Buffer.prototype.slice = function ( arg_start, arg_end )
 	
 }
 
+Buffer.toString = function ( arg_address , arg_encoding, arg_start, arg_end ) 
+{
+    var encoding = 'ascii';
+
+    var param_codepage = 0;
+    var param_start = 0;
+    var param_end = -1;
+	
+	var helperText = '';
+
+    if (arguments.length >= 2) 
+	{
+        assert(_.isString( arguments[1] ), "encoding must be string");
+        encoding = arguments[1].trim().toLowerCase();
+
+        if ( ("hex" != encoding) && ("dump" != encoding) && ( "base64" != encoding) ) 
+		{
+            param_codepage = encoding2codepage( arguments[1] );
+        }
+    }
+
+    if (arguments.length >= 3) 
+	{
+        assert(_.isNumber( arguments[2] ), "start must be number");
+        param_start = arguments[2];
+    }
+
+    if (arguments.length >= 4) 
+	{
+        assert(_.isNumber( arguments[3] ), "end must be number");
+        param_end = arguments[3];
+		
+		if ( param_end > 0 )
+		{
+			assert( param_end >= param_start );
+
+			if ( param_end == param_start )
+			{
+				return "";
+			}	
+		}
+		
+    }
+
+	assert( param_start >= 0 );
+	
+	
+	if ( "dump" == encoding) 
+	{
+		// CRYPT_STRING_HEXASCIIADDR
+        return process.reserved.bindings.buffer_toBinaryString( arg_address , 0x0000000b , param_start , param_end );
+    }
+    else if ("hex" == encoding) 
+	{
+		// CRYPT_STRING_HEX
+        var helper = process.reserved.bindings.buffer_toBinaryString( arg_address , 4 , param_start , param_end );
+
+	
+		var tempArray = helper.split("\r\n");
+		
+		tempArray = _.filter( tempArray , function(item)
+		{
+			return ( item.length != 0 )
+		});
+		
+		helper = tempArray.join(" ");
+		
+		tempArray = helper.split(" ");
+		tempArray = _.filter( tempArray , function(item)
+		{
+			return ( item.length != 0 )
+		});
+		
+		helper = tempArray.join("");
+		
+		return helper;
+    }
+    else if ("base64" == encoding) 
+	{
+        // CRYPT_STRING_BASE64
+        helperText =  process.reserved.bindings.buffer_toBinaryString( arg_address , 1 , param_start , param_end );
+    }
+    else 
+	{
+        // specail for unicode
+        if (1200 == param_codepage) 
+		{
+            helperText =  process.reserved.bindings.buffer_toWString( arg_address , param_start, param_end );
+        }
+        else 
+		{
+            helperText = process.reserved.bindings.buffer_toString( arg_address , param_codepage , param_start , param_end );
+        }
+    }
+	
+	if ( !helperText )
+	{
+		return "";
+	}
+	
+	return helperText;
+}
+
+
 Buffer.prototype.toString = function ( arg_encoding, arg_start, arg_end ) 
 {
     if (!this.isValid()) 
@@ -1491,6 +1588,21 @@ Buffer.prototype.readULONG_PTR = function (offset)
 	}
 }
 Buffer.prototype.readPointer = Buffer.prototype.readULONG_PTR;
+
+
+Buffer.readPointer = function ( address , offset) 
+{
+    assert(_.isUndefined(offset) || _.isNumber(offset));
+	
+	if ( 'x64' == process.arch )
+	{
+		return Number64( process.reserved.bindings.buffer_readUInt64LE( address, offset || 0) );
+	}
+	else
+	{
+		return Number64( process.reserved.bindings.buffer_readUInt32LE( address, offset || 0) );
+	}
+}
 
 
 // as wow64 , will read 8bytes
