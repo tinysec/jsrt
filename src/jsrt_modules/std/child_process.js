@@ -13,7 +13,7 @@ const path = require("path");
 const ffi = require("ffi");
 
 var ffi_kernel32 = ffi.loadAndBatchBind("kernel32.dll" , [
-	"BOOL WINAPI CreateProcessW(_In_opt_    LPCWSTR  lpApplicationName,_Inout_opt_ LPWSTR  lpCommandLine,_In_opt_  LPSECURITY_ATTRIBUTES lpProcessAttributes, _In_opt_    LPSECURITY_ATTRIBUTES lpThreadAttributes,_In_  BOOL bInheritHandles,_In_  DWORD dwCreationFlags,_In_opt_    LPVOID  pEnvironment,_In_opt_    LPCWSTR  lpCurrentDirectory,_In_ LPSTARTUPINFO lpStartupInfo,_Out_ LPPROCESS_INFORMATION lpProcessInformation);" ,
+	"BOOL WINAPI CreateProcessW(_In_opt_    LPCWSTR  lpApplicationName,_Inout_opt_ LPWSTR  lpCommandLine,_In_opt_  SECURITY_ATTRIBUTES* lpProcessAttributes, _In_opt_    SECURITY_ATTRIBUTES* lpThreadAttributes,_In_  BOOL bInheritHandles,_In_  DWORD dwCreationFlags,_In_opt_    LPVOID  pEnvironment,_In_opt_    LPCWSTR  lpCurrentDirectory,_In_ STARTUPINFO* lpStartupInfo,_Out_ PROCESS_INFORMATION* lpProcessInformation);" ,
 	
 	"BOOL WINAPI CloseHandle(_In_ HANDLE hObject);" ,
 	
@@ -21,11 +21,11 @@ var ffi_kernel32 = ffi.loadAndBatchBind("kernel32.dll" , [
 	
 	"DWORD WINAPI WaitForMultipleObjects(_In_       DWORD  nCount, _In_ const HANDLE *lpHandles, _In_       BOOL   bWaitAll, _In_       DWORD  dwMilliseconds);" ,
 	
-	"BOOL WINAPI CreatePipe(_Out_    PHANDLE               hReadPipe, _Out_    PHANDLE               hWritePipe, _In_opt_ LPSECURITY_ATTRIBUTES lpPipeAttributes, _In_     DWORD                 nSize);" ,
+	"BOOL WINAPI CreatePipe(_Out_    PHANDLE               hReadPipe, _Out_    PHANDLE               hWritePipe, _In_opt_ SECURITY_ATTRIBUTES* lpPipeAttributes, _In_     DWORD                 nSize);" ,
 	
-	"BOOL WINAPI ReadFile( _In_        HANDLE       hFile,_Out_       LPVOID       lpBuffer,_In_        DWORD        nNumberOfBytesToRead,_Out_opt_   LPDWORD      lpNumberOfBytesRead,_Inout_opt_ LPOVERLAPPED lpOverlapped);" ,
+	"BOOL WINAPI ReadFile( _In_        HANDLE       hFile,_Out_       LPVOID       lpBuffer,_In_        DWORD        nNumberOfBytesToRead,_Out_opt_   LPDWORD      lpNumberOfBytesRead,_Inout_opt_ OVERLAPPED* lpOverlapped);" ,
 	
-	"BOOL WINAPI WriteFile(_In_        HANDLE       hFile,_In_        LPCVOID      lpBuffer, _In_        DWORD        nNumberOfBytesToWrite,_Out_opt_   LPDWORD      lpNumberOfBytesWritten,_Inout_opt_ LPOVERLAPPED lpOverlapped);" ,
+	"BOOL WINAPI WriteFile(_In_        HANDLE       hFile,_In_        LPCVOID      lpBuffer, _In_        DWORD        nNumberOfBytesToWrite,_Out_opt_   LPDWORD      lpNumberOfBytesWritten,_Inout_opt_ OVERLAPPED* lpOverlapped);" ,
 	
 	"BOOL WINAPI PeekNamedPipe(_In_      HANDLE  hNamedPipe, _Out_opt_ LPVOID  lpBuffer,_In_      DWORD   nBufferSize,_Out_opt_ LPDWORD lpBytesRead,_Out_opt_ LPDWORD lpTotalBytesAvail,_Out_opt_ LPDWORD lpBytesLeftThisMessage);",
 	

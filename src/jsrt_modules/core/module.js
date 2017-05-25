@@ -41,7 +41,7 @@ function Module(id, parent) {
 
 Module._cache = {};
 
-const BUILDIN_MODULE_NAME_TABLE = [
+const BUILTIN_MODULE_NAME_TABLE = [
 	
 	
 	// core
@@ -56,7 +56,6 @@ const BUILDIN_MODULE_NAME_TABLE = [
 	
 	
 	// std
-	"pdb" ,
 	"os" ,
 	"child_process" ,
 	
@@ -68,10 +67,18 @@ const BUILDIN_MODULE_NAME_TABLE = [
 	"sqlite3" ,
 	
 	// win32
-	"authorization"
+	"win32/native" , 
+	"win32/pdb" ,
+	"win32/auth" ,
+	"win32/toolHelp" ,
+	
+	"win32/ioctl" ,
+	
+	"win32/sysinfo" 
+	
 
 ];
-process.buildInModules = BUILDIN_MODULE_NAME_TABLE;
+process.builtInModules = BUILTIN_MODULE_NAME_TABLE;
 
 function stripBOM(content) 
 {
@@ -513,7 +520,7 @@ Module.prototype._loadFromContent = function (fileContent, arg_filename) {
              return cachedModule.exports;
         }
 
-		if ( -1 != BUILDIN_MODULE_NAME_TABLE.indexOf( requestName ) )
+		if ( -1 != BUILTIN_MODULE_NAME_TABLE.indexOf( requestName ) )
 		{
 			return process.reserved.NativeModule.require(requestName);
 		}

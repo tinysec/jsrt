@@ -1664,6 +1664,7 @@ Buffer.prototype.writeNativePointer = function (value, offset)
 }
 
 
+
 //------------------------------------
 
 

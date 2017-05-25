@@ -91,7 +91,8 @@ var WIN_TYPE_TO_FFI_TYPE_TABLE = {
     "INT_PTR": "long_ptr",
     "UINT_PTR": "ulong_ptr",
 
-    "size_t": "ulong_ptr",
+    "size_t": "ulong_ptr", 
+	"SIZE_T" : "ulong_ptr" ,
 
     "FLOAT": "float",
     "DOUBLE": "DOUBLE",
@@ -219,19 +220,10 @@ var WIN_TYPE_TO_FFI_TYPE_TABLE = {
     "BOOLEAN": "bool",
 		
 	"NTSTATUS": "long",
+	"ACCESS_MASK" : "ulong" ,
 
+    "COLORREF": "ulong"
 
-    "COLORREF": "ulong",
-	
-	 // struct pointer buffer
-    "LPMSG" : "buffer" ,
-	"LPSECURITY_ATTRIBUTES" : "buffer" ,
-	"LPSTARTUPINFO" : "buffer" ,
-	"LPPROCESS_INFORMATION" : "buffer" ,
-	"LPOVERLAPPED" : "buffer" ,
-	
-	
-	
 	
 };
 
@@ -1547,11 +1539,14 @@ function ffi_getProcAddress(arg_imagebase, arg_name)
 }
 exports.getProcAddress = ffi_getProcAddress;
 
-function ffi_getLastError(arg_name) 
+function ffi_getLastError() 
 {
 	return process.reserved.bindings.ffi_getLastError();
 }
 exports.getLastError = ffi_getLastError;
+
+
+
 
 function ffi_bindFromRoutineAddressAndDeclareInfo(arg_address, declareInfo) 
 {

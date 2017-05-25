@@ -39,6 +39,39 @@ function ALIGN_UP_BY(length, alignment)
 }
 exports.ALIGN_UP_BY = ALIGN_UP_BY;
 
+function FlagOn( mask , flag ) 
+{
+    return ( mask & flag );
+}
+exports.FlagOn = FlagOn;
+
+function SetFlag( mask , flag ) 
+{
+    return ( mask | flag );
+}
+exports.SetFlag = SetFlag;
+
+function ClearFlag( mask , flag ) 
+{
+    return ( mask &  ( ~flag ) );
+}
+exports.ClearFlag = ClearFlag;
+
+
+function getLastError() 
+{
+	return process.reserved.runtime.errorCode;
+}
+exports.getLastError = getLastError;
+
+function setLastError(code) 
+{
+	var oldCode = process.reserved.runtime.errorCode;
+	process.reserved.runtime.errorCode = code;
+	
+	return oldCode;
+}
+exports.setLastError = setLastError;
 
 function stackTrace(arg_skip) 
 {

@@ -129,6 +129,7 @@
         process.reserved.entryContext = {};
 
         process.reserved.tables = {};
+		process.reserved.runtime = {};
 
         // exitCode
         process.exitCode = undefined;
