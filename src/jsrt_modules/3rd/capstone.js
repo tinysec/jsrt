@@ -141,23 +141,6 @@ const ENUM_TABLE_CS_MODE = {
     "CS_MODE_MIPS64" : 1 << 3 
 };
 
-const ENUM_TABLE_CS_ERR = {
-    "CS_ERR_OK" : 0 ,
-    "CS_ERR_MEM" : 1 ,
-    "CS_ERR_ARCH" : 2 ,
-    "CS_ERR_HANDLE" : 3 ,
-    "CS_ERR_CSH" : 4 ,
-    "CS_ERR_MODE" : 5 ,
-    "CS_ERR_OPTION" : 6 ,
-    "CS_ERR_DETAIL" : 7 ,
-    "CS_ERR_MEMSETUP" : 8 ,
-    "CS_ERR_VERSION" : 9 ,
-    "CS_ERR_DIET" : 10 ,
-    "CS_ERR_SKIPDATA" : 11 ,
-    "CS_ERR_X86_ATT" : 12 ,
-    "CS_ERR_X86_INTEL" : 13 
-};
-
 const ENUM_TABLE_CS_OPT_TYPE = {
     "CS_OPT_INVALID" : 0 , 
     "CS_OPT_SYNTAX" : 1 , 
@@ -176,24 +159,6 @@ const ENUM_TABLE_CS_OPT_VALUE = {
     "CS_OPT_SYNTAX_ATT" : 4 , 
     "CS_OPT_SYNTAX_NOREGNAME" : 5 
 };
-
-const ENUM_TABLE_CS_OP_TYPE = {
-    "CS_OP_INVALID" : 0 , 
-    "CS_OP_REG" : 1 , 
-    "CS_OP_IMM" : 2 , 
-    "CS_OP_MEM" : 3 , 
-    "CS_OP_FP" : 4 
-};
-
-const ENUM_TABLE_CS_GROUP_TYPE = {
-    "CS_GRP_INVALID" : 0 , 
-    "CS_GRP_JUMP" : 1 , 
-    "CS_GRP_CALL" : 2 , 
-    "CS_GRP_RET" : 3 , 
-    "CS_GRP_INT" : 4 ,
-    "CS_GRP_IRET" : 5 
-};
-
 
 var bindings = ffi.loadAndBatchBind("capstone.dll" , [
 
@@ -285,7 +250,7 @@ function cs_open( arg_arch , arg_mode )
     param_mode = ENUM_TABLE_CS_MODE[ arg_mode ];
 
     errCode = bindings.cs_open( param_arch , param_mode , buffer_param_lpHandle );
-    if ( ENUM_TABLE_CS_ERR["CS_ERR_OK"] != errCode )
+    if ( 0 != errCode )
     {
 		buffer_param_lpHandle.free();
 		buffer_param_lpHandle = null;
@@ -872,21 +837,6 @@ exports.disasm = cs_disasm;
 
 function main(  )
 {
-	var capstone = exports;
-
-
-	var xxText = "8BFF";
-    
-	var hCapstone = capstone.open( "CS_ARCH_X86" , "CS_MODE_32" );
-	
-	capstone.setOption(hCapstone , "CS_OPT_DETAIL" , "CS_OPT_ON" );
-	
-	var insts = capstone.disasm( hCapstone , xxText , 0x1000000 );
-	
-	printf( insts );
-	
-	capstone.close( hCapstone );
-
 	return 0;
 }
 

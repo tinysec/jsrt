@@ -300,7 +300,7 @@ function openObject( ObjectName , arg_options )
 	var param_DesiredAccess = 0; // 
 	var param_lpObjectAttributes = null;
 	var param_IoStatusBlock = Buffer.alloc( 0x10 );
-	var param_ShareAccess = 0;
+	var param_ShareAccess = 0; 
 	var param_OpenOptions = 0;
 	
 	var ObjectAttributes_Attributes  = 0;
@@ -317,25 +317,44 @@ function openObject( ObjectName , arg_options )
 		{
 			if ( param_options.ignoreCase )
 			{
-				// OBJ_CASE_INSENSITIVE
 				ObjectAttributes_Attributes = base.SetFlag( ObjectAttributes_Attributes , 0x40 );
 			}
+		}
+		else
+		{
+			ObjectAttributes_Attributes = 0x40; // OBJ_CASE_INSENSITIVE
 		}
 		
 		if ( !_.isUndefined( param_options.desiredAccess ) )
 		{
-			// FILE_READ_ATTRIBUTES
 			param_DesiredAccess = param_options.desiredAccess;
 		}
+		else
+		{
+			param_DesiredAccess = 0x80; //FILE_READ_ATTRIBUTES
+		}
 		
+		if ( !_.isUndefined( param_options.shareAccess ) )
+		{
+			param_ShareAccess = param_options.shareAccess;
+		}
+		else
+		{
+			param_ShareAccess = 1; // FILE_SHARE_READ
+		}
 		
+		if ( !_.isUndefined( param_options.openOption ) )
+		{
+			param_OpenOptions = param_options.openOption;
+		}
+	
 		param_lpObjectAttributes = allocAndInitializeObjectAttributes( 
 						ObjectName ,
 						ObjectAttributes_Attributes ,
 						ObjectAttributes_RootDirectory ,
 						null
 		);
-						
+				
 						
 		Status = ffi_ntdll.NtOpenFile(
 				param_lpFileHandle ,
@@ -347,7 +366,8 @@ function openObject( ObjectName , arg_options )
 		);
 		
 		base.setLastError( Status );
-				
+		
+		hDevice = param_lpFileHandle.readPointer(0);
 		
 	}while(false);
 	
@@ -379,6 +399,12 @@ function openObject( ObjectName , arg_options )
 }
 exports.openObject = openObject;
 
+
+function closeHandle( hHandle )
+{
+	return ffi_ntdll.NtClose( hHandle );
+}
+exports.closeHandle = closeHandle;
 
 
 function main(  )

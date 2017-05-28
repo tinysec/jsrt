@@ -116,8 +116,6 @@ function pdb_loadSymbolFile( imageFile )
 		pszDbgFile ,
 		nDbgFileLength
 	);
-	
-	printf( pszSymbolFile );
 		
 	strSymbolFile = pszSymbolFile.toString('ucs2');
 		
@@ -167,16 +165,15 @@ function pdb_loadImage( imageFile , arg_imageName , arg_imageBase , arg_imageSiz
 		
 	return loadedBase;
 }
-exports.load = pdb_loadImage;
+exports.loadImage = pdb_loadImage;
 
 function pdb_unloadImage( imageBase )
 {
 	return ffi_dbghelp.SymUnloadModule64( g_hCurrentProcess , Number64( imageBase ) );
 }
-exports.unload = pdb_unloadImage;
+exports.unloadImage = pdb_unloadImage;
 
-// get name from address
-function pdb_resolve( symbolAddress )
+function pdb_address2Symbol( symbolAddress )
 {
 	var MaxNameLength = 1024;
 	
@@ -230,7 +227,7 @@ function pdb_resolve( symbolAddress )
 	
 	return symbolInfo;
 }
-exports.resolve = pdb_resolve;
+exports.address2Symbol = pdb_address2Symbol;
 
 
 function pdb_address2Name( symbolAddress )
@@ -253,7 +250,7 @@ function pdb_address2Name( symbolAddress )
 exports.address2Name = pdb_address2Name;
 
 // get address from name
-function pdb_query( symbolName )
+function pdb_name2Address( symbolName )
 {
 	var MaxNameLength = 1024;
 	
@@ -295,8 +292,8 @@ function pdb_query( symbolName )
 	return symbolAddress;
 	
 }
-exports.query = pdb_query;
-exports.name2Address = pdb_query;
+exports.name2Address = pdb_name2Address;
+
 
 function main(  )
 {

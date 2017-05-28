@@ -313,8 +313,7 @@ exports.enumThread = enumThread ;
 function main(  )
 {
 	
-	printf( enumModule(0) );
-	
+
 	return 0;
 }
 

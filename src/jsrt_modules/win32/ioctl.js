@@ -1,5 +1,6 @@
 const assert = require("assert");
 const _ = require("underscore");
+const base = require("base");
 
 const printf = require("cprintf").printf;
 const sprintf = require("cprintf").sprintf;
@@ -8,6 +9,8 @@ const KdPrint = require("cprintf").KdPrint;
 const path = require("path");
 
 const ffi = require("ffi");
+
+const win32_native = require("win32/native");
 
 
 var ffi_ntdll = ffi.loadAndBatchBind("ntdll.dll" , [
@@ -24,92 +27,105 @@ var ffi_ntdll = ffi.loadAndBatchBind("ntdll.dll" , [
 
 function CTL_CODE(DeviceType, FunctionIndex, Method, Access)
 {
-	return ( ((DeviceType) << 16) | ((Access) << 14) | ((FunctionIndex) << 2) | (Method) );
+	var param_DeviceType = Number64( DeviceType ).shiftLeft(16);
+	var param_Access = Number64( Access ).shiftLeft(14);
+	var param_FunctionIndex = Number64( FunctionIndex ).shiftLeft(2);
+	
+	var IoControlCode = Number64( param_DeviceType );
+	
+	IoControlCode.or( param_Access ).or( param_FunctionIndex).or( Method );
+
+	return IoControlCode.cast2Number32();
 }
+exports.CTL_CODE = CTL_CODE;
 
 function METHOD_FROM_CTL_CODE(ctrlCode)
 {
-	return ((ctrlCode & 3))
+	var IoControlCode = Number64( ctrlCode );
+	
+	IoControlCode.and( 3 );
+	
+	return IoControlCode.toUInt8();
 }
+exports.METHOD_FROM_CTL_CODE = METHOD_FROM_CTL_CODE;
 
 function DEVICE_TYPE_FROM_CTL_CODE(ctrlCode)
 {
-	return (((ctrlCode & 0xffff0000)) >> 16);
+	var IoControlCode = Number64( ctrlCode );
+	
+	IoControlCode.and( 0xffff0000 );
+	IoControlCode.shiftRight( 16 );
+	
+	return IoControlCode.toUInt16LE();
 }
+exports.DEVICE_TYPE_FROM_CTL_CODE = DEVICE_TYPE_FROM_CTL_CODE;
 
+exports.openDevice = win32_native.openObject;
+exports.closeDevice = win32_native.closeHandle;
 
-function allocAndInitializeObjectAttributes( ObjectName , Attributes , RootDirectory , SecurityDescriptor )
+function deviceIoControl( hDevice , IoControlCode , arg_input , arg_output , IoStatusBlock )
 {
-	var lpObjectArributes = null;
-	
-	
-	
-	return lpObjectArributes;
-}
+	var param_lpIoStatusBlock = Buffer.alloc( 0x10 ).fill(0);
+	var Status = 0;
 
-
-
-function openDevice( ObjectName , arg_options )
-{
-	var param_options = {};
-	var hDevice = Number64(0);
+	assert( Number64.isNumber64(hDevice) , "invalid device handle" );
 	
-	assert( _.isString( arguments[0] ) , "invalid ObjectName" );
+	assert(  ( Number64.isNumber64(IoControlCode)  || ( _.isNumber(IoControlCode) ) ) , "invalid IoControlCode" );
 	
-	if ( arguments.length >= 2 )
+	if ( arg_input )
 	{
-		if ( arguments[1] )
+		assert( Buffer.isBuffer(arg_input) , "invalid input" );
+	}
+	
+	if ( arg_output )
+	{
+		assert( Buffer.isBuffer(arg_output) , "invalid output" );
+	}
+	
+	Status = ffi_ntdll.NtDeviceIoControlFile(
+			hDevice ,
+			null ,
+			null ,
+			null ,
+			param_lpIoStatusBlock ,
+			IoControlCode ,
+			arg_input ? arg_input : null ,
+			arg_input ? arg_input.length : 0 ,
+			arg_output ? arg_output : null ,
+			arg_output ? arg_output.length : 0
+	);
+	
+	if ( IoStatusBlock )
+	{
+		IoStatusBlock.Status = param_lpIoStatusBlock.readUInt32LE(0);
+		IoStatusBlock.Pointer = param_lpIoStatusBlock.readPointer(0);
+		
+		if ( "x64" == process.arch )
 		{
-			assert( _.isObject( arguments[1] ) , "invalid arguments 1" );
-			param_options = arguments[1];
+			IoStatusBlock.Information = param_lpIoStatusBlock.readULONG_PTR(8);
+		}
+		else
+		{
+			IoStatusBlock.Information = param_lpIoStatusBlock.readULONG_PTR(8);
 		}
 	}
 	
-	var param_lpFileHandle = Buffer.alloc( 8 ).fill(0);
-	var param_DesiredAccess = 0x80; // FILE_READ_ATTRIBUTES
-	var param_lpObjectAttributes = null;
-	var param_IoStatusBlock = null;
-	var param_ShareAccess = 0;
-	var param_OpenOptions = 0;
+	param_lpIoStatusBlock.free();
+	param_lpIoStatusBlock = null;
 	
-	
-	do
-	{
-		
-		
-		
-	}while(false);
-	
-	if ( param_lpFileHandle )
-	{
-		param_lpFileHandle.free();
-		param_lpFileHandle = null;
-	}
-	
-	if ( param_lpObjectAttributes )
-	{
-		param_lpObjectAttributes.free();
-		param_lpObjectAttributes = null;
-	}
-	
-	if ( param_IoStatusBlock )
-	{
-		param_IoStatusBlock.free();
-		param_IoStatusBlock = null;
-	}
-	
-	
-	return hDevice;
+	return Status;
 }
-exports.openDevice = openDevice;
+exports.deviceIoControl = deviceIoControl;
 
-
+// Number64.lessThanSigned32(Status , 0);
 
 function main(  )
 {
 	
+	var ioctl = exports;
 	
-
+	
+	
 	return 0;
 }
 
