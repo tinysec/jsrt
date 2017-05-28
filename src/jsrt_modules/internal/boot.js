@@ -280,6 +280,10 @@
 		Object.defineProperty(process, 'reserved', {
 			enumerable: false
 		});
+		
+		
+		// extend
+		NativeModule.require("internal/extend");
 
 
         return 0;

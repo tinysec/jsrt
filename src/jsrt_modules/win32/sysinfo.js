@@ -1,5 +1,6 @@
 const assert = require("assert");
 const _ = require("underscore");
+const base = require("base");
 
 const printf = require("cprintf").printf;
 const sprintf = require("cprintf").sprintf;
@@ -792,12 +793,100 @@ function queryModuleInformation()
 }
 exports.queryModuleInformation = queryModuleInformation;
 
+// not support wow64 mode
+function queryBigPoolInformation()
+{
+	var lpBuffer = null;
+	
+	var entryBaseOffset = 0;
+
+	var stPoolNode = {};
+	var PoolArray = [];
+	
+	var NumberOfPools = 0;
+	var entryIndex = 0;
+	
+	var testValue = 0;
+	
+	lpBuffer = helper_querySystemInfomation2( 66 , 1024 * 10 );
+	if ( !lpBuffer )
+	{
+		return moduleArray;
+	}
+	
+	// init offsets
+	var offset_SYSTEM_BIGPOOL_ENTRY_VirtualAddress = 0x00;
+		
+	var offset_SYSTEM_BIGPOOL_ENTRY_SizeInBytes = 0x00;
+		
+	var offset_SYSTEM_BIGPOOL_ENTRY_TagUlong = 0x00;
+	
+	var sizeof_SYSTEM_BIGPOOL_ENTRY = 0x00;
+		
+
+	if ( 'x64' == process.arch )
+	{
+		offset_SYSTEM_BIGPOOL_ENTRY_VirtualAddress = 0x00;
+		
+		offset_SYSTEM_BIGPOOL_ENTRY_SizeInBytes = 0x08;
+		
+		offset_SYSTEM_BIGPOOL_ENTRY_TagUlong = 0x10;
+		
+		sizeof_SYSTEM_BIGPOOL_ENTRY = 0x18;
+	}
+	else
+	{
+		offset_SYSTEM_BIGPOOL_ENTRY_VirtualAddress = 0x00;
+		
+		offset_SYSTEM_BIGPOOL_ENTRY_SizeInBytes = 0x04;
+			
+		offset_SYSTEM_BIGPOOL_ENTRY_TagUlong = 0x08;
+			
+		sizeof_SYSTEM_BIGPOOL_ENTRY = 0x0C;
+		
+	}
+	
+	NumberOfPools = lpBuffer.readUInt32LE( 0 );
+		
+	for ( entryIndex = 0; entryIndex < NumberOfPools; entryIndex++ )
+	{
+		if ( 'x64' == process.arch )
+		{
+			entryBaseOffset = 8 + entryIndex * sizeof_SYSTEM_BIGPOOL_ENTRY;
+		}
+		else
+		{
+			entryBaseOffset = 4 + entryIndex * sizeof_SYSTEM_BIGPOOL_ENTRY;
+		}
+		
+		stPoolNode = {};
+		
+		testValue =  lpBuffer.readPointer( entryBaseOffset + offset_SYSTEM_BIGPOOL_ENTRY_VirtualAddress );
+		
+		stPoolNode.nonPaged = Number64.testBit(testValue , 0);
+		stPoolNode.address = testValue.clearBit( 0);
+		
+		stPoolNode.bytes =  lpBuffer.readULONG_PTR( entryBaseOffset + offset_SYSTEM_BIGPOOL_ENTRY_SizeInBytes );
+			
+		stPoolNode.tag = base.ULONG2Tag( lpBuffer.readUInt32BE( entryBaseOffset + offset_SYSTEM_BIGPOOL_ENTRY_TagUlong ) );
+	
+		// push node 
+		PoolArray.push( stPoolNode ); 
+	}
+	
+	if ( lpBuffer )
+	{
+		lpBuffer.free();
+		lpBuffer = null;
+	}
+
+	return PoolArray;
+}
+exports.queryBigPoolInformation = queryBigPoolInformation;
 
 
 function main(  )
 {
-	
-	
 
 	return 0;
 }

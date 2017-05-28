@@ -196,9 +196,19 @@ Number64.prototype.isZero = function ()
     return (0 == this.compare(0));
 }
 
+Number64.isZero = function ( item ) 
+{
+    return Number64(item).isZero();
+}
+
 Number64.prototype.isZero32 = function () 
 {
     return (0 == this.compare32(0));
+}
+
+Number64.isZero32 = function ( item ) 
+{
+    return Number64(item).isZero32();
 }
 
 Number64.prototype.isNegative = function () 
@@ -433,11 +443,22 @@ Number64.prototype.add = function (arg_other)
     return this;
 }
 
+Number64.add = function ( item , other ) 
+{
+    return Number64(item).add(other);
+}
+
+
 Number64.prototype.sub = function (arg_other) 
 {
     this.hexText = process.reserved.bindings.Number64_sub(this.hexText, cast2Number64(arg_other).hexText);
 
     return this;
+}
+
+Number64.sub = function ( item , other ) 
+{
+    return Number64(item).sub(other);
 }
 
 Number64.prototype.mul = function (arg_other)
@@ -447,11 +468,21 @@ Number64.prototype.mul = function (arg_other)
     return this;
 }
 
+Number64.mul = function ( item , other ) 
+{
+    return Number64(item).mul(other);
+}
+
 Number64.prototype.div = function (arg_other)
  {
     this.hexText = process.reserved.bindings.Number64_div(this.hexText, cast2Number64(arg_other).hexText);
 
     return this;
+}
+
+Number64.div = function ( item , other ) 
+{
+    return Number64(item).div(other);
 }
 
 Number64.prototype.mod = function (arg_other) 
@@ -461,6 +492,11 @@ Number64.prototype.mod = function (arg_other)
     return this;
 }
 
+Number64.mod = function ( item , other ) 
+{
+    return Number64(item).mod(other);
+}
+
 Number64.prototype.not = function (arg_other) 
 {
     this.hexText = process.reserved.bindings.Number64_not(this.hexText, cast2Number64(arg_other).hexText);
@@ -468,12 +504,21 @@ Number64.prototype.not = function (arg_other)
     return this;
 }
 
+Number64.not = function ( item , other ) 
+{
+    return Number64(item).not(other);
+}
 
 Number64.prototype.and = function (arg_other) 
 {
     this.hexText = process.reserved.bindings.Number64_and(this.hexText, cast2Number64(arg_other).hexText);
 
     return this;
+}
+
+Number64.and = function ( item , other ) 
+{
+    return Number64(item).and(other);
 }
 
 Number64.prototype.or = function (arg_other) 
@@ -483,11 +528,21 @@ Number64.prototype.or = function (arg_other)
     return this;
 }
 
+Number64.or = function ( item , other ) 
+{
+    return Number64(item).or(other);
+}
+
 Number64.prototype.xor = function (arg_other) 
 {
     this.hexText = process.reserved.bindings.Number64_xor(this.hexText, cast2Number64(arg_other).hexText);
 
     return this;
+}
+
+Number64.xor = function ( item , other ) 
+{
+    return Number64(item).xor(other);
 }
 
 Number64.prototype.shl = function (arg_other) 
@@ -498,6 +553,11 @@ Number64.prototype.shl = function (arg_other)
 }
 Number64.prototype.shiftLeft = Number64.prototype.shl;
 
+Number64.shiftLeft = function ( item , other ) 
+{
+    return Number64(item).shiftLeft(other);
+}
+Number64.shl = Number64.shiftLeft;
 
 Number64.prototype.shr = function (arg_other) 
 {
@@ -507,10 +567,58 @@ Number64.prototype.shr = function (arg_other)
 }
 Number64.prototype.shiftRight = Number64.prototype.shr;
 
+Number64.shiftRight = function ( item , other ) 
+{
+    return Number64(item).shiftRight(other);
+}
+Number64.shr = Number64.shiftRight;
+
+
 Number64.prototype.isNumber32 = function () 
 {
     return (0 == parseInt(this.hexText.substring(0, 10)));
 }
+
+Number64.prototype.setBit = function ( index ) 
+{
+    return this.or( Number64(1).shiftLeft(index) );
+}
+
+Number64.setBit = function ( item , index ) 
+{
+    return Number64(item).setBit(index);
+}
+
+Number64.prototype.clearBit = function ( index ) 
+{
+    return this.and( Number64(1).shiftLeft(index).not() );
+}
+
+Number64.clearBit = function ( item , index ) 
+{
+    return Number64(item).clearBit(index);
+}
+
+Number64.prototype.negBit = function ( index ) 
+{
+    return this.xor( Number64(1).shiftLeft(index).not() );
+}
+
+Number64.negBit = function ( item , index ) 
+{
+    return Number64(item).negBit(index);
+}
+
+Number64.prototype.testBit = function ( index ) 
+{
+	return ( 1 == Number64(this).shiftRight(index).and(1).toUInt8() );
+}
+
+Number64.testBit = function ( item , index ) 
+{
+    return Number64(item).testBit(index);
+}
+
 
 Number64.prototype.cast2Number32 = function () 
 {
@@ -591,7 +699,6 @@ Number64.prototype.toDoubleBE = function ()
 }
 
 // swap
-
 Number64.swap16 = function Number64_swap16(value) 
 {
     return process.reserved.bindings.Number64_swap16(Number64(16).hexText);

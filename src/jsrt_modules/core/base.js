@@ -170,10 +170,48 @@ function escapeDoubleQuotes(str)
 }
 exports.escapeDoubleQuotes = escapeDoubleQuotes;
 
+
+function ULONG2Tag(nValue)
+{
+	assert( _.isNumber(nValue) );
+
+	var a = (nValue >> 24) & 0xFF;
+	var b = (nValue >> 16) & 0xFF;
+	var c = (nValue >> 8) & 0xFF;
+	var d = (nValue >> 0) & 0xFF;
+	
+	var tag = String.fromCharCode(a);
+	
+	tag += String.fromCharCode(b);
+	
+	tag += String.fromCharCode(c);
+	
+	tag += String.fromCharCode(d);
+	
+	return tag;
+}
+exports.ULONG2Tag = ULONG2Tag;
+
+function Tag2ULONG(strTag)
+{
+	assert( _.isString(strTag) );
+	assert( strTag.length == 4 );	// only support 4 bytes
+
+	var a = strTag.charCodeAt(0) & 0xFF;
+	var b = strTag.charCodeAt(1) & 0xFF;
+	var c = strTag.charCodeAt(2) & 0xFF;
+	var d = strTag.charCodeAt(3) & 0xFF;
+	var nValue = 0;
+	
+	nValue = (a << 0 ) | (b << 8 ) | (c << 16 ) | (d << 24 );
+	
+	return nValue;
+}
+exports.Tag2ULONG = Tag2ULONG;
+
+
 function main(  )
 {
-	
-	
 	return 0;
 }
 

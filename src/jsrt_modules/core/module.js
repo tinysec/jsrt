@@ -44,6 +44,9 @@ Module._cache = {};
 const BUILTIN_MODULE_NAME_TABLE = [
 	
 	
+	// depend
+	"underscore" , 
+
 	// core
     "assert",
 	"base" ,
@@ -52,7 +55,6 @@ const BUILTIN_MODULE_NAME_TABLE = [
 	"fs" ,
 	"path" ,
 	"serialize" ,
-    "underscore" , 
 	
 	
 	// std
@@ -386,7 +388,8 @@ Module.staticLoadFile = function (arg_requestName, arg_parent, arg_isMain)
 	{
         return execRet;
     }
-    else {
+    else 
+	{
         return NewModule.exports;
     }
 }
@@ -469,8 +472,19 @@ Module.prototype._loadFile = function (arg_filename)
     this.searchPaths.push(path.removeFileSpec(arg_filename));
 
     var fileContent = fs_readTextFile(arg_filename, "utf-8");
-
-    return this._loadFromContent(fileContent, arg_filename);
+	
+	var extname = path.extname(arg_filename);
+	
+	if ( ".json" == extname )
+	{
+		this.exports = JSON.parse( fileContent );
+		
+		return this.exports;
+	}
+	else
+	{
+		 return this._loadFromContent(fileContent, arg_filename);
+	}
 }
 
 
