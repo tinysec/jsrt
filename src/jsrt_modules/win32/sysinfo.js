@@ -112,6 +112,8 @@ function helper_querySystemInfomation2( SystemInformationClass , param_initSize 
 			//nTestSize += 1024 * 200;
 			
 			nTestSize = nTestSize * 2;
+			
+			
 		}
 		
 	}while(false);
@@ -365,7 +367,7 @@ function queryProcessInfomation()
 		{
 			stProcessNode.NumberOfThreads =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_NumberOfThreads );
 	
-			stProcessNode.ImageName =  lpBuffer.readUNICODE_STRING( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_ImageName );
+			stProcessNode.ImageName =  lpBuffer.readStringFromUNICODE_STRING( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_ImageName );
 			
 			stProcessNode.BasePriority =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_BasePriority );
 			
@@ -419,7 +421,7 @@ function queryProcessInfomation()
 		{
 			stProcessNode.NumberOfThreads =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_NumberOfThreads );
 	
-			stProcessNode.ImageName =  lpBuffer.readUNICODE_STRING( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_ImageName );
+			stProcessNode.ImageName =  lpBuffer.readStringFromUNICODE_STRING( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_ImageName );
 			
 			stProcessNode.BasePriority =  lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_PROCESS_INFORMATION_BasePriority );
 			
@@ -610,6 +612,150 @@ function queryHandleInfomation()
 exports.queryHandleInfomation = queryHandleInfomation;
 
 
+function queryLockInfomation()
+{
+	var lpBuffer = null;
+	
+	var entryBaseOffset = 0;
+
+	var stLockNode = {};
+	var lockArray = [];
+	
+	var NumberOfHandles = 0;
+	var entryIndex = 0;
+	
+	lpBuffer = helper_querySystemInfomation2( 12 , 1024 * 100 );
+	
+	if ( !lpBuffer )
+	{
+		return lockArray;
+	}
+
+	
+	// init offsets
+	var offset_RTL_PROCESS_LOCK_INFORMATION_Address = 0x00;
+		
+	var offset_RTL_PROCESS_LOCK_INFORMATION_Type = 0x00;
+		
+	var offset_RTL_PROCESS_LOCK_INFORMATION_CreatorBackTraceIndex = 0x00;
+		
+	var offset_RTL_PROCESS_LOCK_INFORMATION_OwningThread = 0x00;
+		
+	var offset_RTL_PROCESS_LOCK_INFORMATION_LockCount = 0x00;
+		
+	var offset_RTL_PROCESS_LOCK_INFORMATION_ContentionCount = 0x00;
+		
+	var offset_RTL_PROCESS_LOCK_INFORMATION_EntryCount = 0x00;
+	
+	var offset_RTL_PROCESS_LOCK_INFORMATION_RecursionCount = 0x00;
+	
+	var offset_RTL_PROCESS_LOCK_INFORMATION_NumberOfWaitingShared = 0x00;
+	
+	var offset_RTL_PROCESS_LOCK_INFORMATION_NumberOfWaitingExclusive = 0x00;
+	
+	var sizeof_RTL_PROCESS_LOCK_INFORMATION = 0;
+
+	
+	if ( 'x64' == process.arch )
+	{
+		offset_RTL_PROCESS_LOCK_INFORMATION_Address = 0x00;
+		
+		offset_RTL_PROCESS_LOCK_INFORMATION_Type = 0x08;
+		
+		offset_RTL_PROCESS_LOCK_INFORMATION_CreatorBackTraceIndex = 0x0A;
+		
+		offset_RTL_PROCESS_LOCK_INFORMATION_OwningThread = 0x10;
+		
+		offset_RTL_PROCESS_LOCK_INFORMATION_LockCount = 0x18;
+		
+		offset_RTL_PROCESS_LOCK_INFORMATION_ContentionCount = 0x1C;
+		
+		offset_RTL_PROCESS_LOCK_INFORMATION_EntryCount = 0x20;
+		
+		offset_RTL_PROCESS_LOCK_INFORMATION_RecursionCount = 0x24;
+		
+		offset_RTL_PROCESS_LOCK_INFORMATION_NumberOfWaitingShared = 0x28;
+		
+		offset_RTL_PROCESS_LOCK_INFORMATION_NumberOfWaitingExclusive = 0x2C;
+
+		sizeof_RTL_PROCESS_LOCK_INFORMATION = 0x30;
+	}
+	else
+	{
+		offset_RTL_PROCESS_LOCK_INFORMATION_Address = 0x00;
+		
+		offset_RTL_PROCESS_LOCK_INFORMATION_Type = 0x04;
+		
+		offset_RTL_PROCESS_LOCK_INFORMATION_CreatorBackTraceIndex = 0x06;
+		
+		offset_RTL_PROCESS_LOCK_INFORMATION_OwningThread = 0x08;
+		
+		offset_RTL_PROCESS_LOCK_INFORMATION_LockCount = 0x0C;
+		
+		offset_RTL_PROCESS_LOCK_INFORMATION_ContentionCount = 0x10;
+		
+		offset_RTL_PROCESS_LOCK_INFORMATION_EntryCount = 0x14;
+		
+		offset_RTL_PROCESS_LOCK_INFORMATION_RecursionCount = 0x18;
+		
+		offset_RTL_PROCESS_LOCK_INFORMATION_NumberOfWaitingShared = 0x1C;
+		
+		offset_RTL_PROCESS_LOCK_INFORMATION_NumberOfWaitingExclusive = 0x20;
+		
+		sizeof_RTL_PROCESS_LOCK_INFORMATION = 0x24;
+	}
+	
+	NumberOfHandles = lpBuffer.readUInt32LE( 0 );
+		
+	for ( entryIndex = 0; entryIndex < NumberOfHandles; entryIndex++ )
+	{
+		if ( 'x64' == process.arch )
+		{
+			entryBaseOffset = 8 + entryIndex * sizeof_RTL_PROCESS_LOCK_INFORMATION;
+		}
+		else
+		{
+			entryBaseOffset = 4 + entryIndex * sizeof_RTL_PROCESS_LOCK_INFORMATION;
+		}
+		
+		stLockNode = {};
+		
+		stLockNode.Address =  lpBuffer.readPointer( entryBaseOffset + offset_RTL_PROCESS_LOCK_INFORMATION_Address );
+	
+		stLockNode.Type =  lpBuffer.readUInt16LE( entryBaseOffset + offset_RTL_PROCESS_LOCK_INFORMATION_Type );
+			
+		stLockNode.CreatorBackTraceIndex =  lpBuffer.readUInt16LE( entryBaseOffset + offset_RTL_PROCESS_LOCK_INFORMATION_CreatorBackTraceIndex );
+			
+		stLockNode.OwningThread =  lpBuffer.readPointer( entryBaseOffset + offset_RTL_PROCESS_LOCK_INFORMATION_OwningThread );
+			
+		stLockNode.LockCount =  lpBuffer.readInt32LE( entryBaseOffset + offset_RTL_PROCESS_LOCK_INFORMATION_LockCount );
+			
+		stLockNode.ContentionCount =  lpBuffer.readUInt32LE( entryBaseOffset + offset_RTL_PROCESS_LOCK_INFORMATION_ContentionCount );
+
+		stLockNode.EntryCount =  lpBuffer.readUInt32LE( entryBaseOffset + offset_RTL_PROCESS_LOCK_INFORMATION_EntryCount );
+			
+		stLockNode.RecursionCount =  lpBuffer.readInt32LE( entryBaseOffset + offset_RTL_PROCESS_LOCK_INFORMATION_EntryCount );
+		
+		stLockNode.NumberOfWaitingShared =  lpBuffer.readUInt32LE( entryBaseOffset + offset_RTL_PROCESS_LOCK_INFORMATION_EntryCount );
+		
+		stLockNode.NumberOfWaitingExclusive =  lpBuffer.readUInt32LE( entryBaseOffset + offset_RTL_PROCESS_LOCK_INFORMATION_EntryCount );
+		
+		
+		// push node 
+		lockArray.push( stLockNode ); 
+	}
+	
+	if ( lpBuffer )
+	{
+		lpBuffer.free();
+		lpBuffer = null;
+	}
+
+	return lockArray;
+}
+exports.queryLockInfomation = queryLockInfomation;
+
+
 function fix_module_path(  arg_src_path )
 {
     if ( 0 == arg_src_path.length )
@@ -793,7 +939,7 @@ function queryModuleInformation()
 }
 exports.queryModuleInformation = queryModuleInformation;
 
-// not support wow64 mode
+
 function queryBigPoolInformation()
 {
 	var lpBuffer = null;
@@ -885,9 +1031,12 @@ function queryBigPoolInformation()
 exports.queryBigPoolInformation = queryBigPoolInformation;
 
 
+
+
+
 function main(  )
 {
-
+	
 	return 0;
 }
 
