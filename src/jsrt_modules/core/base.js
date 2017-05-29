@@ -209,6 +209,11 @@ function Tag2ULONG(strTag)
 }
 exports.Tag2ULONG = Tag2ULONG;
 
+function sleep(time) 
+{
+	return process.reserved.bindings.host_sleep( time || 0 );
+}
+exports.sleep = sleep;
 
 function main(  )
 {

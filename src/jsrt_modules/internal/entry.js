@@ -1,5 +1,6 @@
 'use strict';
-(function entrypoint(__GLOBAL) {
+(function entrypoint(__GLOBAL) 
+{
     const require = process.reserved.NativeModule.require;
 
     const printf = require("cprintf").printf;
@@ -11,6 +12,10 @@
     const Module = require("Module");
 	
 	const base = require("base");
+	
+	const serialize = require("serialize").serialize;
+	const unserialize = require("serialize").unserialize;
+
 
     var EXEC_ARG_OPTION_TABLE = [
         {
@@ -355,12 +360,39 @@
 
         return 0;
     }
+	
+	function threadEntry()
+	{
+		process.parentTid = process.reserved.entryContext.parentTid;
+		
+		var fileExports = Module.staticRunContentWithFilename( 
+				process.reserved.entryContext.fileContent ,
+				process.reserved.entryContext.fileName ,
+		);
+		
+		var fnRoutine = fileExports[ process.reserved.entryContext.routineName ];
+		
+		if ( !fnRoutine )
+		{
+			throw new Error( sprintf("[-] not found thread routine %s\n" ,  process.reserved.entryContext.routineName) );
+		}
+		
+		var threadContext = unserialize( process.reserved.entryContext.threadContext );
+		
+		return fnRoutine( threadContext );
+	}
 
 	function entryMain()
 	{
-
-
-		parseEntryCommandLine();
+		if ( process.reserved.entryContext.threadMode )
+		{
+			threadEntry();
+		}
+		else
+		{
+			parseEntryCommandLine();
+		}
+	
 		entryPostCheck();	
 	}
    

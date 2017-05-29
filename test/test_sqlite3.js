@@ -1,5 +1,5 @@
 const printf = require("cprintf").printf;
-const sqlite3 = require("sqlite3");
+const sqlite3 = require("3rd/sqlite3");
 
 var hSQLite = sqlite3.open( "d:/1.db");
 	

@@ -30,7 +30,8 @@ function Module(id, parent) {
     this.exports = {};
     this.parent = parent;
 
-    if (parent && parent.children) {
+    if (parent && parent.children) 
+	{
         parent.children.push(this);
     }
 
@@ -56,10 +57,10 @@ const BUILTIN_MODULE_NAME_TABLE = [
 	"path" ,
 	"serialize" ,
 	
-	
 	// std
 	"os" ,
 	"child_process" ,
+	"thread" ,
 	
 	// 3rd
 	"3rd/capstone" ,
@@ -404,7 +405,8 @@ Module.staticRunEval = function ()
 {
     var filecontent = process.argv[1];
 
-    if (!filecontent) {
+    if (!filecontent) 
+	{
         return;
     }
 
@@ -419,11 +421,25 @@ Module.staticRunEval = function ()
 	{
         execRet = NewModule._loadFromContent(filecontent, "eval code");
     }
-    catch (err) {
+    catch (err) 
+	{
         printf("eval error %s\n", err);
     }
 
     return execRet;
+}
+
+Module.staticRunContentWithFilename = function ( filecontent , fileName ) 
+{
+    var NewModule = new Module();
+
+    process.mainModule = NewModule;
+    NewModule.id = '#';
+	NewModule.parent = {};
+	
+    NewModule._loadFromContent(filecontent , fileName);
+   
+    return NewModule.exports;
 }
 
 
