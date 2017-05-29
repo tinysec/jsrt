@@ -62,11 +62,11 @@ const BUILTIN_MODULE_NAME_TABLE = [
 	"child_process" ,
 	
 	// 3rd
-	"capstone" ,
-	"keystone" ,
-	"unicorn" ,
+	"3rd/capstone" ,
+	"3rd/keystone" ,
+	"3rd/unicorn" ,
 	
-	"sqlite3" ,
+	"3rd/sqlite3" ,
 	
 	// win32
 	"win32/native" , 
@@ -171,11 +171,11 @@ function buildSearchPaths(arg_name, arg_searchPaths)
         searchPaths.push(testPath);
     }
 
-    if ("windbg" == process.hostType) 
+    if ("windbg" == host.type) 
 	{
         searchPaths = addEnvPaths(searchPaths, "JSRT_WINDBG_MODULE_PATH");
     }
-    else if ("ida" == process.hostType) 
+    else if ("ida" == host.type) 
 	{
         searchPaths = addEnvPaths(searchPaths, "JSRT_IDA_MODULE_PATH");
     }

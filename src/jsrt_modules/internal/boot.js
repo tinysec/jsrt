@@ -122,8 +122,6 @@
 
     function pre_init_process() 
 	{
-
-
         // zero-depends
         process.reserved.wrapper = {};
         process.reserved.entryContext = {};
@@ -198,71 +196,56 @@
         process.compiledType = process.reserved.bootContext.compiledType;
         process.hostVersionNumber = process.reserved.bootContext.hostVersionNumber || 0;
 
-        if ("console" == process.compiledType) 
-		{
-            if (process.env["GATEWAY_INTERFACE"]) 
-			{
-                process.hostType = "cgi";
-            }
-            else {
-                process.hostType = "console";
-            }
-        }
-        else if ("window" == process.compiledType) 
-		{
-            process.hostType = "window";
-        }
-        else if ("windbg" == process.compiledType) 
-		{
-            process.hostType = "windbg";
-        }
-        else if ("ida" == process.compiledType) 
-		{
-            process.hostType = "ida";
-        }
-        else 
-		{
-            throw new Error("unknown host type");
-        }
-
         // argv
         process.argv = [process.execPath];
 
         delete process.reserved.bootContext;
     }
-
-    function startup()
+	
+	function pre_init_host() 
 	{
-		// zero-depends
-        pre_init_process();
+        // zero-depends
+   
+		if ("console" == process.compiledType) 
+		{
+            if ( process.env["GATEWAY_INTERFACE"] ) 
+			{
+                host.type = "cgi";
+            }
+            else 
+			{
+                host.type = "console";
+            }
+        }
+        else if ( "window" == process.compiledType ) 
+		{
+            host.type = "window";
+        }
+        else if ( "windbg" == process.compiledType ) 
+		{
+            host.type = "windbg";
+        }
+        else if ( "ida" == process.compiledType ) 
+		{
+            host.type = "ida";
+        }
+        else 
+		{
+            throw new Error( "unknown host type" );
+        }
 		
-		__GLOBAL["host"] = {};
-
-		__GLOBAL["console"] = {};
-
-		const Number64 = NativeModule.require("number64");
-		__GLOBAL["Number64"] = Number64;
+        
+    }
+	
+	
+	function post_init_process() 
+	{
+		const path = NativeModule.require("path");
 		
 		const base = NativeModule.require("base");
 
 		const printf = NativeModule.require("cprintf").printf;
         const sprintf = NativeModule.require("cprintf").sprintf;
-		
-		const path = NativeModule.require("path");
-
-		// console
-		console.log = function console_log() 
-		{
-			var totaltext = sprintf.apply(this, arguments);
-			printf(totaltext + "\n");
-		}
-
-
-		const Buffer = NativeModule.require("Buffer");
-		__GLOBAL["Buffer"] = Buffer;
-
-		
-		// post init process
 		
 		process.execDirectory = path.removeFileSpec( process.execPath );
 		
@@ -280,11 +263,88 @@
 		Object.defineProperty(process, 'reserved', {
 			enumerable: false
 		});
+    }
+	
+	function init_console() 
+	{
+		// console
+		const printf = NativeModule.require("cprintf").printf;
+        const sprintf = NativeModule.require("cprintf").sprintf;
+		const _ = NativeModule.require("underscore");
+		const assert = NativeModule.require("assert");
 		
 		
+		__GLOBAL["alert"] = function alert() 
+		{
+			var totaltext = sprintf.apply(this , arguments);
+			process.reserved.bindings.host_alert(totaltext);
+		}
+		
+		__GLOBAL["console"] = {};
+		console.log = function console_log() 
+		{
+			var totaltext = sprintf.apply(this , arguments);
+			printf(totaltext + "\n");
+		}
+        
+		console.input = function( )
+		{
+			var argv = Array.prototype.slice.call(arguments);
+			var maxLength = 1024;
+			
+			if ( 0 != arguments.length )
+			{
+				if ( _.isNumber( arguments[0] ) )
+				{
+					assert( ( 0 < arguments[0] ) , "invalid max input length");
+				
+					maxLength = arguments[0];
+					
+					argv.shift();
+					printf.apply(this , argv);
+				}
+				else
+				{
+					printf.apply(this , arguments);
+				}
+			}
+			
+			var text = process.reserved.bindings.host_input(maxLength);
+			
+			// remove last \n
+			if ( 0 != text.length )
+			{
+				if ( '\n' == text.charAt( text.length - 1 ) )
+				{
+					text = text.substr( 0 , text.length - 1 );
+				}
+			}
+			
+			return text;
+		}
+    }
+
+    function startup()
+	{
+		// zero-depends
+        pre_init_process();
+		
+		// zero-depends
+		pre_init_host();
+
+		__GLOBAL["Number64"] = NativeModule.require("number64");
+		
+		init_console();
+	
+		__GLOBAL["Buffer"] = NativeModule.require("Buffer");
+		
+		// post init process
+		post_init_process();
+	
 		// extend
 		NativeModule.require("internal/extend");
 
+		NativeModule.require("host/common");
 
         return 0;
     }

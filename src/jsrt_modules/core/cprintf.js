@@ -8,7 +8,8 @@ function escapeDoubleQuotes(str) {
     return str.replace(/\\([\s\S])|(")/g, "\\$1$2");
 }
 
-function sprintf() {
+function sprintf() 
+{
     var argv = Array.prototype.slice.call(arguments);
     var text = '';
 
@@ -32,7 +33,8 @@ function sprintf() {
 }
 exports.sprintf = sprintf;
 
-function printf() {
+function printf() 
+{
     var totaltext = sprintf.apply(this, arguments);
     if (0 == totaltext.length) {
         return;
@@ -49,7 +51,7 @@ function printf() {
         singletext = totaltext.substring(offset, offset + singlelength);
 
         if (0 != singletext.length) {
-            process.reserved.bindings.host_stdout(singletext);
+            process.reserved.bindings.host_output(singletext);
         }
 
         leftLength -= singlelength;
