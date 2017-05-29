@@ -28,6 +28,7 @@
 # just  compatible to my first version.
 
 ## native support feature
+* real native multi-thread support
 * 64-bit number
 * Buffer
 * host full memory access , and support both GC and manual memory manager.
@@ -70,6 +71,9 @@ more info is at https://github.com/tinysec/jsrt
 
 ## xp ~ win10 rs2 support !!
 ![xp_support](xp.png)
+
+## real multi thread support !!
+![thread_support](thread.png)
 
 
 ## example
