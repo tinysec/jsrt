@@ -171,7 +171,7 @@ function escapeDoubleQuotes(str)
 exports.escapeDoubleQuotes = escapeDoubleQuotes;
 
 
-function ULONG2Tag(nValue)
+function UInt32LEToTag(nValue)
 {
 	assert( _.isNumber(nValue) );
 
@@ -180,7 +180,32 @@ function ULONG2Tag(nValue)
 	var c = (nValue >> 8) & 0xFF;
 	var d = (nValue >> 0) & 0xFF;
 	
-	var tag = String.fromCharCode(a);
+	var tag = '';
+	
+	tag = String.fromCharCode(d);
+	
+	tag += String.fromCharCode(c);
+	
+	tag += String.fromCharCode(b);
+	
+	tag += String.fromCharCode(a);
+	
+	return tag;
+}
+exports.UInt32LEToTag = UInt32LEToTag;
+
+function UInt32BEToTag(nValue)
+{
+	assert( _.isNumber(nValue) );
+
+	var a = (nValue >> 24) & 0xFF;
+	var b = (nValue >> 16) & 0xFF;
+	var c = (nValue >> 8) & 0xFF;
+	var d = (nValue >> 0) & 0xFF;
+	
+	var tag = '';
+	
+	tag = String.fromCharCode(a);
 	
 	tag += String.fromCharCode(b);
 	
@@ -190,9 +215,9 @@ function ULONG2Tag(nValue)
 	
 	return tag;
 }
-exports.ULONG2Tag = ULONG2Tag;
+exports.UInt32BEToTag = UInt32BEToTag;
 
-function Tag2ULONG(strTag)
+function tagToUInt32LE(strTag)
 {
 	assert( _.isString(strTag) );
 	assert( strTag.length == 4 );	// only support 4 bytes
@@ -207,7 +232,25 @@ function Tag2ULONG(strTag)
 	
 	return nValue;
 }
-exports.Tag2ULONG = Tag2ULONG;
+exports.tagToUInt32LE = tagToUInt32LE;
+
+function tagToUInt32BE(strTag)
+{
+	assert( _.isString(strTag) );
+	assert( strTag.length == 4 );	// only support 4 bytes
+
+	var a = strTag.charCodeAt(0) & 0xFF;
+	var b = strTag.charCodeAt(1) & 0xFF;
+	var c = strTag.charCodeAt(2) & 0xFF;
+	var d = strTag.charCodeAt(3) & 0xFF;
+	
+	var nValue = 0;
+	
+	nValue = (a << 24 ) | (b << 16 ) | (c << 8 ) | (d << 0 );
+	
+	return nValue;
+}
+exports.tagToUInt32BE = tagToUInt32BE;
 
 function sleep(time) 
 {

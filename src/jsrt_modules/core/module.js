@@ -56,6 +56,7 @@ const BUILTIN_MODULE_NAME_TABLE = [
 	"fs" ,
 	"path" ,
 	"serialize" ,
+	"intrinsic" ,
 	
 	// std
 	"os" ,
@@ -71,13 +72,20 @@ const BUILTIN_MODULE_NAME_TABLE = [
 	
 	// win32
 	"win32/native" , 
+	
 	"win32/pdb" ,
+	
 	"win32/auth" ,
+	
 	"win32/toolHelp" ,
 	
 	"win32/ioctl" ,
 	
-	"win32/sysinfo" 
+	"win32/sysinfo",
+	
+	"win32/message" ,
+	
+	"win32/pe" 
 	
 
 ];

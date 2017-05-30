@@ -93,6 +93,8 @@ var WIN_TYPE_TO_FFI_TYPE_TABLE = {
 
     "size_t": "ulong_ptr", 
 	"SIZE_T" : "ulong_ptr" ,
+	
+	"LRESULT" : "long_ptr",
 
     "FLOAT": "float",
     "DOUBLE": "DOUBLE",
@@ -996,6 +998,10 @@ function _castTo_long_ptr(argValue)
 	{
         return argValue;
     }
+	else if ( Buffer.isBuffer(argValue) )
+	{
+        return argValue.address;
+    }
     else 
 	{
         throw new Error(sprintf("want long_ptr but receive %s", typeof argValue));
@@ -1010,9 +1016,13 @@ function _castTo_ulong_ptr(argValue)
 	{
         return Number64(argValue);
     }
-    else if (Number64.isNumber64(argValue)) 
+    else if ( Number64.isNumber64(argValue) ) 
 	{
         return argValue;
+    }
+	else if ( Buffer.isBuffer(argValue) )
+	{
+        return argValue.address;
     }
     else 
 	{
@@ -1034,7 +1044,8 @@ function _castTo_buffer(argValue)
     }
     else if (Buffer.isBuffer(argValue)) 
 	{
-        if (!argValue.isValid()) {
+        if (!argValue.isValid()) 
+		{
             throw new Error(sprintf("the Buffer is invalid"));
         }
 
@@ -1048,15 +1059,15 @@ function _castTo_buffer(argValue)
 
 function _castTo_handle(argValue) 
 {
-    if (_.isNull(argValue)) 
+    if ( _.isNull(argValue) ) 
 	{
         return null;
     }
-    else if (Number64.isNumber64(argValue)) 
+    else if ( Number64.isNumber64(argValue) ) 
 	{
         return argValue;
     }
-    else if (Buffer.isBuffer(argValue))
+    else if ( Buffer.isBuffer(argValue) )
 	{
         return argValue.address;
     }

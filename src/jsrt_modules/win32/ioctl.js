@@ -122,9 +122,6 @@ exports.deviceIoControl = deviceIoControl;
 function main(  )
 {
 	
-	var ioctl = exports;
-	
-	
 	
 	return 0;
 }

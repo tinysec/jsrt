@@ -1014,7 +1014,7 @@ function queryBigPoolInformation()
 		
 		stPoolNode.bytes =  lpBuffer.readULONG_PTR( entryBaseOffset + offset_SYSTEM_BIGPOOL_ENTRY_SizeInBytes );
 			
-		stPoolNode.tag = base.ULONG2Tag( lpBuffer.readUInt32BE( entryBaseOffset + offset_SYSTEM_BIGPOOL_ENTRY_TagUlong ) );
+		stPoolNode.tag = base.UInt32LEToTag( lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_BIGPOOL_ENTRY_TagUlong ) );
 	
 		// push node 
 		PoolArray.push( stPoolNode ); 
