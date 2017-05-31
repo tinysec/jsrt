@@ -171,6 +171,42 @@ function escapeDoubleQuotes(str)
 exports.escapeDoubleQuotes = escapeDoubleQuotes;
 
 
+function UInt16LEToTag(nValue)
+{
+	assert( _.isNumber(nValue) );
+
+	var c = (nValue >> 8) & 0xFF;
+	var d = (nValue >> 0) & 0xFF;
+	
+	var tag = '';
+	
+	tag = String.fromCharCode(d);
+	
+	tag += String.fromCharCode(c);
+	
+	return tag;
+}
+exports.UInt16LEToTag = UInt16LEToTag;
+
+function UInt16BEToTag(nValue)
+{
+	assert( _.isNumber(nValue) );
+
+
+	var c = (nValue >> 8) & 0xFF;
+	var d = (nValue >> 0) & 0xFF;
+	
+	var tag = '';
+	
+	tag += String.fromCharCode(c);
+	
+	tag += String.fromCharCode(d);
+	
+	return tag;
+}
+exports.UInt16BEToTag = UInt16BEToTag;
+
+
 function UInt32LEToTag(nValue)
 {
 	assert( _.isNumber(nValue) );

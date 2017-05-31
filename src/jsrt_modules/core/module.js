@@ -85,7 +85,9 @@ const BUILTIN_MODULE_NAME_TABLE = [
 	
 	"win32/message" ,
 	
-	"win32/pe" 
+	"win32/pe" ,
+	
+	"win32/fileversion"
 	
 
 ];

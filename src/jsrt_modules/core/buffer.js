@@ -722,6 +722,27 @@ Buffer.readInt8 = function (address , offset)
     return process.reserved.bindings.buffer_readInt8(address, offset || 0);
 }
 
+Buffer.prototype.readInt8Array = function (offset , count ) 
+{
+    return Buffer.readInt8Array(this.address, offset , count );
+}
+
+Buffer.readInt8Array = function (address , arg_offset , arg_count) 
+{
+    assert( _.isNumber(arg_offset) );
+	assert( _.isNumber(arg_count) );
+	
+	var index = 0;
+	var valueArray = [];
+	
+	for ( index = 0; index < arg_count; index++ )
+	{
+		valueArray.push( Buffer.readInt8( address , arg_offset + index * 1  ) );
+	}
+	
+    return valueArray;
+}
+
 Buffer.prototype.readUInt8 = function (offset) 
 {
     if (!this.isValid()) 
@@ -740,6 +761,28 @@ Buffer.readUInt8 = function (address , offset)
 	
     return process.reserved.bindings.buffer_readUInt8( address, offset || 0);
 }
+
+Buffer.prototype.readUInt8Array = function (offset , count ) 
+{
+    return Buffer.readUInt8Array(this.address, offset , count );
+}
+
+Buffer.readUInt8Array = function (address , arg_offset , arg_count) 
+{
+    assert( _.isNumber(arg_offset) );
+	assert( _.isNumber(arg_count) );
+	
+	var index = 0;
+	var valueArray = [];
+	
+	for ( index = 0; index < arg_count; index++ )
+	{
+		valueArray.push( Buffer.readUInt8( address , arg_offset + index * 1  ) );
+	}
+	
+    return valueArray;
+}
+
 
 Buffer.prototype.readInt16BE = function (offset) 
 {
@@ -760,6 +803,29 @@ Buffer.readInt16BE = function (address , offset)
     return process.reserved.bindings.buffer_readInt16BE(address, offset || 0);
 }
 
+Buffer.prototype.readInt16BEArray = function (offset , count ) 
+{
+    return Buffer.readInt16BEArray(this.address, offset , count );
+}
+
+Buffer.readInt16BEArray = function (address , arg_offset , arg_count) 
+{
+    assert( _.isNumber(arg_offset) );
+	assert( _.isNumber(arg_count) );
+	
+	var index = 0;
+	var valueArray = [];
+	
+	
+	for ( index = 0; index < arg_count; index++ )
+	{
+		valueArray.push( Buffer.readInt16BE( address , arg_offset + index * 2  ) );
+	}
+	
+    return valueArray;
+}
+
+
 Buffer.prototype.readInt16LE = function (offset) 
 {
     if (!this.isValid()) 
@@ -778,6 +844,29 @@ Buffer.readInt16LE = function (address , offset)
 	
     return process.reserved.bindings.buffer_readInt16LE(address, offset || 0);
 }
+
+Buffer.prototype.readInt16LEArray = function (offset , count ) 
+{
+    return Buffer.readInt16LEArray(this.address, offset , count );
+}
+
+Buffer.readInt16LEArray = function (address , arg_offset , arg_count) 
+{
+    assert( _.isNumber(arg_offset) );
+	assert( _.isNumber(arg_count) );
+	
+	var index = 0;
+	var valueArray = [];
+	
+	
+	for ( index = 0; index < arg_count; index++ )
+	{
+		valueArray.push( Buffer.readInt16LE( address , arg_offset + index * 2  ) );
+	}
+	
+    return valueArray;
+}
+
 
 Buffer.prototype.readUInt16BE = function (offset) 
 {
@@ -798,6 +887,28 @@ Buffer.readUInt16BE = function (address , offset)
     return process.reserved.bindings.buffer_readUInt16BE(address, offset || 0);
 }
 
+Buffer.prototype.readUInt16BEArray = function (offset , count ) 
+{
+    return Buffer.readUInt16BEArray(this.address, offset , count );
+}
+
+Buffer.readUInt16BEArray = function (address , arg_offset , arg_count) 
+{
+    assert( _.isNumber(arg_offset) );
+	assert( _.isNumber(arg_count) );
+	
+	var index = 0;
+	var valueArray = [];
+	
+	for ( index = 0; index < arg_count; index++ )
+	{
+		valueArray.push( Buffer.readUInt16BE( address , arg_offset + index * 2  ) );
+	}
+	
+    return valueArray;
+}
+
+
 Buffer.prototype.readUInt16LE = function (offset) 
 {
     if (!this.isValid()) 
@@ -817,6 +928,30 @@ Buffer.readUInt16LE = function (address , offset)
     return process.reserved.bindings.buffer_readUInt16LE(address, offset || 0);
 }
 
+
+Buffer.prototype.readUInt16LEArray = function (offset , count ) 
+{
+    return Buffer.readUInt16LEArray(this.address, offset , count );
+}
+
+Buffer.readUInt16LEArray = function (address , arg_offset , arg_count) 
+{
+    assert( _.isNumber(arg_offset) );
+	assert( _.isNumber(arg_count) );
+	
+	var index = 0;
+	var valueArray = [];
+	
+	
+	for ( index = 0; index < arg_count; index++ )
+	{
+		valueArray.push( Buffer.readUInt16LE( address , arg_offset + index * 2  ) );
+	}
+	
+    return valueArray;
+}
+
+
 Buffer.prototype.readInt32BE = function (offset) 
 {
     if (!this.isValid()) 
@@ -834,6 +969,28 @@ Buffer.readInt32BE = function (address , offset)
     assert(_.isUndefined(offset) || _.isNumber(offset));
 	
     return process.reserved.bindings.buffer_readInt32BE( address, offset || 0);
+}
+
+Buffer.prototype.readInt32BEArray = function (offset , count ) 
+{
+    return Buffer.readInt32BEArray(this.address, offset , count );
+}
+
+Buffer.readInt32BEArray = function (address , arg_offset , arg_count) 
+{
+    assert( _.isNumber(arg_offset) );
+	assert( _.isNumber(arg_count) );
+	
+	var index = 0;
+	var valueArray = [];
+	
+	
+	for ( index = 0; index < arg_count; index++ )
+	{
+		valueArray.push( Buffer.readInt32BE( address , arg_offset + index * 4  ) );
+	}
+	
+    return valueArray;
 }
 
 Buffer.prototype.readInt32LE = function (offset) 
@@ -855,6 +1012,28 @@ Buffer.readInt32LE = function (address , offset)
     return process.reserved.bindings.buffer_readInt32LE(address, offset || 0);
 }
 
+Buffer.prototype.readInt32LEArray = function (offset , count ) 
+{
+    return Buffer.readInt32LEArray(this.address, offset , count );
+}
+
+Buffer.readInt32LEArray = function (address , arg_offset , arg_count) 
+{
+    assert( _.isNumber(arg_offset) );
+	assert( _.isNumber(arg_count) );
+	
+	var index = 0;
+	var valueArray = [];
+	
+	
+	for ( index = 0; index < arg_count; index++ )
+	{
+		valueArray.push( Buffer.readInt32LE( address , arg_offset + index * 4  ) );
+	}
+	
+    return valueArray;
+}
+
 Buffer.prototype.readUInt32BE = function (offset) 
 {
     if (!this.isValid()) 
@@ -872,6 +1051,28 @@ Buffer.readUInt32BE = function (address , offset)
     assert(_.isUndefined(offset) || _.isNumber(offset));
 	
     return process.reserved.bindings.buffer_readUInt32BE( address, offset || 0);
+}
+
+Buffer.prototype.readUInt32BEArray = function (offset , count ) 
+{
+    return Buffer.readUInt32BEArray(this.address, offset , count );
+}
+
+Buffer.readUInt32BEArray = function (address , arg_offset , arg_count) 
+{
+    assert( _.isNumber(arg_offset) );
+	assert( _.isNumber(arg_count) );
+	
+	var index = 0;
+	var valueArray = [];
+	
+	
+	for ( index = 0; index < arg_count; index++ )
+	{
+		valueArray.push( Buffer.readUInt32BE( address , arg_offset + index * 4  ) );
+	}
+	
+    return valueArray;
 }
 
 Buffer.prototype.readUInt32LE = function (offset) 
@@ -893,6 +1094,28 @@ Buffer.readUInt32LE = function (address , offset)
     return process.reserved.bindings.buffer_readUInt32LE(address, offset || 0);
 }
 
+Buffer.prototype.readUInt32LEArray = function (offset , count ) 
+{
+    return Buffer.readUInt32LEArray(this.address, offset , count );
+}
+
+Buffer.readUInt32LEArray = function (address , arg_offset , arg_count) 
+{
+    assert( _.isNumber(arg_offset) );
+	assert( _.isNumber(arg_count) );
+	
+	var index = 0;
+	var valueArray = [];
+	
+	
+	for ( index = 0; index < arg_count; index++ )
+	{
+		valueArray.push( Buffer.readUInt32LE( address , arg_offset + index * 4  ) );
+	}
+	
+    return valueArray;
+}
+
 Buffer.prototype.readInt64BE = function (offset) 
 {
     if (!this.isValid()) 
@@ -911,6 +1134,28 @@ Buffer.readInt64BE = function (address , offset)
     return Number64(process.reserved.bindings.buffer_readInt64BE(address, offset || 0));
 }
 
+Buffer.prototype.readInt64BEArray = function (offset , count ) 
+{
+    return Buffer.readInt64BEArray(this.address, offset , count );
+}
+
+Buffer.readInt64BEArray = function (address , arg_offset , arg_count) 
+{
+    assert( _.isNumber(arg_offset) );
+	assert( _.isNumber(arg_count) );
+	
+	var index = 0;
+	var valueArray = [];
+	
+	
+	for ( index = 0; index < arg_count; index++ )
+	{
+		valueArray.push( Buffer.readInt64BE( address , arg_offset + index * 8  ) );
+	}
+	
+    return valueArray;
+}
+
 Buffer.prototype.readInt64LE = function (offset) 
 {
     if (!this.isValid()) {
@@ -925,6 +1170,28 @@ Buffer.readInt64LE = function (address , offset)
 {
     assert(_.isUndefined(offset) || _.isNumber(offset));
     return Number64(process.reserved.bindings.buffer_readInt64LE(address, offset || 0));
+}
+
+Buffer.prototype.readInt64LEArray = function (offset , count ) 
+{
+    return Buffer.readInt64LEArray(this.address, offset , count );
+}
+
+Buffer.readInt64LEArray = function (address , arg_offset , arg_count) 
+{
+    assert( _.isNumber(arg_offset) );
+	assert( _.isNumber(arg_count) );
+	
+	var index = 0;
+	var valueArray = [];
+	
+	
+	for ( index = 0; index < arg_count; index++ )
+	{
+		valueArray.push( Buffer.readInt64LE( address , arg_offset + index * 8  ) );
+	}
+	
+    return valueArray;
 }
 
 Buffer.prototype.readUInt64BE = function (offset) 
@@ -945,6 +1212,28 @@ Buffer.readUInt64BE = function (address , offset)
     return Number64(process.reserved.bindings.buffer_readUInt64BE(address, offset || 0));
 }
 
+Buffer.prototype.readUInt64BEArray = function (offset , count ) 
+{
+    return Buffer.readUInt64BEArray(this.address, offset , count );
+}
+
+Buffer.readUInt64BEArray = function (address , arg_offset , arg_count) 
+{
+    assert( _.isNumber(arg_offset) );
+	assert( _.isNumber(arg_count) );
+	
+	var index = 0;
+	var valueArray = [];
+	
+	
+	for ( index = 0; index < arg_count; index++ )
+	{
+		valueArray.push( Buffer.readUInt64BE( address , arg_offset + index * 8  ) );
+	}
+	
+    return valueArray;
+}
+
 Buffer.prototype.readUInt64LE = function (offset) 
 {
     if (!this.isValid()) 
@@ -963,6 +1252,29 @@ Buffer.readUInt64LE = function (address , offset)
 
     return Number64(process.reserved.bindings.buffer_readUInt64LE(address, offset || 0));
 }
+
+Buffer.prototype.readUInt64LEArray = function (offset , count ) 
+{
+    return Buffer.readUInt64LEArray(this.address, offset , count );
+}
+
+Buffer.readUInt64LEArray = function (address , arg_offset , arg_count) 
+{
+    assert( _.isNumber(arg_offset) );
+	assert( _.isNumber(arg_count) );
+	
+	var index = 0;
+	var valueArray = [];
+	
+	
+	for ( index = 0; index < arg_count; index++ )
+	{
+		valueArray.push( Buffer.readUInt64LE( address , arg_offset + index * 8  ) );
+	}
+	
+    return valueArray;
+}
+
 
 Buffer.prototype.slice = function ( arg_start, arg_end ) 
 {
@@ -1008,108 +1320,16 @@ Buffer.prototype.slice = function ( arg_start, arg_end )
 
 Buffer.prototype.toString = function ( arg_encoding, arg_start, arg_end ) 
 {
-    if (!this.isValid()) 
+	if (!this.isValid()) 
 	{
         throw new Error("try to operate with invalid buffer");
     }
-
-    var encoding = 'ascii';
-
-    var param_codepage = 0;
-    var param_start = 0;
-    var param_end = this.length;
 	
-	var helperText = '';
-
-
-    if (arguments.length >= 1) 
-	{
-        assert(_.isString( arguments[0] ), "encoding must be string");
-        encoding = arguments[0].trim().toLowerCase();
-
-        if ( ("hex" != encoding) && ("dump" != encoding) && ( "base64" != encoding) ) 
-		{
-            param_codepage = encoding2codepage( arguments[0] );
-        }
-    }
-
-    if (arguments.length >= 2) 
-	{
-        assert(_.isNumber( arguments[1] ), "start must be number");
-        param_start = arguments[1];
-    }
-
-    if (arguments.length >= 3) 
-	{
-        assert(_.isNumber( arguments[2] ), "end must be number");
-        param_end = arguments[2];
-    }
-
-	assert( param_start >= 0 );
-	assert( param_end >= param_start );
-		
-	assert( param_end <= this.length );
-
-	if ( param_end == param_start )
-	{
-		return "";
-	}
-
+	var argv = Array.prototype.slice.call(arguments);
 	
-	if ( "dump" == encoding) 
-	{
-		// CRYPT_STRING_HEXASCIIADDR
-        return process.reserved.bindings.buffer_toBinaryString( this.address, 0x0000000b , param_start , param_end );
-    }
-    else if ("hex" == encoding) 
-	{
-		// CRYPT_STRING_HEX
-        var helper = process.reserved.bindings.buffer_toBinaryString( this.address, 4 , param_start , param_end );
-
+	argv.unshift( this.address );
 	
-		var tempArray = helper.split("\r\n");
-		
-		tempArray = _.filter( tempArray , function(item)
-		{
-			return ( item.length != 0 )
-		});
-		
-		helper = tempArray.join(" ");
-		
-		tempArray = helper.split(" ");
-		tempArray = _.filter( tempArray , function(item)
-		{
-			return ( item.length != 0 )
-		});
-		
-		helper = tempArray.join("");
-		
-		return helper;
-    }
-    else if ("base64" == encoding) 
-	{
-        // CRYPT_STRING_BASE64
-        helperText =  process.reserved.bindings.buffer_toBinaryString( this.address, 1 , param_start , param_end );
-    }
-    else 
-	{
-        // specail for unicode
-        if (1200 == param_codepage) 
-		{
-            helperText =  process.reserved.bindings.buffer_toWString(this.address, param_start, param_end );
-        }
-        else 
-		{
-            helperText = process.reserved.bindings.buffer_toString(this.address, param_codepage , param_start , param_end );
-        }
-    }
-	
-	if ( !helperText )
-	{
-		return "";
-	}
-	
-	return helperText;
+	return Buffer.toString.apply( this , argv );
 }
 
 
@@ -1125,13 +1345,19 @@ Buffer.toString = function ( arg_address , arg_encoding, arg_start, arg_end )
 
     if (arguments.length >= 2) 
 	{
-        assert(_.isString( arguments[1] ), "encoding must be string");
-        encoding = arguments[1].trim().toLowerCase();
-
-        if ( ("hex" != encoding) && ("dump" != encoding) && ( "base64" != encoding) ) 
+		if ( _.isString( arguments[1] ) )
 		{
-            param_codepage = encoding2codepage( arguments[1] );
-        }
+			encoding = arguments[1].trim().toLowerCase();
+
+			if ( ("hex" != encoding) && ("dump" != encoding) && ( "base64" != encoding) ) 
+			{
+				param_codepage = encoding2codepage( arguments[1] );
+			}
+		}
+		else if ( _.isNumber( arguments[1] ) )
+		{
+			param_codepage = arguments[1]; 
+		}
     }
 
     if (arguments.length >= 3) 
@@ -1198,7 +1424,7 @@ Buffer.toString = function ( arg_address , arg_encoding, arg_start, arg_end )
     else 
 	{
         // specail for unicode
-        if (1200 == param_codepage) 
+        if ( 1200 == param_codepage ) 
 		{
             helperText =  process.reserved.bindings.buffer_toWString( arg_address , param_start, param_end );
         }
@@ -1981,6 +2207,10 @@ Buffer.writeNativePointer = function (address , value, offset)
 		}
 	}
 }
+
+
+// 
+
 
 //------------------------------------
 
