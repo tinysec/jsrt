@@ -676,7 +676,7 @@ function fd_readString( fd  , offset , arg_encoding )
 		}	
 		else
 		{
-			for ( index = 0; index < bytesRead; index += 2 )
+			for ( index = 0; index < bytesRead; index += 1 )
 			{
 				if ( 0 == ioBuffer.readUInt8( index ) )
 				{
@@ -1000,8 +1000,6 @@ module.exports = CPEFile;
 
 function main(  )
 {
-	
-
 	
 	return 0;
 }

@@ -825,7 +825,14 @@ function cs_disasm( hCapstone , arg_code , arg_BaseAddress , arg_instNumber , ar
 	}
 	else
 	{
-		return instArray;
+		if ( 1 == instNumber )
+		{
+			return instArray[0];
+		}
+		else
+		{
+			return instArray;
+		}
 	}
 }
 exports.disasm = cs_disasm;
