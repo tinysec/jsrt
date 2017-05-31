@@ -881,9 +881,20 @@ function fd_read_exports( fd , ntHeader , sectionHeaderArray , exportDirectory )
 
 
 //-----------------------------------------------------------------------
-function CPEFile( arg_fd , arg_filename )
+function CPEFile( arg_filename )
 {
-	this.fd = arg_fd;
+	if (!(this instanceof CPEFile)) 
+	{
+        return new CPEFile( arg_filename );
+    }
+	
+	this.fd = fs.open( arg_filename , 'r' );
+	
+	if ( this.fd <= 0 )
+	{
+		throw new Error( sprintf("open %s faild" , arg_filename ) );
+	}
+	
 	this.filename = arg_filename;
 }
 
@@ -982,22 +993,7 @@ CPEFile.prototype.readExports = function()
 
 //---------------------------------------------------------------
 
-function parseFile( filename )
-{
-	var fd = fs.open( filename , 'r' );
-	
-	if ( fd <= 0 )
-	{
-		return null;
-	}
-	
-	var newPEFile = new CPEFile( fd , filename );
-	
-	fd_read_IMAGE_DOS_HEADER( fd );
-	
-	return newPEFile;
-}
-exports.parseFile = parseFile;
+module.exports = CPEFile;
 
 
 

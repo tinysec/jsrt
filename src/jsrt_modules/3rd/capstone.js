@@ -867,6 +867,7 @@ CCapstone.prototype.disasm = function()
 
 
 
+//---------------------------------------------------------------
 
 module.exports = CCapstone;
 

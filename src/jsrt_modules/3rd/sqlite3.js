@@ -299,6 +299,11 @@ CSQLite3.prototype.execSync = function( sql )
 }
 
 
+
+
+
+
+//---------------------------------------------------------------
 module.exports = CSQLite3;
 
 
