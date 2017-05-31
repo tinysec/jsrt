@@ -229,7 +229,6 @@ function cs_version( )
 
     return sprintf("%d.%d" , versionInfo.major , versionInfo.minor );
 }
-exports.version = cs_version();
 
 
 function cs_open( arg_arch , arg_mode )
@@ -265,7 +264,7 @@ function cs_open( arg_arch , arg_mode )
 
     return hCapstone;
 }
-exports.open = cs_open;
+
 
 function cs_close( hCapstone )
 {
@@ -280,7 +279,7 @@ function cs_close( hCapstone )
 
     return cs_strerror( errCode );
 }
-exports.close = cs_close;
+
 
 function cs_option(  hCapstone , arg_type , arg_value )
 {
@@ -292,7 +291,7 @@ function cs_option(  hCapstone , arg_type , arg_value )
 
     return cs_strerror( errCode );
 }
-exports.setOption = cs_option;
+
 
 function cs_errno( hCapstone )
 {
@@ -832,7 +831,44 @@ function cs_disasm( hCapstone , arg_code , arg_BaseAddress , arg_instNumber , ar
 exports.disasm = cs_disasm;
 
 
+function CCapstone( arg_arch , arg_mode )
+{
+	if (!(this instanceof CCapstone)) 
+	{
+        return new CCapstone( arg_arch , arg_mode );
+    }
+	
+	this.hCapstone = cs_open( arg_arch , arg_mode );
+}
 
+CCapstone.prototype.close = function()
+{
+	return cs_close( this.hCapstone );
+}
+
+CCapstone.prototype.disasm = cs_version;
+
+
+CCapstone.prototype.setOption = function()
+{
+	var argv = Array.prototype.slice.call(arguments);
+	argv.unshift( this.hCapstone );
+	 
+	return cs_option.apply(this , argv );
+}
+
+CCapstone.prototype.disasm = function()
+{
+	var argv = Array.prototype.slice.call(arguments);
+	argv.unshift( this.hCapstone );
+	 
+	return cs_disasm.apply(this , argv );
+}
+
+
+
+
+module.exports = CCapstone;
 
 
 function main(  )

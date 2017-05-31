@@ -29,6 +29,8 @@ var ffi_sqlite3 = ffi.loadAndBatchBind("sqlite3.dll" , [
 ]);
 
 
+
+
 function sqlite3_open( filename )
 {
 	var lpFileName = null;
@@ -67,7 +69,7 @@ function sqlite3_open( filename )
 		
 	return hSQLite;
 }
-exports.open = sqlite3_open;
+
 
 function sqlite3_close( hSQLite )
 {
@@ -77,7 +79,7 @@ function sqlite3_close( hSQLite )
 
 	return ffi_sqlite3.sqlite3_close( hSQLite );
 }
-exports.close = sqlite3_close;
+
 
 function sqlite3_exec( hSQLite , sql )
 {
@@ -125,7 +127,7 @@ function sqlite3_exec( hSQLite , sql )
 	
 	return result;
 }
-exports.exec = sqlite3_exec;
+
 
 function def_exec_callback( param , columnCount , ppColumn_value  , ppColumn_name , context  )
 {
@@ -267,7 +269,38 @@ function sqlite3_execSync( hSQLite , sql )
 	
 	return result;
 }
-exports.execSync = sqlite3_execSync;
+
+
+
+function CSQLite3( filename )
+{
+	if (!(this instanceof CSQLite3)) 
+	{
+        return new CSQLite3( filename );
+    }
+	
+	this.hSQLite3 = sqlite3_open( filename );
+}
+
+
+CSQLite3.prototype.close = function()
+{
+	return sqlite3_close( this.hSQLite3 );
+}
+
+CSQLite3.prototype.exec = function( sql )
+{
+	return sqlite3_exec( this.hSQLite3 , sql );
+}
+
+CSQLite3.prototype.execSync = function( sql )
+{
+	return sqlite3_execSync( this.hSQLite3 , sql );
+}
+
+
+module.exports = CSQLite3;
+
 
 
 function main(  )

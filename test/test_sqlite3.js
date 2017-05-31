@@ -1,7 +1,7 @@
 const printf = require("cprintf").printf;
-const sqlite3 = require("3rd/sqlite3");
+const libsqlite3 = require("3rd/sqlite3");
 
-var hSQLite = sqlite3.open( "d:/1.db");
+var dbmgr = new libsqlite3( "d:/1.db");
 	
 var sql = `
 	CREATE TABLE project
@@ -11,10 +11,10 @@ var sql = `
 					)
 `;
 	
-sqlite3.exec( hSQLite , sql );
+dbmgr.exec( sql );
 	
-sqlite3.exec(hSQLite , 'INSERT INTO project (name) VALUES ("test1")' );
+dbmgr.exec( 'INSERT INTO project (name) VALUES ("test1")' );
 
-printf( sqlite3.execSync( hSQLite , "SELECT * from project" ) );
+printf( dbmgr.execSync( "SELECT * from project" ) );
 	
-sqlite3.close( hSQLite );
+dbmgr.close();
