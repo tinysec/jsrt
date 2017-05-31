@@ -415,8 +415,8 @@ function fd_read_IMAGE_SECTION_HEADER( fd , e_lfanew , ntHeader , sectionIndex )
 		offset = e_lfanew + 4 + 0x14 + ntHeader.FileHeader.SizeOfOptionalHeader;
 		offset += sectionIndex * 0x28
 	
-		bytesRead = fs.read( fd , ioBuffer , 0 , 0x28 , offset );
-		if ( 0x28 != bytesRead )
+		bytesRead = fs.read( fd , ioBuffer , 0 , ioBuffer.length , offset );
+		if ( ioBuffer.length != bytesRead )
 		{
 			break;
 		}
@@ -464,7 +464,7 @@ function fd_read_IMAGE_SECTION_HEADERS( fd , e_lfanew , ntHeader )
 	for ( index = 0; index < ntHeader.FileHeader.NumberOfSections; index++ )
 	{
 		sectionHeader = fd_read_IMAGE_SECTION_HEADER( fd , e_lfanew , ntHeader , index );
-			
+		
 		sectionHeaderArray.push( sectionHeader);
 	}
 
@@ -497,6 +497,8 @@ function rva2foa( ntHeader , sectionHeaderArray , rva_offset )
 	{
 		sectionHeader = sectionHeaderArray[ sectionIndex ];
 		
+		assert( sectionHeader , sectionIndex );
+		
 		if ( sectionIndex != ( sectionHeaderArray.length - 1) )
 		{
 			nextSectionHeader = sectionHeaderArray[ sectionIndex + 1 ];
@@ -528,7 +530,7 @@ function rva2foa( ntHeader , sectionHeaderArray , rva_offset )
 		}
 		
 		
-		if ( ( begin_rva <= rva_offset) && ( end_rva >= rva_offset ) )
+		if ( ( begin_rva <= rva_offset) && ( end_rva > rva_offset ) )
 		{
 			foa_offset = sectionHeader.PointerToRawData + ( rva_offset - sectionHeader.VirtualAddress ) ;
 			break;
@@ -595,7 +597,7 @@ function foa2rva( ntHeader , sectionHeaderArray , foa_offset )
 		}
 		
 		
-		if ( ( begin_foa <= foa_offset) && ( end_foa >= foa_offset ) )
+		if ( ( begin_foa <= foa_offset) && ( end_foa > foa_offset ) )
 		{
 			rva_offset = sectionHeader.VirtualAddress + ( foa_offset - sectionHeader.PointerToRawData ) ;
 			break;
@@ -613,7 +615,7 @@ function fd_readUInt16LE( fd , offset )
 	
 	bytesRead = fs.read( fd , ioBuffer , 0 , 2 , offset );
 	
-	value = ioBuffer.readInt16LE(0);
+	value = ioBuffer.readUInt16LE(0);
 	
 	ioBuffer.free();
 	ioBuffer = null;
@@ -629,12 +631,94 @@ function fd_readUInt32LE( fd , offset )
 	
 	bytesRead = fs.read( fd , ioBuffer , 0 , 4 , offset );
 	
-	value = ioBuffer.readInt32LE(0);
+	value = ioBuffer.readUInt32LE(0);
 	
 	ioBuffer.free();
 	ioBuffer = null;
 	
 	return value;
+}
+
+function fd_readUInt8Array( fd , arg_offset , count )
+{
+	var ioBuffer = Buffer.alloc( 4 ).fill(0);
+	var bytesRead = 0;
+	var value = 0;
+	var index = 0;
+	var offset = Number64( arg_offset );
+	var valueArray = [];
+	
+	for ( index = 0; index < count; index++ )
+	{
+		ioBuffer.fill(0);
+		bytesRead = fs.read( fd , ioBuffer , 0 , 1 , offset );
+	
+		value = ioBuffer.readUInt8(0);
+		
+		valueArray.push( value );
+		
+		offset.add(1);
+	}
+	
+	ioBuffer.free();
+	ioBuffer = null;
+	
+	return valueArray;
+}
+
+function fd_readUInt16LEArray( fd , arg_offset , count )
+{
+	var ioBuffer = Buffer.alloc( 4 ).fill(0);
+	var bytesRead = 0;
+	var value = 0;
+	var index = 0;
+	var offset = Number64( arg_offset );
+	var valueArray = [];
+	
+	for ( index = 0; index < count; index++ )
+	{
+		ioBuffer.fill(0);
+		bytesRead = fs.read( fd , ioBuffer , 0 , 2 , offset );
+	
+		value = ioBuffer.readUInt16LE(0);
+		
+		valueArray.push( value );
+		
+		offset.add(2);
+	}
+	
+	ioBuffer.free();
+	ioBuffer = null;
+	
+	return valueArray;
+}
+
+function fd_readUInt32LEArray( fd , arg_offset , count )
+{
+	var ioBuffer = Buffer.alloc( 4 ).fill(0);
+	var bytesRead = 0;
+	var value = 0;
+	var index = 0;
+	var offset = Number64( arg_offset );
+	var valueArray = [];
+	
+	for ( index = 0; index < count; index++ )
+	{
+		ioBuffer.fill(0);
+		
+		bytesRead = fs.read( fd , ioBuffer , 0 , 4 , offset );
+	
+		value = ioBuffer.readUInt32LE(0);
+		
+		valueArray.push( value );
+		
+		offset.add(4);
+	}
+	
+	ioBuffer.free();
+	ioBuffer = null;
+	
+	return valueArray;
 }
 
 function fd_readString( fd  , offset , arg_encoding )
@@ -761,8 +845,7 @@ function fd_read_IMAGE_DIRECTORY_ENTRY_EXPORT( fd , ntHeader , sectionHeaderArra
 		exportDirectory.AddressOfNames = ioBuffer.readUInt32LE( 0x020  );
 		
 		exportDirectory.AddressOfNameOrdinals = ioBuffer.readUInt32LE( 0x024  );
-
-	
+		
 	}while(false);
 	
 	ioBuffer.free();
@@ -799,6 +882,7 @@ function fd_read_exports( fd , ntHeader , sectionHeaderArray , exportDirectory )
 		{
 			break;
 		}
+
 		
 		for ( exportIndex = 0; exportIndex < exportDirectory.NumberOfFunctions; exportIndex++ )
 		{
@@ -829,7 +913,9 @@ function fd_read_exports( fd , ntHeader , sectionHeaderArray , exportDirectory )
 				nameRVA = 0;
 			}
 			
-			exportNode.addressRVA = fd_readUInt32LE( fd , AddressOfFunctions_FOA + exportNode.ordinal * 4);
+	
+			exportNode.addressRVA = fd_readUInt32LE( fd , AddressOfFunctions_FOA + exportNode.ordinal * 4 );
+			
 			exportNode.addressFOA = rva2foa( ntHeader , sectionHeaderArray , exportNode.addressRVA );
 			
 			exportArray.push( exportNode );
@@ -966,6 +1052,21 @@ CPEFile.prototype.readUInt32LE= function( offset )
 	return fd_readUInt32LE( this.fd  , offset  );
 }
 
+CPEFile.prototype.readUInt8Array = function( offset , count )
+{
+	return fd_readUInt8Array( this.fd  , offset , count );
+}
+
+CPEFile.prototype.readUInt16LEArray = function( offset , count )
+{
+	return fd_readUInt16LEArray( this.fd  , offset , count );
+}
+
+CPEFile.prototype.readUInt32LEArray = function( offset , count )
+{
+	return fd_readUInt32LEArray( this.fd  , offset , count );
+}
+
 CPEFile.prototype.readString= function( offset , arg_encoding )
 {
 	return fd_readString( this.fd  , offset , arg_encoding );
@@ -978,6 +1079,7 @@ CPEFile.prototype.readIMAGE_DIRECTORY_ENTRY_EXPORT= function()
 	var ntHeader = fd_read_IMAGE_NT_HEADER( this.fd , dosHeader.e_lfanew );
 	var sectionHeaderArray = fd_read_IMAGE_SECTION_HEADERS( this.fd , dosHeader.e_lfanew , ntHeader );
 	
+
 	return fd_read_IMAGE_DIRECTORY_ENTRY_EXPORT( this.fd , ntHeader , sectionHeaderArray )
 }
 
@@ -1001,6 +1103,7 @@ module.exports = CPEFile;
 function main(  )
 {
 	
+
 	return 0;
 }
 

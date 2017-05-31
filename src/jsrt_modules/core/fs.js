@@ -16,12 +16,14 @@ const O_RDWR = 0x0002;
 const O_TRUNC = 0x0200;
 const O_WRONLY = 0x0001;
 
+const O_BINARY = 0x8000;
 
 const S_IFMT = 0xF000;
 const S_IFDIR = 0x4000;
 
 const S_IREAD = 0x100;
 const S_IWRITE = 0x80;
+
 
 
 // 100 MB
@@ -36,28 +38,28 @@ function stringToFlags(flag)
 
   switch (flag) 
   {
-    case 'r' : return O_RDONLY;
+    case 'r' : return O_RDONLY | O_BINARY;
     case 'rs' : // Fall through.
-    case 'sr' : return O_RDONLY ;
-    case 'r+' : return O_RDWR;
+    case 'sr' : return O_RDONLY | O_BINARY ;
+    case 'r+' : return O_RDWR | O_BINARY;
     case 'rs+' : // Fall through.
-    case 'sr+' : return O_RDWR ;
+    case 'sr+' : return O_RDWR | O_BINARY ;
 
-    case 'w' : return O_TRUNC | O_CREAT | O_WRONLY;
+    case 'w' : return O_TRUNC | O_CREAT | O_WRONLY | O_BINARY;
     case 'wx' : // Fall through.
-    case 'xw' : return O_TRUNC | O_CREAT | O_WRONLY | O_EXCL;
+    case 'xw' : return O_TRUNC | O_CREAT | O_WRONLY | O_EXCL | O_BINARY;
 
-    case 'w+' : return O_TRUNC | O_CREAT | O_RDWR;
+    case 'w+' : return O_TRUNC | O_CREAT | O_RDWR | O_BINARY;
     case 'wx+': // Fall through.
-    case 'xw+': return O_TRUNC | O_CREAT | O_RDWR | O_EXCL;
+    case 'xw+': return O_TRUNC | O_CREAT | O_RDWR | O_EXCL | O_BINARY;
 
-    case 'a' : return O_APPEND | O_CREAT | O_WRONLY;
+    case 'a' : return O_APPEND | O_CREAT | O_WRONLY | O_BINARY;
     case 'ax' : // Fall through.
-    case 'xa' : return O_APPEND | O_CREAT | O_WRONLY | O_EXCL;
+    case 'xa' : return O_APPEND | O_CREAT | O_WRONLY | O_EXCL | O_BINARY;
 
-    case 'a+' : return O_APPEND | O_CREAT | O_RDWR;
+    case 'a+' : return O_APPEND | O_CREAT | O_RDWR | O_BINARY;
     case 'ax+': // Fall through.
-    case 'xa+': return O_APPEND | O_CREAT | O_RDWR | O_EXCL;
+    case 'xa+': return O_APPEND | O_CREAT | O_RDWR | O_EXCL | O_BINARY;
   }
 
   throw new Error('Unknown file open flag: ' + flag);
@@ -82,7 +84,7 @@ function fs_open( arg_name , arg_flag , arg_mode )
 	var fd = 0;
 
 	var param_name = '';
-	var param_flag = O_RDONLY;
+	var param_flag = O_RDONLY | O_BINARY;
 	var param_mode = S_IREAD ;
 	
 	assert( arguments.length >= 1 );
@@ -217,7 +219,7 @@ function fs_read( fd , arg_buffer , arg_buffer_start , arg_buffer_length , arg_f
 
 	assert( ( arg_buffer_start + arg_buffer_length <= arg_buffer.length ) );
 
-	assert( arg_file_position >= 0 );
+	assert(  ( arg_file_position >= 0 ) , sprintf("arg_file_position must >=0 , but %d\n" , arg_file_position ) );
 
 	if ( 0 == arg_buffer_length )
 	{	
@@ -227,7 +229,7 @@ function fs_read( fd , arg_buffer , arg_buffer_start , arg_buffer_length , arg_f
 	param_buffer_address = arg_buffer.address.add( arg_buffer_start );
 
 	fs_seek( fd , arg_file_position , "SEEK_SET" );
-
+		
 	readSize = process.reserved.bindings.fs_read( fd , param_buffer_address , arg_buffer_length );
 
 	return readSize;
@@ -811,8 +813,6 @@ exports.rmdir = fs_rmdir;
 
 function main(  )
 {
-	
-
 	return 0;
 }
 
