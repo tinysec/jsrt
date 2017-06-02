@@ -448,6 +448,18 @@ Number64.add = function ( item , other )
     return Number64(item).add(other);
 }
 
+Number64.prototype.addSigned = function (arg_other)
+{
+    this.hexText = process.reserved.bindings.Number64_addSigned(this.hexText, cast2Number64(arg_other).hexText);
+
+    return this;
+}
+
+Number64.addSigned = function ( item , other ) 
+{
+    return Number64(item).addSigned(other);
+}
+
 
 Number64.prototype.sub = function (arg_other) 
 {
@@ -459,6 +471,18 @@ Number64.prototype.sub = function (arg_other)
 Number64.sub = function ( item , other ) 
 {
     return Number64(item).sub(other);
+}
+
+Number64.prototype.subSigned = function (arg_other) 
+{
+    this.hexText = process.reserved.bindings.Number64_subSigned(this.hexText, cast2Number64(arg_other).hexText);
+
+    return this;
+}
+
+Number64.subSigned = function ( item , other ) 
+{
+    return Number64(item).subSigned(other);
 }
 
 Number64.prototype.mul = function (arg_other)

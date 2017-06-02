@@ -721,6 +721,34 @@ function fd_readUInt32LEArray( fd , arg_offset , count )
 	return valueArray;
 }
 
+function fd_readUInt64LEArray( fd , arg_offset , count )
+{
+	var ioBuffer = Buffer.alloc( 8 ).fill(0);
+	var bytesRead = 0;
+	var value = 0;
+	var index = 0;
+	var offset = Number64( arg_offset );
+	var valueArray = [];
+	
+	for ( index = 0; index < count; index++ )
+	{
+		ioBuffer.fill(0);
+		
+		bytesRead = fs.read( fd , ioBuffer , 0 , 8 , offset );
+	
+		value = ioBuffer.readUInt64LE(0);
+		
+		valueArray.push( value );
+		
+		offset.add(8);
+	}
+	
+	ioBuffer.free();
+	ioBuffer = null;
+	
+	return valueArray;
+}
+
 function fd_readString( fd  , offset , arg_encoding )
 {
 	var ioBuffer = Buffer.alloc( 100 ).fill(0);
@@ -1065,6 +1093,11 @@ CPEFile.prototype.readUInt16LEArray = function( offset , count )
 CPEFile.prototype.readUInt32LEArray = function( offset , count )
 {
 	return fd_readUInt32LEArray( this.fd  , offset , count );
+}
+
+CPEFile.prototype.readUInt64LEArray = function( offset , count )
+{
+	return fd_readUInt64LEArray( this.fd  , offset , count );
 }
 
 CPEFile.prototype.readString= function( offset , arg_encoding )

@@ -75,11 +75,11 @@ function pdb_init( param_searchPath )
 }
 exports.init = pdb_init;
 
-function pdb_cleanup( )
+function pdb_clean( )
 {
 	return ffi_dbghelp.SymCleanup( g_hCurrentProcess );
 }
-exports.cleanup = pdb_cleanup;
+exports.clean = pdb_clean;
 
 function pdb_setSearchPath( param_searchPath )
 {
@@ -173,7 +173,7 @@ function pdb_unloadImage( imageBase )
 }
 exports.unloadImage = pdb_unloadImage;
 
-function pdb_address2Symbol( symbolAddress )
+function pdb_addressToSymbol( symbolAddress )
 {
 	var MaxNameLength = 1024;
 	
@@ -227,12 +227,12 @@ function pdb_address2Symbol( symbolAddress )
 	
 	return symbolInfo;
 }
-exports.address2Symbol = pdb_address2Symbol;
+exports.addressToSymbol = pdb_addressToSymbol;
 
 
-function pdb_address2Name( symbolAddress )
+function pdb_addressToName( symbolAddress )
 {
-	var symbolInfo = pdb_resolve( symbolAddress );
+	var symbolInfo = pdb_addressToSymbol( symbolAddress );
 	if ( !symbolInfo )
 	{
 		return '';
@@ -247,10 +247,10 @@ function pdb_address2Name( symbolAddress )
 		return sprintf("%s+0x%X", symbolInfo.name , symbolInfo.offset);
 	}
 }
-exports.address2Name = pdb_address2Name;
+exports.addressToName = pdb_addressToName;
 
 // get address from name
-function pdb_name2Address( symbolName )
+function pdb_nameToAddress( symbolName )
 {
 	var MaxNameLength = 1024;
 	
@@ -292,7 +292,7 @@ function pdb_name2Address( symbolName )
 	return symbolAddress;
 	
 }
-exports.name2Address = pdb_name2Address;
+exports.nameToAddress = pdb_nameToAddress;
 
 
 function main(  )
