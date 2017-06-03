@@ -494,12 +494,12 @@ Buffer.prototype.compare = function( arg_target , arg_targetStart , arg_targetEn
 		}
 		else
 		{
-			
+			// nop
 		}
 	}
 	else
 	{
-		
+		// nop
 	}
 
 

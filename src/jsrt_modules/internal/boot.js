@@ -1,7 +1,10 @@
 (function boot(__GLOBAL) {
-    function runAtRootNamespace(name) {
+
+    function runAtRootNamespace(name) 
+	{
         var fileinfo = process.reserved.bindings.module_findInternalFile(name);
-        if (!fileinfo) {
+        if (!fileinfo) 
+		{
             throw new Error("not found " + name);
         }
 
@@ -58,7 +61,10 @@
             delete NativeModule._cache[requestName];
             throw err;
         }
-
+		
+		buildInFileInfo.content = null;
+		buildInFileInfo = null;
+		
         return NewModule.exports;
     }
 
@@ -104,13 +110,15 @@
         '\n});'
     ];
 
-    function wrap_source(script) {
+    function wrap_source(script) 
+	{
         return MODULE_WRAPPER[0] + script + MODULE_WRAPPER[1];
     };
 
     NativeModule.prototype._compile = function (fileContent, filename) 
 	{
-        if (0 == fileContent.length) {
+        if (0 == fileContent.length) 
+		{
             return;
         }
 

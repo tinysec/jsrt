@@ -17,17 +17,22 @@ function sprintf()
         return '';
     }
 
-    if ('string' == typeof argv[0]) {
-        if (0 === argv[0].length) {
+    if ('string' == typeof argv[0]) 
+	{
+        if (0 === argv[0].length) 
+		{
             return '';
         }
-        if (-1 === argv[0].indexOf('%')) {
+		
+        if (-1 === argv[0].indexOf('%')) 
+		{
             return argv[0];
         }
 
         return _internal_sprintf.apply(this, arguments);
     }
-    else {
+    else 
+	{
         return _inspect(argv[0], 0, 0);
     }
 }
@@ -36,7 +41,8 @@ exports.sprintf = sprintf;
 function printf() 
 {
     var totaltext = sprintf.apply(this, arguments);
-    if (0 == totaltext.length) {
+    if (0 == totaltext.length) 
+	{
         return;
     }
 
@@ -45,34 +51,43 @@ function printf()
     var singlelength = 0;
     var leftLength = totaltext.length;
 
-    for (offset = 0; offset < totaltext.length; offset += singlelength) {
+    for (offset = 0; offset < totaltext.length; offset += singlelength) 
+	{
         singlelength = Math.min(1024, leftLength);
 
         singletext = totaltext.substring(offset, offset + singlelength);
 
-        if (0 != singletext.length) {
+        if (0 != singletext.length) 
+		{
             process.reserved.bindings.host_output(singletext);
         }
 
         leftLength -= singlelength;
 
-        if (0 == leftLength) {
+        if (0 == leftLength) 
+		{
             break;
         }
+		
+		singletext = null;
     }
 }
 exports.printf = printf;
 
-function KdPrint() {
-    if (process.verbose) {
+function KdPrint() 
+{
+    if (process.verbose) 
+	{
         return printf.apply(this, arguments);
     }
 }
 exports.KdPrint = KdPrint;
 
-function DbgPrint() {
+function DbgPrint() 
+{
     var totaltext = sprintf.apply(this, arguments);
-    if (0 == totaltext.length) {
+    if (0 == totaltext.length) 
+	{
         return;
     }
 
@@ -81,7 +96,8 @@ function DbgPrint() {
     var singlelength = 0;
     var leftLength = totaltext.length;
 
-    for (offset = 0; offset < totaltext.length; offset += singlelength) {
+    for (offset = 0; offset < totaltext.length; offset += singlelength) 
+	{
         singlelength = Math.min(1024, leftLength);
 
         singletext = totaltext.substring(offset, offset + singlelength);
@@ -92,15 +108,20 @@ function DbgPrint() {
 
         leftLength -= singlelength;
 
-        if (0 == leftLength) {
+        if (0 == leftLength) 
+		{
             break;
         }
+		
+		singlelength = null;
     }
 }
 exports.DbgPrint = DbgPrint;
 
 //-----------------------------------------------------------------------------------------------------------------------
-function _internal_sprintf() {
+
+function _internal_sprintf() 
+{
     var argv = Array.prototype.slice.call(arguments);
     var format = argv[0];
     var index = 0;
@@ -109,28 +130,37 @@ function _internal_sprintf() {
 
     argv.shift();
 
-    for (index = 0; index < format.length;) {
-        if ('%' == format.charAt(index)) {
-            if (index != (format.length - 1)) {
-                if ('%' == format.charAt(index + 1)) {
+    for (index = 0; index < format.length;) 
+	{
+        if ('%' == format.charAt(index)) 
+		{
+            if (index != (format.length - 1)) 
+			{
+                if ('%' == format.charAt(index + 1)) 
+				{
                     final_text += '%';
                     index += 2;
                     continue;
                 }
-                else {
+                else 
+				{
                     // format.
                     option = _parse_single_format(format.substring(index + 1, format.length));
 
-                    if ('' == option.type) {
+                    if ('' == option.type) 
+					{
                         final_text += '%';
                         index += 1;
                         continue;
                     }
-                    else {
-                        if (0 == argv.length) {
+                    else 
+					{
+                        if (0 == argv.length) 
+						{
                             final_text += format.substring(index, index + option.len + 1);
                         }
-                        else {
+                        else 
+						{
                             final_text += _handle_single_type(option, argv);
                             argv.shift();
                         }
@@ -139,12 +169,14 @@ function _internal_sprintf() {
                     index += 1 + option.len;
                 }
             }
-            else {
+            else 
+			{
                 final_text += '%';
                 break;
             }
         }
-        else {
+        else 
+		{
             final_text += format.charAt(index);
             index += 1;
             continue;
@@ -155,7 +187,8 @@ function _internal_sprintf() {
 }
 
 // %[flags][field width][.precision][length]type
-function _parse_single_format(format) {
+function _parse_single_format(format) 
+{
     var index = 0;
 
     var field_width = '';
@@ -193,45 +226,56 @@ function _parse_single_format(format) {
         'type': ''
     };
 
-    do {
+    do 
+	{
         option.len = 0;
         option.type = '';
 
         // [flags]
-        while (index < format.length) {
-            if ('+' === format.charAt(index)) {
+        while (index < format.length) 
+		{
+            if ('+' === format.charAt(index)) 
+			{
                 option.sign = true;
                 index++;
             }
-            else if (' ' === format.charAt(index)) {
+            else if (' ' === format.charAt(index)) 
+			{
                 option.blankPadding = true;
                 index++;
             }
-            else if ('-' === format.charAt(index)) {
+            else if ('-' === format.charAt(index)) 
+			{
                 option.leftAlign = true;
                 index++;
             }
-            else if ('#' === format.charAt(index)) {
+            else if ('#' === format.charAt(index)) 
+			{
                 option.sharp = true;
                 index++;
             }
-            else if ('0' === format.charAt(index)) {
+            else if ('0' === format.charAt(index)) 
+			{
                 option.zeroPadding = true;
                 index++;
             }
-            else {
+            else 
+			{
                 break;
             }
         }
 
         left = format.substring(index, format.length);
-        if (left.length <= 0) {
+        if (left.length <= 0) 
+		{
             break;
         }
 
         // [field width]
-        while (index < format.length) {
-            if (('0' > format.charAt(index)) || ('9' < format.charAt(index))) {
+        while (index < format.length)
+		{
+            if (('0' > format.charAt(index)) || ('9' < format.charAt(index))) 
+			{
                 break;
             }
 
@@ -245,20 +289,25 @@ function _parse_single_format(format) {
             break;
         }
 
-        if (field_width.length > 0) {
+        if (field_width.length > 0) 
+		{
             option.fieldWidth = parseInt(field_width);
         }
-        else {
+        else 
+		{
             option.fieldWidth = 0;
         }
 
         // [.precision]
-        if ('.' === format.charAt(index)) {
+        if ('.' === format.charAt(index)) 
+		{
             // Calc Precision Length
             index++;
 
-            while (index < format.length) {
-                if (('0' > format.charAt(index)) || ('9' < format.charAt(index))) {
+            while (index < format.length) 
+			{
+                if (('0' > format.charAt(index)) || ('9' < format.charAt(index))) 
+				{
                     break;
                 }
 
@@ -268,88 +317,108 @@ function _parse_single_format(format) {
 
 
             left = format.substring(index, format.length);
-            if (left.length <= 0) {
+            if (left.length <= 0) 
+			{
                 break;
             }
 
-            if (precision.length > 0) {
+            if (precision.length > 0) 
+			{
                 option.precision = parseInt(precision);
             }
-            else {
+            else 
+			{
                 option.precision = 0;
             }
         }
-        else {
+        else 
+		{
             option.precision = 0;
         }
 
         left = format.substring(index, format.length);
-        if (left.length <= 0) {
+        if (left.length <= 0) 
+		{
             break;
         }
 
         // [length] type
-        if (left.length >= 3) {
-            if ('I64' === left.substring(0, 3)) {
+        if (left.length >= 3) 
+		{
+            if ('I64' === left.substring(0, 3)) 
+			{
                 option.I64 = true;
 
                 index += 3;
             }
-            else if ('I32' === left.substring(0, 3)) {
+            else if ('I32' === left.substring(0, 3)) 
+			{
                 option.I32 = true;
 
                 index += 3;
             }
         }
-        else if (left.length >= 2) {
-            if ('hh' === left.substring(0, 2)) {
+        else if (left.length >= 2) 
+		{
+            if ('hh' === left.substring(0, 2)) 
+			{
                 option.hh = true;
 
                 index += 2;
             }
-            else if ('ll' === left.substring(0, 2)) {
+            else if ('ll' === left.substring(0, 2)) 
+			{
                 option.ll = true;
 
                 index += 2;
             }
         }
-        else if (left.length >= 1) {
-            if ('h' === left.substring(0, 1)) {
+        else if (left.length >= 1) 
+		{
+            if ('h' === left.substring(0, 1)) 
+			{
                 option.h = true;
 
                 index += 1;
             }
-            else if ('l' === left.substring(0, 1)) {
+            else if ('l' === left.substring(0, 1)) 
+			{
                 option.l = true;
 
                 index += 1;
             }
-            else if ('L' === left.substring(0, 1)) {
+            else if ('L' === left.substring(0, 1))
+			{
                 option.L = true;
 
                 index += 1;
             }
-            else if ('z' === left.substring(0, 1)) {
+            else if ('z' === left.substring(0, 1)) 
+			{
                 option.z = true;
 
                 index += 1;
             }
-            else if ('j' === left.substring(0, 1)) {
+            else if ('j' === left.substring(0, 1))
+			{
                 option.j = true;
 
                 index += 1;
             }
-            else if ('t' === left.substring(0, 1)) {
+            else if ('t' === left.substring(0, 1)) 
+			{
                 option.x = true;
 
                 index += 1;
             }
-            else if ('I' === left.substring(0, 1)) {
+            else if ('I' === left.substring(0, 1)) 
+			{
                 option.I = true;
 
                 index += 1;
             }
-            else if ('q' === left.substring(0, 1)) {
+            else if ('q' === left.substring(0, 1)) 
+			{
                 option.q = true;
 
                 index += 1;
@@ -369,11 +438,13 @@ function _parse_single_format(format) {
 
         if (('a'.charCodeAt(0) <= xx_type.charCodeAt(0))
             && ('z'.charCodeAt(0) >= xx_type.charCodeAt(0))
-        ) {
+        ) 
+		{
             option.type = format.charAt(index);
             index += 1;
         }
-        else {
+        else 
+		{
             break;
         }
 
@@ -386,88 +457,116 @@ function _parse_single_format(format) {
     return option;
 }
 
-function _handle_single_type(option, argv) {
+function _handle_single_type(option, argv) 
+{
     var strText = '';
     var strFinal = '';
     var nIndex = 0;
 
-    do {
-        if ('a' == option.type.toLowerCase()) {
+    do 
+	{
+        if ('a' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_a(option, argv);
         }
-        else if ('b' == option.type.toLowerCase()) {
+        else if ('b' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_b(option, argv);
         }
-        else if ('c' == option.type.toLowerCase()) {
+        else if ('c' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_c(option, argv);
         }
-        else if ('d' == option.type.toLowerCase()) {
+        else if ('d' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_d(option, argv);
         }
-        else if ('e' == option.type.toLowerCase()) {
+        else if ('e' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_e(option, argv);
         }
-        else if ('f' == option.type.toLowerCase()) {
+        else if ('f' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_f(option, argv);
         }
-        else if ('g' == option.type.toLowerCase()) {
+        else if ('g' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_g(option, argv);
         }
-        else if ('h' == option.type.toLowerCase()) {
+        else if ('h' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_h(option, argv);
         }
-        else if ('i' == option.type.toLowerCase()) {
+        else if ('i' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_i(option, argv);
         }
-        else if ('j' == option.type.toLowerCase()) {
+        else if ('j' == option.type.toLowerCase())
+		{
             strText = _handle_type_j(option, argv);
         }
-        else if ('k' == option.type.toLowerCase()) {
+        else if ('k' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_k(option, argv);
         }
-        else if ('l' == option.type.toLowerCase()) {
+        else if ('l' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_l(option, argv);
         }
-        else if ('m' == option.type.toLowerCase()) {
+        else if ('m' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_m(option, argv);
         }
-        else if ('n' == option.type.toLowerCase()) {
+        else if ('n' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_n(option, argv);
         }
-        else if ('o' == option.type.toLowerCase()) {
+        else if ('o' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_o(option, argv);
         }
-        else if ('p' == option.type.toLowerCase()) {
+        else if ('p' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_p(option, argv);
         }
-        else if ('q' == option.type.toLowerCase()) {
+        else if ('q' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_q(option, argv);
         }
-        else if ('r' == option.type.toLowerCase()) {
+        else if ('r' == option.type.toLowerCase())
+		{
             strText = _handle_type_r(option, argv);
         }
-        else if ('s' == option.type.toLowerCase()) {
+        else if ('s' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_s(option, argv);
         }
-        else if ('t' == option.type.toLowerCase()) {
+        else if ('t' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_t(option, argv);
         }
-        else if ('u' == option.type.toLowerCase()) {
+        else if ('u' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_u(option, argv);
         }
-        else if ('v' == option.type.toLowerCase()) {
+        else if ('v' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_v(option, argv);
         }
-        else if ('w' == option.type.toLowerCase()) {
+        else if ('w' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_w(option, argv);
         }
-        else if ('x' == option.type.toLowerCase()) {
+        else if ('x' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_x(option, argv);
         }
-        else if ('y' == option.type.toLowerCase()) {
+        else if ('y' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_y(option, argv);
         }
-        else if ('z' == option.type.toLowerCase()) {
+        else if ('z' == option.type.toLowerCase()) 
+		{
             strText = _handle_type_z(option, argv);
         }
         else {
@@ -476,20 +575,27 @@ function _handle_single_type(option, argv) {
 
     } while (false);
 
-    if (option.fieldWidth <= strText.length) {
-        if (0 == option.fieldWidth) {
+    if (option.fieldWidth <= strText.length) 
+	{
+        if (0 == option.fieldWidth)
+		{
             strFinal = strText;
         }
-        else {
+        else 
+		{
             strFinal = strText.substring(strText.length - option.fieldWidth, strText.length);
         }
     }
-    else {
-        for (nIndex = 0; nIndex < option.fieldWidth - strText.length; nIndex++) {
-            if (option.blankPadding) {
+    else 
+	{
+        for (nIndex = 0; nIndex < option.fieldWidth - strText.length; nIndex++) 
+		{
+            if (option.blankPadding) 
+			{
                 strFinal += ' ';
             }
-            else if (option.zeroPadding) {
+            else if (option.zeroPadding) 
+			{
                 strFinal += '0';
             }
         }
@@ -502,10 +608,12 @@ function _handle_single_type(option, argv) {
 }
 
 // %a
-function _handle_type_a(option, argv) {
+function _handle_type_a(option, argv) 
+{
     var strFinal = '';
 
-    do {
+    do 
+	{
         // reserved
 
     } while (false);
@@ -514,7 +622,8 @@ function _handle_type_a(option, argv) {
 }
 
 // %b
-function _handle_type_b(option, argv) {
+function _handle_type_b(option, argv) 
+{
     var strFinal = '';
 
     do {
@@ -526,29 +635,37 @@ function _handle_type_b(option, argv) {
 }
 
 // %c the character with that ASCII value
-function _handle_type_c(option, argv) {
+function _handle_type_c(option, argv) 
+{
     var strFinal = '';
     var nCharCode = 0;
 
-    do {
-        if ('number' === typeof argv[0]) {
+    do 
+	{
+        if ('number' === typeof argv[0]) 
+		{
             nCharCode = argv[0];
         }
-        else if ('string' === typeof argv[0]) {
-            if (0 === argv[0].length) {
+        else if ('string' === typeof argv[0]) 
+		{
+            if (0 === argv[0].length) 
+			{
                 nCharCode = 0;
             }
-            else {
+            else 
+			{
                 nCharCode = argv[0].charCodeAt(0);
             }
         }
-        else {
+        else 
+		{
             nCharCode = 0;
         }
 
         strFinal = String.fromCharCode(nCharCode);
 
-        if ('C' === option.type) {
+        if ('C' === option.type) 
+		{
             strFinal = strFinal.toUpperCase();
         }
 
@@ -558,40 +675,50 @@ function _handle_type_c(option, argv) {
 }
 
 // %d
-function _handle_type_d(option, argv) {
+function _handle_type_d(option, argv) 
+{
     var strFinal = '';
     var nValue = 0;
 
-    do {
-        if ('number' === typeof argv[0]) {
+    do 
+	{
+        if ('number' === typeof argv[0]) 
+		{
             nValue = argv[0];
 
             strFinal = nValue.toString();
         }
-        else if ('string' === typeof argv[0]) {
+        else if ('string' === typeof argv[0]) 
+		{
             if (0 === argv[0].length) {
                 nValue = 0;
             }
-            else {
+            else 
+			{
                 nValue = argv[0].charCodeAt(0);
             }
 
             strFinal = nValue.toString();
         }
-        else if (null === argv[0]) {
+        else if (null === argv[0]) 
+		{
             nValue = 0;
             strFinal = nValue.toString();
         }
-        else if ('object' == typeof argv[0]) {
-            if ('function' === typeof argv[0].toString) {
+        else if ('object' == typeof argv[0]) 
+		{
+            if ('function' === typeof argv[0].toString) 
+			{
                 strFinal = argv[0].toString(10);
             }
-            else {
+            else 
+			{
                 nValue = Number(argv[0]);
                 strFinal = nValue.toString(10);
             }
         }
-        else {
+        else 
+		{
             nValue = Number(argv[0]);
             strFinal = nValue.toString();
         }
@@ -602,10 +729,12 @@ function _handle_type_d(option, argv) {
 }
 
 // %e
-function _handle_type_e(option, argv) {
+function _handle_type_e(option, argv) 
+{
     var strFinal = '';
 
-    do {
+    do 
+	{
         // reserved
 
     } while (false);
@@ -614,23 +743,30 @@ function _handle_type_e(option, argv) {
 }
 
 // %f
-function _handle_type_f(option, argv) {
+function _handle_type_f(option, argv) 
+{
     var strFinal = '';
     var nValue = 0;
 
-    do {
-        if ('number' === typeof argv[0]) {
+    do 
+	{
+        if ('number' === typeof argv[0]) 
+		{
             nValue = argv[0];
         }
-        else if ('string' === typeof argv[0]) {
-            if (0 === argv[0].length) {
+        else if ('string' === typeof argv[0]) 
+		{
+            if (0 === argv[0].length) 
+			{
                 nValue = 0;
             }
-            else {
+            else 
+			{
                 nValue = argv[0].charCodeAt(0);
             }
         }
-        else {
+        else 
+		{
             nValue = 0;
         }
 
@@ -642,10 +778,12 @@ function _handle_type_f(option, argv) {
 }
 
 // %g
-function _handle_type_g(option, argv) {
+function _handle_type_g(option, argv) 
+{
     var strFinal = '';
 
-    do {
+    do 
+	{
         // reserved
 
     } while (false);
@@ -654,10 +792,12 @@ function _handle_type_g(option, argv) {
 }
 
 // %h
-function _handle_type_h(option, argv) {
+function _handle_type_h(option, argv)
+{
     var strFinal = '';
 
-    do {
+    do 
+	{
         // reserved
 
     } while (false);
@@ -666,38 +806,49 @@ function _handle_type_h(option, argv) {
 }
 
 // %i
-function _handle_type_i(option, argv) {
+function _handle_type_i(option, argv) 
+{
     var strFinal = '';
     var nValue = 0;
 
-    do {
-        if ('number' === typeof argv[0]) {
+    do
+	{
+        if ('number' === typeof argv[0]) 
+		{
             nValue = argv[0];
             strFinal = nValue.toString();
         }
-        else if ('string' === typeof argv[0]) {
-            if (0 === argv[0].length) {
+        else if ('string' === typeof argv[0]) 
+		{
+            if (0 === argv[0].length) 
+			{
                 nValue = 0;
             }
-            else {
+            else 
+			{
                 nValue = argv[0].charCodeAt(0);
             }
             strFinal = nValue.toString();
         }
-        else if (null === argv[0]) {
+        else if (null === argv[0])
+		{
             nValue = 0;
             strFinal = nValue.toString();
         }
-        else if ('object' == typeof argv[0]) {
-            if (('Number64' === argv[0].__TYPE__)) {
+        else if ('object' == typeof argv[0]) 
+		{
+            if (('Number64' === argv[0].__TYPE__))
+			{
                 strFinal = argv[0].toRadixString(10);
             }
-            else {
+            else 
+			{
                 nValue = Number(argv[0]);
                 strFinal = nValue.toString(10);
             }
         }
-        else {
+        else 
+		{
             nValue = Number(argv[0]);
             strFinal = nValue.toString();
         }
@@ -708,10 +859,12 @@ function _handle_type_i(option, argv) {
 }
 
 // %j
-function _handle_type_j(option, argv) {
+function _handle_type_j(option, argv)
+ {
     var strFinal = '';
 
-    do {
+    do
+	{
         // reserved
 
     } while (false);
@@ -720,11 +873,14 @@ function _handle_type_j(option, argv) {
 }
 
 // %k
-function _handle_type_k(option, argv) {
+function _handle_type_k(option, argv) 
+{
     var strFinal = '';
 
-    do {
-        // reserved
+    do 
+	{
+        
+		// reserved
 
     } while (false);
 
@@ -732,7 +888,8 @@ function _handle_type_k(option, argv) {
 }
 
 // %l
-function _handle_type_l(option, argv) {
+function _handle_type_l(option, argv) 
+{
     var strFinal = '';
 
     do {
@@ -745,7 +902,8 @@ function _handle_type_l(option, argv) {
 }
 
 // %m
-function _handle_type_m(option, argv) {
+function _handle_type_m(option, argv) 
+{
     var strFinal = '';
 
     do {
@@ -757,7 +915,8 @@ function _handle_type_m(option, argv) {
 }
 
 // %n
-function _handle_type_n(option, argv) {
+function _handle_type_n(option, argv) 
+{
     var strFinal = '';
 
     do {
@@ -769,23 +928,30 @@ function _handle_type_n(option, argv) {
 }
 
 // %o
-function _handle_type_o(option, argv) {
+function _handle_type_o(option, argv) 
+{
     var strFinal = '';
     var nValue = 0;
 
-    do {
-        if ('number' === typeof argv[0]) {
+    do 
+	{
+        if ('number' === typeof argv[0]) 
+		{
             nValue = argv[0];
         }
-        else if ('string' === typeof argv[0]) {
-            if (0 === argv[0].length) {
+        else if ('string' === typeof argv[0]) 
+		{
+            if (0 === argv[0].length) 
+			{
                 nValue = 0;
             }
-            else {
+            else 
+			{
                 nValue = argv[0].charCodeAt(0);
             }
         }
-        else {
+        else 
+		{
             nValue = 0;
         }
 
@@ -797,7 +963,8 @@ function _handle_type_o(option, argv) {
 }
 
 // %p
-function _handle_type_p(option, argv) {
+function _handle_type_p(option, argv)
+ {
     var strFinal = '';
     var strText = '';
     var nValue = 0;
@@ -812,41 +979,51 @@ function _handle_type_p(option, argv) {
 
         option.zeroPadding = true;
 
-        if ('string' === typeof argv[0]) {
-            if (0 === argv[0].toLowerCase().indexOf('0x')) {
+        if ('string' === typeof argv[0]) 
+		{
+            if (0 === argv[0].toLowerCase().indexOf('0x')) 
+			{
                 strFinal = argv[0].toLowerCase();
             }
             else {
                 strFinal = parseInt(argv[0], 10).toString(16).toLowerCase();
             }
         }
-        else if ('number' === typeof argv[0]) {
+        else if ('number' === typeof argv[0]) 
+		{
             strFinal = argv[0].toString(16).toLowerCase();
         }
-        else if (null === argv[0]) {
+        else if (null === argv[0]) 
+		{
             nValue = 0;
             strFinal = nValue.toString(16).toLowerCase();
         }
-        else if ('object' == typeof argv[0]) {
-            if (('function' == typeof Buffer) && (Buffer.isBuffer(argv[0]))) {
+        else if ('object' == typeof argv[0]) 
+		{
+            if (('function' == typeof Buffer) && (Buffer.isBuffer(argv[0]))) 
+			{
                 strFinal = argv[0].address.toString(16);
             }
-            else if (('Number64' === argv[0].__TYPE__)) {
+            else if (('Number64' === argv[0].__TYPE__)) 
+			{
 
                 strFinal = argv[0].toRadixString(16);
 
 
-                if ('X' === option.type) {
+                if ('X' === option.type) 
+				{
                     strFinal = strFinal.toUpperCase();
                     break;
                 }
             }
-            else {
+            else 
+			{
                 nValue = Number(argv[0]);
                 strFinal = nValue.toString(16);
             }
         }
-        else {
+        else 
+		{
             nValue = Number(argv[0]);
             strFinal = nValue.toString(16);
         }
@@ -857,7 +1034,8 @@ function _handle_type_p(option, argv) {
 }
 
 // %q
-function _handle_type_q(option, argv) {
+function _handle_type_q(option, argv) 
+{
     var strFinal = '';
 
     do {
@@ -870,7 +1048,8 @@ function _handle_type_q(option, argv) {
 }
 
 // %r
-function _handle_type_r(option, argv) {
+function _handle_type_r(option, argv) 
+{
     var strFinal = '';
 
     do {
@@ -882,19 +1061,25 @@ function _handle_type_r(option, argv) {
 }
 
 // %s
-function _handle_type_s(option, argv) {
+function _handle_type_s(option, argv) 
+{
     var strFinal = '';
     var strText = '';
 
-    do {
-        if ('string' === typeof argv[0]) {
+    do 
+	{
+        if ('string' === typeof argv[0])
+		{
             strFinal = argv[0];
         }
-        else if ('undefined' === typeof argv[0]) {
+        else if ('undefined' === typeof argv[0]) 
+		{
             strFinal = 'undefined';
         }
-        else if ('number' === typeof argv[0]) {
-            if (argv[0] < 0) {
+        else if ('number' === typeof argv[0]) 
+		{
+            if (argv[0] < 0) 
+			{
                 strText = argv[0].toString(10);
             }
             else {
@@ -903,11 +1088,13 @@ function _handle_type_s(option, argv) {
 
             strFinal = strText;
         }
-        else {
+        else 
+		{
             strFinal = _inspect(argv[0]);
         }
 
-        if ('S' === option.type) {
+        if ('S' === option.type) 
+		{
             strFinal = strFinal.toUpperCase();
         }
 
@@ -917,7 +1104,8 @@ function _handle_type_s(option, argv) {
 }
 
 // %t
-function _handle_type_t(option, argv) {
+function _handle_type_t(option, argv) 
+{
     var strFinal = '';
 
     do {
@@ -930,17 +1118,20 @@ function _handle_type_t(option, argv) {
 }
 
 // %u
-function _handle_type_u(option, argv) {
+function _handle_type_u(option, argv) 
+{
     var strFinal = '';
     var nValue = 0;
 
     do {
-        if ('number' === typeof argv[0]) {
+        if ('number' === typeof argv[0]) 
+		{
             nValue = argv[0];
             nValue = nValue >>> 0;
             strFinal = nValue.toString();
         }
-        else if ('string' === typeof argv[0]) {
+        else if ('string' === typeof argv[0]) 
+		{
             if (0 === argv[0].length) {
                 nValue = 0;
             }
@@ -951,12 +1142,15 @@ function _handle_type_u(option, argv) {
             nValue = nValue >>> 0;
             strFinal = nValue.toString();
         }
-        else if (null === argv[0]) {
+        else if (null === argv[0]) 
+		{
             nValue = 0;
             strFinal = nValue.toString();
         }
-        else if ('object' == typeof argv[0]) {
-            if ('function' === typeof argv[0].toString) {
+        else if ('object' == typeof argv[0]) 
+		{
+            if ('function' === typeof argv[0].toString) 
+			{
                 strFinal = argv[0].toString(10);
             }
             else {
@@ -976,7 +1170,8 @@ function _handle_type_u(option, argv) {
 }
 
 // %v
-function _handle_type_v(option, argv) {
+function _handle_type_v(option, argv) 
+{
     var strFinal = '';
 
     do {
@@ -988,7 +1183,8 @@ function _handle_type_v(option, argv) {
 }
 
 // %w
-function _handle_type_w(option, argv) {
+function _handle_type_w(option, argv) 
+{
     var strFinal = '';
 
     do {
@@ -1000,44 +1196,57 @@ function _handle_type_w(option, argv) {
 }
 
 // %x
-function _handle_type_x(option, argv) {
+function _handle_type_x(option, argv)
+ {
     var strFinal = '';
     var nValue = 0;
     var strText = '';
 
-    do {
-        if ('number' === typeof argv[0]) {
+    do 
+	{
+        if ('number' === typeof argv[0]) 
+		{
             nValue = argv[0];
 
-            if (nValue < 0) {
+            if (nValue < 0) 
+			{
                 strFinal = Number64(nValue).toRadixString(16);
             }
-            else {
+            else 
+			{
                 strFinal = nValue.toString(16);
             }
         }
-        else if ('string' === typeof argv[0]) {
-            if (0 === argv[0].length) {
+        else if ('string' === typeof argv[0]) 
+		{
+            if (0 === argv[0].length) 
+			{
                 nValue = 0;
             }
-            else {
+            else 
+			{
                 nValue = argv[0].charCodeAt(0);
             }
 
             strFinal = nValue.toString(16);
         }
-        else if (null === argv[0]) {
+        else if (null === argv[0]) 
+		{
             nValue = 0;
             strFinal = nValue.toString(16);
         }
-        else if ('object' === typeof argv[0]) {
-            if (('function' == typeof Buffer) && (Buffer.isBuffer(argv[0]))) {
+        else if ('object' === typeof argv[0]) 
+		{
+            if (('function' == typeof Buffer) && (Buffer.isBuffer(argv[0]))) 
+			{
                 strFinal = argv[0].address.toString(16);
             }
-            else if (('Number64' === argv[0].__TYPE__)) {
+            else if (('Number64' === argv[0].__TYPE__))
+			{
                 strFinal = argv[0].toRadixString(16);
             }
-            else {
+            else
+			{
                 nValue = Number(argv[0]);
                 strFinal = nValue.toString(16);
             }
