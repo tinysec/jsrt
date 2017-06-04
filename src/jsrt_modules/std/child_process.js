@@ -1124,7 +1124,55 @@ function help_close_handles( child )
 
 }
 
+function help_close_handles_all_but_hProcess( child )
+{
+	// hStdInput
+	if ( child.hStdInputReadPipe ) 
+	{
+		ffi_kernel32.CloseHandle( child.hStdInputReadPipe ) ;
+		child.hStdInputReadPipe = null;
+	}
+		
+	if ( child.hStdInputWritePipe ) 
+	{
+		ffi_kernel32.CloseHandle( child.hStdInputWritePipe ) ;
+		child.hStdInputWritePipe = null;
+	}
+		
+	// hStdOutput
+	if ( child.hStdOutputReadPipe ) 
+	{
+		ffi_kernel32.CloseHandle( child.hStdOutputReadPipe ) ;
+		child.hStdOutputReadPipe = null;
+	}
+		
+	if ( child.hStdOutputWritePipe ) 
+	{
+		ffi_kernel32.CloseHandle( child.hStdOutputWritePipe ) ;
+		child.hStdOutputWritePipe = null;
+	}
+		
+	// hStdError
+	if ( child.hStdErrorReadPipe ) 
+	{
+		ffi_kernel32.CloseHandle( child.hStdErrorReadPipe ) ;
+		child.hStdErrorReadPipe = null;
+	}
+		
+	if ( child.hStdErrorWritePipe ) 
+	{
+		ffi_kernel32.CloseHandle( child.hStdErrorWritePipe ) ;
+		child.hStdErrorWritePipe = null;
+	}
 
+	// hThread
+	if ( child.hThread )
+	{
+		ffi_kernel32.CloseHandle( child.hThread ) ;
+		child.hThread = null;
+	}
+
+}
 
 // winExec
 function winExec( commandline , uCmdShow )
@@ -1168,7 +1216,7 @@ function spawnSync( commandline , arg_options )
 exports.spawnSync = spawnSync;
 
 // without shell , nowait , std output
-function system( commandline , timeout )
+function system( commandline )
 {
 	var child = help_child_process_spawn( commandline );
 	
@@ -1292,8 +1340,260 @@ function shell_execSync( commandline , options )
 }
 exports.shell_execSync = shell_execSync;
 
+
+// multi
+function WaitForMultipleObjects( handleArray , bWaitAll  , timeout )
+{
+	var lpHandleArray = null;
+	var pointerSize = ("x64" == process.arch) ? 8 : 4;
+	var index = 0;
+	var waitRet = 0;
+	
+	do
+	{
+		assert( _.isArray(handleArray) , "handleArray must be array" );
+		
+		assert( ( 0 != handleArray.length ) , "handleArray must not empty" );
+		
+		lpHandleArray = Buffer.alloc( pointerSize * handleArray.length ).fill(0);
+		
+		for ( index = 0; index < handleArray.length; index++ )
+		{
+			lpHandleArray.writePointer( handleArray[index] , index * pointerSize );
+		}
+		
+		waitRet = ffi_kernel32.WaitForMultipleObjects(
+				handleArray.length , 
+				lpHandleArray , 
+				bWaitAll ,
+				timeout || -1
+		);
+				
+	}while(false);
+	
+	
+	if ( lpHandleArray )
+	{
+		lpHandleArray.free();
+		lpHandleArray = null;
+	}
+
+	return waitRet;
+}
+
+// directly output
+function multi_system( fnProvider ,  arg_maxInstances )
+{
+	assert( _.isFunction(fnProvider) , "provider must be function" );
+
+	var childArray = [];
+	var child = null;
+	var handleArray = [];
+	var maxInstances = arg_maxInstances || 63;
+
+	var waitRet = 0;
+	
+	var signalHandle = null;
+	var index = 0;
+	
+	var commandline = null;
+	
+	var finalRet = true;
+	
+	while( true )
+	{
+		if ( handleArray.length >= maxInstances )
+		{
+			waitRet = WaitForMultipleObjects( handleArray , false , 1000 );
+			
+			if ( 0 == Number64.compareSigned32( waitRet , -1 ) )
+			{	
+				// wait faild
+				finalRet = false;
+				break;
+			}
+			else if ( 0x102 == waitRet )
+			{
+				// WAIT_TIMEOUT
+				base.sleep( 1000 );
+				continue;
+			}
+			else
+			{
+				assert(  ( waitRet <=  ( handleArray.length - 1) , "invalid wait ret" ) );
+				
+				// find and remove handle
+				
+				// close handle handle
+				signalHandle = handleArray[ waitRet ];
+				handleArray.splice( waitRet , 1 );
+				ffi_kernel32.CloseHandle( signalHandle ) ;
+				
+				// remove from childArray
+				childArray.splice( waitRet , 1 );
+			
+			}
+		}
+	
+	
+		if ( handleArray.length < maxInstances )
+		{
+			commandline = fnProvider( );
+			if ( !commandline )
+			{
+				break;
+			}
+			
+			child = help_child_process_spawn( commandline  );
+			if ( !child )
+			{
+				break;
+			}
+			
+			if ( child.hThread )
+			{
+				ffi_kernel32.CloseHandle( child.hThread ) ;
+				child.hThread = null;
+			}
+			
+			childArray.push( child );
+			handleArray.push( child.hProcess );
+		}
+	}
+	
+
+	// wait left all childs
+	if ( handleArray.length > 0 )
+	{
+		waitRet = WaitForMultipleObjects( handleArray , true , -1 );
+		
+		for( index = 0; index < handleArray.length; index++ )
+		{
+			// find and remove handle
+					
+			// close handle handle
+			signalHandle = handleArray[ index ];
+			handleArray.splice( index , 1 );
+			ffi_kernel32.CloseHandle( signalHandle ) ;
+					
+			// remove from childArray
+			childArray.splice( index , 1 );
+		}
+	}
+	
+	return finalRet;
+}
+exports.multi_system = multi_system;
+
+
+// no output
+function multi_exec( fnProvider ,  arg_maxInstances )
+{
+	assert( _.isFunction(fnProvider) , "provider must be function" );
+
+	var childArray = [];
+	var child = null;
+	var handleArray = [];
+	var maxInstances = arg_maxInstances || 63;
+
+	var waitRet = 0;
+	
+	var signalHandle = null;
+	var index = 0;
+	
+	var provideInfo = null;
+	
+	var finalRet = true;
+	
+	while( true )
+	{
+		if ( handleArray.length >= maxInstances )
+		{
+			waitRet = WaitForMultipleObjects( handleArray , false , 1000 );
+			
+			if ( 0 == Number64.compareSigned32( waitRet , -1 ) )
+			{	
+				// wait faild
+				finalRet = false;
+				break;
+			}
+			else if ( 0x102 == waitRet )
+			{
+				// WAIT_TIMEOUT
+				base.sleep( 1000 );
+				continue;
+			}
+			else
+			{
+				assert(  ( waitRet <=  ( handleArray.length - 1) , "invalid wait ret" ) );
+				
+				// find and remove handle
+				
+				// close handle handle
+				signalHandle = handleArray[ waitRet ];
+				handleArray.splice( waitRet , 1 );
+				ffi_kernel32.CloseHandle( signalHandle ) ;
+				
+				// remove from childArray
+				childArray.splice( waitRet , 1 );
+			
+			}
+		}
+	
+	
+		if ( handleArray.length < maxInstances )
+		{
+			provideInfo = fnProvider( );
+			if ( !provideInfo )
+			{
+				break;
+			}
+			
+			child = help_child_process_spawn( provideInfo.commandline , provideInfo.option  );
+			if ( !child )
+			{
+				break;
+			}
+			
+			help_close_handles_all_but_hProcess( child );
+			
+			childArray.push( child );
+			handleArray.push( child.hProcess );
+		}
+	}
+	
+
+	// wait left all childs
+	if ( handleArray.length > 0 )
+	{
+		waitRet = WaitForMultipleObjects( handleArray , true , -1 );
+		
+		for( index = 0; index < handleArray.length; index++ )
+		{
+			// find and remove handle
+					
+			// close handle handle
+			signalHandle = handleArray[ index ];
+			handleArray.splice( index , 1 );
+			ffi_kernel32.CloseHandle( signalHandle ) ;
+					
+			// remove from childArray
+			childArray.splice( index , 1 );
+		}
+	}
+	
+	return finalRet;
+}
+exports.multi_exec = multi_exec;
+
+
+
+
 function main(  )
 {
+	
+
+
 	return 0;
 }
 
