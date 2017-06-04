@@ -12,6 +12,7 @@ function path_toWin32Style(arg_src_path)
 
     return arg_src_path.replace(/\//g, '\\');
 }
+exports.toWin32Style = path_toWin32Style;
 
 function path_removePrefix(arg_src_path) 
 {
@@ -36,7 +37,7 @@ function path_normalize(src_path)
     }
 
     var dest_path = path_toWin32Style(src_path);
-
+	
     dest_path = dest_path.trim();
 
     dest_path = process.reserved.bindings.path_normalize(dest_path);
@@ -103,7 +104,7 @@ function path_fileExists(arg_src_path)
     assert(_.isString(arg_src_path));
 
     if (0 == arg_src_path.length)
-		{
+	{
         return false;
     }
 
@@ -242,7 +243,7 @@ exports.combine = path_combine;
 
 function main(  )
 {
-	console.log( path_basename("c://") );
+	console.log( path_normalize("../../osver.js") );
 	
 	return 0;
 }
