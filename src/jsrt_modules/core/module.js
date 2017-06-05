@@ -77,7 +77,7 @@ const BUILTIN_MODULE_NAME_TABLE = [
 	
 	"win32/auth" ,
 	
-	"win32/toolHelp" ,
+	"win32/toolhelp" ,
 	
 	"win32/ioctl" ,
 	
