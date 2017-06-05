@@ -2,6 +2,7 @@
 
 const _ = require("underscore");
 const assert = require("assert");
+const sprintf = require("cprintf").sprintf;
 
 function LOBYTE(v) 
 {
@@ -293,6 +294,67 @@ function sleep(time)
 	return process.reserved.bindings.host_sleep( time || 0 );
 }
 exports.sleep = sleep;
+
+// 64bit
+function stringToFlags( maskTable , arg_textFlags )
+{
+	var finalFlags = Number64(0);
+
+	assert(  (  (maskTable) && ( _.isObject(maskTable) ) )  , "invalid mask table" );
+	
+	assert(  (  (arg_textFlags) && ( _.isString(arg_textFlags) ) )  , "invalid text flags" );
+	
+	var textFlagArray = arg_textFlags.trim().split('|');
+	if ( 0 == textFlagArray.length )
+	{
+		return finalFlags;
+	}
+	
+	var index = 0;
+	var textFlag = '';
+	var tableValue = null;
+	
+	for ( index = 0; index < textFlagArray.length; index++ )
+	{
+		textFlag = textFlagArray[ index ].trim();
+		
+		if ( _.has( maskTable , textFlag ) )
+		{
+			tableValue = maskTable[ textFlag ];
+			
+			if ( _.isString(tableValue) )
+			{
+				tableValue = stringToFlags( maskTable , tableValue );
+				
+				finalFlags.or( tableValue );
+			}
+			else if ( Number64.isNumber64(tableValue) )
+			{
+				finalFlags.or( tableValue );
+			}
+			else if ( _.isNumber(tableValue) )
+			{
+				finalFlags.or( tableValue );
+			}
+			else
+			{
+				throw new Error( sprintf('unknown mask table value "%s" ' , tableValue ) ); 
+			}
+		}
+		else if ( 0 == textFlag.indexOf('0x') )
+		{
+			finalFlags.or( textFlag );
+		}
+		else
+		{
+			throw new Error( sprintf('unknown flag "%s" ' , textFlag ) ); 
+		}
+	}
+	
+	return finalFlags;
+}
+exports.stringToFlags = stringToFlags;
+
 
 function main(  )
 {
