@@ -51,7 +51,7 @@ function enumProcess()
 	var bLoop = true;
 	
 	var processNode = null;
-	var processArray = [];
+	var processArray = null;
 	
 	do
 	{
@@ -105,6 +105,11 @@ function enumProcess()
 				processNode.imageName = lpProcessEntry32.toString( "ucs2" , 0x024 , 0x024 + 260 * 2  );
 			}
 			
+			if ( !processArray )
+			{
+				processArray = [];
+			}
+			
 			processArray.push( processNode );
 			
 			lpProcessEntry32.fill(0);
@@ -151,7 +156,7 @@ function enumModule( arg_pid )
 	var bLoop = true;
 	
 	var moduleNode = null;
-	var moduleArray = [];
+	var moduleArray = null;
 	
 	do
 	{
@@ -203,6 +208,11 @@ function enumModule( arg_pid )
 				moduleNode.imagePath = lpModuleEntry32.toString( "ucs2" , 0x220 , 0x220 + 260 * 2 );
 			}
 			
+			if ( !moduleArray )
+			{
+				moduleArray = [];
+			}
+			
 			moduleArray.push( moduleNode );
 			
 			lpModuleEntry32.fill(0);
@@ -248,7 +258,7 @@ function enumThread( arg_pid )
 	var bLoop = true;
 	
 	var threadNode = null;
-	var threadArray = [];
+	var threadArray = null;
 	
 	do
 	{
@@ -278,7 +288,12 @@ function enumThread( arg_pid )
 			threadNode.pid = lpThreadEntry32.readUInt32LE( 0x0c );
 			
 			threadNode.basePriority = lpThreadEntry32.readInt32LE( 0x010 );
-	
+			
+			if ( !threadArray )
+			{
+				threadArray = [];
+			}
+			
 			threadArray.push( threadNode );
 			
 			lpThreadEntry32.fill(0);
