@@ -46,18 +46,56 @@ var ffi_advapi32 = ffi.loadAndBatchBind("advapi32.dll" , [
 
 exports.EOL = "\r\n";
 
-function os_arch()
+exports.arch = process.OSArch;
+
+exports.endianness = "LE";
+
+exports.homedir = process.env["USERPROFILE"];
+
+exports.platform = process.platform;
+
+exports.type = "Windows_NT";
+
+function os_version()
 {
-	return process.arch;
+	var lpVersionInfo = Buffer.alloc( 284 ).fill( 0 );
+
+	// dwOSVersionInfoSize
+	lpVersionInfo.writeUInt32LE(284 , 0);
+	
+	ffi_ntdll.RtlGetVersion( lpVersionInfo );
+	
+	var value = 0;
+	
+	var versionInfo = {};
+	
+	versionInfo.arch = process.OSArch;
+	
+	versionInfo.major = lpVersionInfo.readUInt32LE( 0x04 );
+	
+	versionInfo.minor = lpVersionInfo.readUInt32LE( 0x08 );
+	
+	versionInfo.buildnumber = lpVersionInfo.readUInt32LE( 0x0C );
+
+	versionInfo.servicepack = lpVersionInfo.readUInt32LE( 0x110 );
+	
+	//versionInfo.platformid = lpVersionInfo.readUInt32LE( 0x10 );
+	
+	//versionInfo.CSDVersion = lpVersionInfo.toString( "ucs2" , 0x14 );
+	
+	versionInfo.suitemask = lpVersionInfo.readUInt16LE( 0x114 );
+
+	versionInfo.producttype = lpVersionInfo.readUInt8( 0x116 );
+	
+	lpVersionInfo.free();
+	lpVersionInfo = null;
+	
+	return versionInfo;
 }
-exports.arch = os_arch;
+exports.version = os_version();
 
 
-function os_endianness()
-{
-	return "LE";
-}
-exports.endianness = os_endianness;
+
 
 
 function os_freemem()
@@ -97,11 +135,6 @@ function os_totalmem()
 exports.totalmem = os_totalmem;
 
 
-function os_homedir()
-{
-	return process.env["USERPROFILE"];
-}
-exports.homedir = os_homedir;
 
 function os_hostname()
 {
@@ -183,12 +216,6 @@ function os_username()
 }
 exports.username = os_username;
 
-function os_platform()
-{
-	return process.platform;
-}
-exports.platform = os_platform;
-
 function os_release()
 {
 	var lpVersionInfo = Buffer.alloc( 284 ).fill( 0 );
@@ -211,40 +238,6 @@ function os_release()
 }
 exports.release = os_release;
 
-function os_version()
-{
-	var lpVersionInfo = Buffer.alloc( 284 ).fill( 0 );
-
-	// dwOSVersionInfoSize
-	lpVersionInfo.writeUInt32LE(284 , 0);
-	
-	ffi_ntdll.RtlGetVersion( lpVersionInfo );
-	
-	var versionInfo = {};
-	
-	versionInfo.major = lpVersionInfo.readUInt32LE( 0x04 );
-	versionInfo.minor = lpVersionInfo.readUInt32LE( 0x08 );
-	versionInfo.buildNumber = lpVersionInfo.readUInt32LE( 0x0C );
-	
-	versionInfo.platformId = lpVersionInfo.readUInt32LE( 0x10 );
-	
-	versionInfo.CSDVersion = lpVersionInfo.toString( "ucs2" , 0x14 );
-	
-	versionInfo.servicePackMajor = lpVersionInfo.readUInt16LE( 0x110 );
-	
-	versionInfo.servicePackMinor = lpVersionInfo.readUInt16LE( 0x112 );
-	
-	versionInfo.suiteMask = lpVersionInfo.readUInt16LE( 0x114 );
-	
-	versionInfo.productType = lpVersionInfo.readUInt8( 0x116 );
-	
-	lpVersionInfo.free();
-	lpVersionInfo = null;
-	
-
-	return versionInfo;
-}
-exports.version = os_version();
 
 
 function os_tmpdir()
@@ -261,12 +254,6 @@ function os_tmpdir()
 	return pathText;
 }
 exports.tmpdir = os_tmpdir;
-
-function os_type()
-{
-	return "Windows_NT";
-}
-exports.type = os_type;
 
 function os_uptime()
 {
