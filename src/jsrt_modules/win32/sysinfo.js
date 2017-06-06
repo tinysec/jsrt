@@ -887,6 +887,7 @@ function fix_module_path(  arg_src_path )
     return dest_path;
 }
 
+// not work at wow64 mode
 function queryModuleInformation()
 {
 	var lpBuffer = null;
@@ -988,7 +989,6 @@ function queryModuleInformation()
 		entryBaseOffset = base.ALIGN_UP_BY( entryBaseOffset , base.POINTER_SIZE );
 		
 		stModuleNode = {};
-		
 
 		stModuleNode.ImageBase =  lpBuffer.readNativePointer( entryBaseOffset + offset_RTL_PROCESS_MODULE_INFORMATION_ImageBase );
 			
@@ -1229,7 +1229,6 @@ exports.queryObjectTypes = queryObjectTypes;
 
 function main(  )
 {
-	
 	return 0;
 }
 

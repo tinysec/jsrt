@@ -266,23 +266,10 @@ function unserialize_to_buffer(input)
 
 function serialize_from_Number64(input)
 {
-
-	if (input.isNUMBER32())
-	{
-		return {
-			"t": "n4",
-			"v": '0x' + input.toString(16)
-		};
-	}
-	else
-	{
-		return {
+	return {
 			"t": "n6",
 			"v": '0x' + input.toString(16)
-		};
-	}
-
-
+	};
 }
 
 function unserialize_to_Number64(input)
@@ -292,16 +279,7 @@ function unserialize_to_Number64(input)
 		throw new Error('invalid data');
 	}
 
-	if ('n4' == input.t)
-	{
-		return Number64(input.v).cast2Number32();
-	}
-	else
-	{
-		return Number64(input.v);
-	}
-
-
+	return Number64(input.v);
 }
 
 function serialize_from_array(input, level)
@@ -597,7 +575,7 @@ function isItemNeedIncLevel(input)
 			}
 		}
 
-		if ('Number64' == input.__TYPE__)
+		if ( Number64.isNumber64( input ) )
 		{
 			return false;
 		}
@@ -679,7 +657,7 @@ function isItemNeedIgnore(input)
 			}
 		}
 
-		if ('Number64' == input.__TYPE__)
+		if ( Number64.isNumber64( input ) )
 		{
 			return false;
 		}
@@ -762,12 +740,7 @@ function recu_serialize(input, level)
 			}
 		}
 
-		if ('Number64' == input.__TYPE__)
-		{
-			return serialize_from_Number64(input);
-		}
-
-		if ('function' == typeof input.isNumber64)
+		if ( Number64.isNumber64( input ) )
 		{
 			return serialize_from_Number64(input);
 		}
@@ -850,7 +823,7 @@ function recu_unserialize(input)
 
 		}
 	}
-	else if (("n4" === input.t) || ("n6" === input.t))
+	else if ("n6" === input.t)
 	{
 		return unserialize_to_Number64(input);
 
