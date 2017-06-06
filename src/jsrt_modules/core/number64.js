@@ -251,6 +251,11 @@ Number64.prototype.notEquals = function (arg_other)
     return (0 != this.compare(arg_other));
 }
 
+Number64.notEquals = function ( arg_1 , arg_2 ) 
+{
+   return ( 0 != Number64.compare(arg_1 , arg_2 ) );
+}
+
 Number64.prototype.notEquals32 = function (arg_other) 
 {
     return (0 != this.compare32(arg_other));
@@ -266,7 +271,12 @@ Number64.prototype.lessThan = function (arg_other)
     return (0 > this.compare(arg_other));
 }
 
-Number64.prototype.lessThan32 = function (arg_other) 
+Number64.lessThan = function ( arg_1 , arg_2 ) 
+{
+    return ( 0 > Number64.compare(arg_1 , arg_2 ) );
+}
+
+Number64.prototype.lessThan32 = function ( arg_1 , arg_2) 
 {
     return (0 > this.compare32(arg_other));
 }
@@ -279,6 +289,11 @@ Number64.lessThan32 = function ( arg_1 , arg_2 )
 Number64.prototype.lessThanSigned = function (arg_other) 
 {
     return (0 > this.compareSigned(arg_other));
+}
+
+Number64.lessThanSigned = function (arg_1 , arg_2) 
+{
+    return ( 0 > Number64.compareSigned(arg_1 , arg_2 ) );
 }
 
 Number64.prototype.lessThanSigned32 = function (arg_other) 
@@ -296,6 +311,11 @@ Number64.prototype.lessThanOrEqual = function (arg_other)
     return (0 >= this.compare(arg_other));
 }
 
+Number64.lessThanOrEqual = function ( arg_1 , arg_2 )
+{
+    return (0 >= this.compare( arg_1 , arg_2 ));
+}
+
 Number64.prototype.lessThanOrEqual32 = function (arg_other)
 {
     return (0 >= this.compare32(arg_other));
@@ -309,6 +329,11 @@ Number64.lessThanOrEqual32 = function ( arg_1 , arg_2 )
 Number64.prototype.lessThanOrEqualSigned = function (arg_other)
 {
     return (0 >= this.compareSigned(arg_other));
+}
+
+Number64.lessThanOrEqualSigned = function (arg_other)
+{
+   return ( 0 >= Number64.compareSigned(arg_1 , arg_2 ) );
 }
 
 Number64.prototype.lessThanOrEqualSigned32 = function (arg_other)
@@ -326,6 +351,11 @@ Number64.prototype.greaterThan = function (arg_other)
     return (0 < this.compare(arg_other));
 }
 
+Number64.greaterThan = function (arg_other) 
+{
+     return ( 0 < Number64.compare(arg_1 , arg_2 ) );
+}
+
 Number64.prototype.greaterThan32 = function (arg_other) 
 {
     return (0 < this.compare32(arg_other));
@@ -339,6 +369,11 @@ Number64.greaterThan32 = function ( arg_1 , arg_2 )
 Number64.prototype.greaterThanSigned = function (arg_other) 
 {
     return (0 < this.compareSigned(arg_other));
+}
+
+Number64.greaterThanSigned = function ( arg_1 , arg_2 ) 
+{
+    return ( 0 < Number64.compareSigned(arg_1 , arg_2 ) );
 }
 
 Number64.prototype.greaterThanSigned32 = function (arg_other) 
@@ -356,6 +391,11 @@ Number64.prototype.greaterThanOrEqual = function (arg_other)
     return (0 <= this.compare(arg_other));
 }
 
+Number64.greaterThanOrEqual = function (arg_1 , arg_2) 
+{
+    return ( 0 <= Number64.compare(arg_1 , arg_2 ) );
+}
+
 Number64.prototype.greaterThanOrEqual32 = function (arg_other) 
 {
     return (0 <= this.compare32(arg_other));
@@ -369,6 +409,11 @@ Number64.greaterThanOrEqual32 = function ( arg_1 , arg_2 )
 Number64.prototype.greaterThanOrEqualSigned = function (arg_other) 
 {
     return (0 <= this.compareSigned(arg_other));
+}
+
+Number64.greaterThanOrEqualSigned = function (arg_1 , arg_2) 
+{
+    return ( 0 <= Number64.compareSigned(arg_1 , arg_2 ) );
 }
 
 Number64.prototype.greaterThanOrEqualSigned32 = function (arg_other) 
@@ -413,17 +458,17 @@ Number64.prototype.compare32 = function (arg_other)
     return process.reserved.bindings.Number64_cmp32(this.hexText, cast2Number64(arg_other).hexText);
 }
 
-Number64.prototype.compareSigned32 = function (arg_other) 
-{
-    return process.reserved.bindings.Number64_scmp32(this.hexText, cast2Number64(arg_other).hexText);
-}
-
 Number64.compare32 = function ( arg_1 , arg_2 ) 
 {
     var n1 = Number64( arg_1 );
 	var n2 = Number64( arg_2 );
 	
 	return process.reserved.bindings.Number64_cmp32(n1.hexText, n2.hexText);
+}
+
+Number64.prototype.compareSigned32 = function (arg_other) 
+{
+    return process.reserved.bindings.Number64_scmp32(this.hexText, cast2Number64(arg_other).hexText);
 }
 
 Number64.compareSigned32 = function ( arg_1 , arg_2 ) 
