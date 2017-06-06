@@ -650,17 +650,12 @@ function queryHandleInfomation()
 	}
 	
 	NumberOfHandles = lpBuffer.readUInt32LE( 0 );
+	
+	entryBaseOffset = base.POINTER_SIZE;
 		
 	for ( entryIndex = 0; entryIndex < NumberOfHandles; entryIndex++ )
 	{
-		if ( 'x64' == process.arch )
-		{
-			entryBaseOffset = 8 + entryIndex * sizeof_SYSTEM_HANDLE_TABLE_ENTRY_INFO;
-		}
-		else
-		{
-			entryBaseOffset = 4 + entryIndex * sizeof_SYSTEM_HANDLE_TABLE_ENTRY_INFO;
-		}
+		entryBaseOffset = base.ALIGN_UP_BY( entryBaseOffset , base.POINTER_SIZE );
 		
 		stHandleNode = {};
 		
@@ -688,6 +683,8 @@ function queryHandleInfomation()
 		}
 		
 		handleArray.push( stHandleNode ); 
+		
+		entryBaseOffset += sizeof_SYSTEM_HANDLE_TABLE_ENTRY_INFO;
 	}
 	
 	if ( lpBuffer )
@@ -795,17 +792,12 @@ function queryLockInfomation()
 	}
 	
 	NumberOfHandles = lpBuffer.readUInt32LE( 0 );
+	
+	entryBaseOffset = base.POINTER_SIZE;
 		
 	for ( entryIndex = 0; entryIndex < NumberOfHandles; entryIndex++ )
 	{
-		if ( 'x64' == process.arch )
-		{
-			entryBaseOffset = 8 + entryIndex * sizeof_RTL_PROCESS_LOCK_INFORMATION;
-		}
-		else
-		{
-			entryBaseOffset = 4 + entryIndex * sizeof_RTL_PROCESS_LOCK_INFORMATION;
-		}
+		entryBaseOffset = base.ALIGN_UP_BY( entryBaseOffset , base.POINTER_SIZE );
 		
 		stLockNode = {};
 		
@@ -837,6 +829,8 @@ function queryLockInfomation()
 		}
 		
 		lockArray.push( stLockNode ); 
+		
+		entryBaseOffset += sizeof_RTL_PROCESS_LOCK_INFORMATION;
 	}
 	
 	if ( lpBuffer )
@@ -986,17 +980,12 @@ function queryModuleInformation()
 	
 
 	NumberOfModules = lpBuffer.readUInt32LE( 0 );
+	
+	entryBaseOffset = base.POINTER_SIZE;
 		
 	for ( entryIndex = 0; entryIndex < NumberOfModules; entryIndex++ )
 	{
-		if ( 'x64' == process.arch )
-		{
-			entryBaseOffset = 8 + entryIndex * sizeof_RTL_PROCESS_MODULE_INFORMATION;
-		}
-		else
-		{
-			entryBaseOffset = 4 + entryIndex * sizeof_RTL_PROCESS_MODULE_INFORMATION;
-		}
+		entryBaseOffset = base.ALIGN_UP_BY( entryBaseOffset , base.POINTER_SIZE );
 		
 		stModuleNode = {};
 		
@@ -1026,6 +1015,8 @@ function queryModuleInformation()
 		}
 		
 		moduleArray.push( stModuleNode ); 
+		
+		entryBaseOffset += sizeof_RTL_PROCESS_MODULE_INFORMATION;
 	}
 	
 	if ( lpBuffer )
@@ -1092,17 +1083,12 @@ function queryBigPoolInformation()
 	}
 	
 	NumberOfPools = lpBuffer.readUInt32LE( 0 );
+	
+	entryBaseOffset = base.POINTER_SIZE;
 		
 	for ( entryIndex = 0; entryIndex < NumberOfPools; entryIndex++ )
 	{
-		if ( 'x64' == process.arch )
-		{
-			entryBaseOffset = 8 + entryIndex * sizeof_SYSTEM_BIGPOOL_ENTRY;
-		}
-		else
-		{
-			entryBaseOffset = 4 + entryIndex * sizeof_SYSTEM_BIGPOOL_ENTRY;
-		}
+		entryBaseOffset = base.ALIGN_UP_BY( entryBaseOffset , base.POINTER_SIZE );
 		
 		stPoolNode = {};
 		
@@ -1122,6 +1108,9 @@ function queryBigPoolInformation()
 		}
 		
 		PoolArray.push( stPoolNode ); 
+		
+		
+		entryBaseOffset += sizeof_SYSTEM_BIGPOOL_ENTRY;
 	}
 	
 	if ( lpBuffer )
