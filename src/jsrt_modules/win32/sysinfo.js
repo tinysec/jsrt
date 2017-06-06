@@ -10,14 +10,18 @@ const path = require("path");
 
 const ffi = require("ffi");
 
+const wtypes = require("win32/wtypes");
+
 var ffi_ntdll = ffi.loadAndBatchBind("ntdll.dll" , [
 
-	"NTSTATUS __stdcall NtQuerySystemInformation(_In_  ULONG SystemInformationClass , _Inout_   PVOID SystemInformation , _In_ ULONG SystemInformationLength , _Out_opt_ PULONG ReturnLength );" 
+	"NTSTATUS __stdcall NtQuerySystemInformation(_In_  ULONG SystemInformationClass , _Inout_   PVOID SystemInformation , _In_ ULONG SystemInformationLength , _Out_opt_ PULONG ReturnLength );" ,
+	
+	"NTSTATUS __stdcall NtQueryObject(  HANDLE Handle ,  ULONG ObjectInformationClass ,  PVOID ObjectInformation ,  ULONG ObjectInformationLength ,  PULONG ReturnLength );"
 
 ]);
 
 
-function helper_querySystemInfomation( SystemInformationClass , param_initSize )
+function help_querySystemInfomation( SystemInformationClass , param_initSize )
 {	
 	var lpBuffer = null;
 	var pnBufferLength = Buffer.alloc( 8 ).fill( 0 );
@@ -73,7 +77,7 @@ function helper_querySystemInfomation( SystemInformationClass , param_initSize )
 	return lpBuffer;
 }
 
-function helper_querySystemInfomation2( SystemInformationClass , param_initSize )
+function help_querySystemInfomation2( SystemInformationClass , param_initSize )
 {	
 	var lpBuffer = null;
 	var pnBufferLength = Buffer.alloc( 8 ).fill( 0 );
@@ -109,11 +113,7 @@ function helper_querySystemInfomation2( SystemInformationClass , param_initSize 
 				lpTestBuffer = null;
 			}
 		
-			//nTestSize += 1024 * 200;
-			
 			nTestSize = nTestSize * 2;
-			
-			
 		}
 		
 	}while(false);
@@ -131,6 +131,59 @@ function helper_querySystemInfomation2( SystemInformationClass , param_initSize 
 }
 
 
+function help_queryObject( hObject , informationClass , param_initSize )
+{	
+	var lpBuffer = null;
+	var pnBufferLength = Buffer.alloc( 8 ).fill( 0 );
+	
+	var lpTestBuffer = null;
+	var nTestSize = param_initSize || 8;
+	var status = 0;
+	
+	var ReturnLength = 0;
+	
+	
+	do
+	{
+		while( 1 )
+		{
+			lpTestBuffer = Buffer.alloc( nTestSize ).fill( 0 );
+	
+			pnBufferLength.writeUInt32LE( nTestSize );
+			
+			status = ffi_ntdll.NtQueryObject( hObject , informationClass , lpTestBuffer , nTestSize , pnBufferLength );
+			if ( 0 == status )
+			{
+				ReturnLength = pnBufferLength.readUInt32LE();
+				
+				lpBuffer = lpTestBuffer.slice( 0 , ReturnLength );
+				
+				break;
+			}
+			
+			if ( lpTestBuffer )
+			{
+				lpTestBuffer.free();
+				lpTestBuffer = null;
+			}
+		
+			nTestSize = nTestSize * 2;
+		}
+		
+	}while(false);
+	
+	pnBufferLength.free();
+	pnBufferLength = null;
+	
+	if ( lpTestBuffer )
+	{
+		lpTestBuffer.free();
+		lpTestBuffer = null;
+	}
+
+	return lpBuffer;
+}
+
 function queryProcessInfomation()
 {
 	var lpBuffer = null;
@@ -139,9 +192,9 @@ function queryProcessInfomation()
 	var NextEntryOffset = 0;
 	
 	var stProcessNode = {};
-	var processArray = [];
+	var processArray = null;
 	
-	lpBuffer = helper_querySystemInfomation( 5 );
+	lpBuffer = help_querySystemInfomation( 5 );
 	if ( !lpBuffer )
 	{
 		return processArray;
@@ -473,6 +526,11 @@ function queryProcessInfomation()
 		}
 
 		// push node 
+		if ( !processArray )
+		{
+			processArray = [];
+		}
+		
 		processArray.push( stProcessNode ); 
 		
 		entryBaseOffset += NextEntryOffset;
@@ -494,6 +552,20 @@ function queryProcessInfomation()
 exports.queryProcessInfomation = queryProcessInfomation;
 
 
+function _getObjectTypeName( objectTypesTable , objectTypeIndex )
+{
+	var index = 0;
+	
+	for ( index = 0; index < objectTypesTable.length; index++ )
+	{
+		if ( objectTypeIndex == objectTypesTable[index].index )
+		{
+			return objectTypesTable[index].name;
+		}
+	}
+}
+
+
 function queryHandleInfomation()
 {
 	var lpBuffer = null;
@@ -501,12 +573,22 @@ function queryHandleInfomation()
 	var entryBaseOffset = 0;
 
 	var stHandleNode = {};
-	var handleArray = [];
+	var handleArray = null;
 	
 	var NumberOfHandles = 0;
 	var entryIndex = 0;
 	
-	lpBuffer = helper_querySystemInfomation2( 16 , 1024 * 100 );
+	var ObjectTypeIndex = 0;
+	
+	var objectTypesTable = null;
+	
+	objectTypesTable = queryObjectTypes();
+	if ( !objectTypesTable )
+	{
+		return null;
+	}
+	
+	lpBuffer = help_querySystemInfomation2( 16 , 1024 * 100 );
 	if ( !lpBuffer )
 	{
 		return handleArray;
@@ -586,7 +668,9 @@ function queryHandleInfomation()
 	
 		stHandleNode.CreatorBackTraceIndex =  lpBuffer.readUInt16LE( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_CreatorBackTraceIndex );
 			
-		stHandleNode.ObjectTypeIndex =  lpBuffer.readUInt8( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_ObjectTypeIndex );
+		ObjectTypeIndex =  lpBuffer.readUInt8( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_ObjectTypeIndex );
+		
+		stHandleNode.ObjectTypeName =  _getObjectTypeName( objectTypesTable , ObjectTypeIndex );
 			
 		stHandleNode.HandleAttributes =  lpBuffer.readUInt8( entryBaseOffset + offset_SYSTEM_HANDLE_TABLE_ENTRY_INFO_HandleAttributes );
 			
@@ -598,6 +682,11 @@ function queryHandleInfomation()
 			
 
 		// push node 
+		if ( !handleArray )
+		{
+			handleArray = [];
+		}
+		
 		handleArray.push( stHandleNode ); 
 	}
 	
@@ -619,12 +708,12 @@ function queryLockInfomation()
 	var entryBaseOffset = 0;
 
 	var stLockNode = {};
-	var lockArray = [];
+	var lockArray = null;
 	
 	var NumberOfHandles = 0;
 	var entryIndex = 0;
 	
-	lpBuffer = helper_querySystemInfomation2( 12 , 1024 * 100 );
+	lpBuffer = help_querySystemInfomation2( 12 , 1024 * 100 );
 	
 	if ( !lpBuffer )
 	{
@@ -742,6 +831,11 @@ function queryLockInfomation()
 		
 		
 		// push node 
+		if ( !lockArray )
+		{
+			lockArray = [];
+		}
+		
 		lockArray.push( stLockNode ); 
 	}
 	
@@ -806,12 +900,12 @@ function queryModuleInformation()
 	var entryBaseOffset = 0;
 
 	var stModuleNode = {};
-	var moduleArray = [];
+	var moduleArray = null;
 	
 	var NumberOfModules = 0;
 	var entryIndex = 0;
 	
-	lpBuffer = helper_querySystemInfomation2( 11 , 1024 * 10 );
+	lpBuffer = help_querySystemInfomation2( 11 , 1024 * 10 );
 	if ( !lpBuffer )
 	{
 		return moduleArray;
@@ -926,6 +1020,11 @@ function queryModuleInformation()
 		stModuleNode.FullPathName = fix_module_path( stModuleNode.FullPathName );
 		
 		// push node 
+		if ( !moduleArray )
+		{
+			moduleArray = [];
+		}
+		
 		moduleArray.push( stModuleNode ); 
 	}
 	
@@ -947,14 +1046,14 @@ function queryBigPoolInformation()
 	var entryBaseOffset = 0;
 
 	var stPoolNode = {};
-	var PoolArray = [];
+	var PoolArray = null;
 	
 	var NumberOfPools = 0;
 	var entryIndex = 0;
 	
 	var testValue = 0;
 	
-	lpBuffer = helper_querySystemInfomation2( 66 , 1024 * 10 );
+	lpBuffer = help_querySystemInfomation2( 66 , 1024 * 10 );
 	if ( !lpBuffer )
 	{
 		return moduleArray;
@@ -1017,6 +1116,11 @@ function queryBigPoolInformation()
 		stPoolNode.tag = base.UInt32LEToTag( lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_BIGPOOL_ENTRY_TagUlong ) );
 	
 		// push node 
+		if ( !PoolArray )
+		{
+			PoolArray = [];
+		}
+		
 		PoolArray.push( stPoolNode ); 
 	}
 	
@@ -1031,7 +1135,107 @@ function queryBigPoolInformation()
 exports.queryBigPoolInformation = queryBigPoolInformation;
 
 
+// return [ { objectTypeIndex , name , poolType} ]
+function queryObjectTypes()
+{
+	var Status = -1;
+	
+	var lpTypesBuffer = null;
+	
+	var NumberOfTypes = 0;
+	var entryIndex = 0;
+	
+	var entryBaseOffset = 0;
+	
+	var offset_OBJECT_TYPE_INFORMATION_TypeIndex = 0x00;
+	var offset_OBJECT_TYPE_INFORMATION_PoolType = 0;
+	var sizeof_OBJECT_TYPE_INFORMATION = 0x00;
+	
+	
+	var nameSize = 0;
+	
+	var typeNode = null;
 
+	var objectTypes = null;
+	var poolType = 0;
+	
+	if ( 'x64' == process.arch )
+	{
+		offset_OBJECT_TYPE_INFORMATION_TypeIndex = 0x5A;
+		
+		offset_OBJECT_TYPE_INFORMATION_PoolType = 0x5C;
+			
+		sizeof_OBJECT_TYPE_INFORMATION = 0x68;
+	}
+	else
+	{
+		offset_OBJECT_TYPE_INFORMATION_TypeIndex = 0x52;
+		
+		offset_OBJECT_TYPE_INFORMATION_PoolType = 0x54;
+			
+		sizeof_OBJECT_TYPE_INFORMATION = 0x60;	
+	}
+	
+	do
+	{	
+		// ObjectTypesInformation
+		lpTypesBuffer = help_queryObject( null , 3 );
+		if ( !lpTypesBuffer )
+		{
+			break;
+		}
+		
+		NumberOfTypes = lpTypesBuffer.readUInt32LE(0);
+		
+		entryBaseOffset = base.POINTER_SIZE;
+		
+		for ( entryIndex = 0; entryIndex < NumberOfTypes; entryIndex++ )
+		{
+			entryBaseOffset = base.ALIGN_UP_BY( entryBaseOffset , base.POINTER_SIZE );
+			
+			nameSize = lpTypesBuffer.readUInt16LE( entryBaseOffset + 0x02 );
+			
+			typeNode = {};
+			typeNode.index = lpTypesBuffer.readUInt8( entryBaseOffset + offset_OBJECT_TYPE_INFORMATION_TypeIndex );
+			
+			typeNode.name = Buffer.toString( 
+						lpTypesBuffer.address , 
+						"ucs2"  , 
+						entryBaseOffset + sizeof_OBJECT_TYPE_INFORMATION ,
+						entryBaseOffset + sizeof_OBJECT_TYPE_INFORMATION + nameSize
+					);
+					
+			poolType = lpTypesBuffer.readUInt32LE( entryBaseOffset + offset_OBJECT_TYPE_INFORMATION_PoolType );
+			
+			typeNode.poolType = base.findKey( wtypes.ENUM_TABLE_POOL_TYPE , poolType);
+			
+			assert( typeNode.poolType , "invalid pool type" );
+			
+			if ( !objectTypes )
+			{
+				objectTypes = [];
+			}
+			
+			objectTypes.push( typeNode );
+			
+			typeNode = null;
+			
+			entryBaseOffset += sizeof_OBJECT_TYPE_INFORMATION + nameSize;
+		}
+			
+		objectTypes.sort( function(item1 , item2)
+		{
+			return item1.index - item2.index;
+		});
+		
+	}while(false);
+
+	lpTypesBuffer.free();
+	lpTypesBuffer = null;
+	
+	return objectTypes;
+}
+exports.queryObjectTypes = queryObjectTypes;
 
 
 function main(  )

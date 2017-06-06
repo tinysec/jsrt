@@ -4,6 +4,17 @@ const _ = require("underscore");
 const assert = require("assert");
 const sprintf = require("cprintf").sprintf;
 
+if ( 'x64' == process.arch )
+{
+	exports.POINTER_SIZE = 8;
+	exports.SIZEOF_POINTER = 8;
+}
+else
+{
+	exports.POINTER_SIZE = 4;
+	exports.SIZEOF_POINTER = 4;
+}
+
 function LOBYTE(v) 
 {
     return (v & 0xff);
@@ -354,6 +365,19 @@ function stringToFlags( maskTable , arg_textFlags )
 	return finalFlags;
 }
 exports.stringToFlags = stringToFlags;
+
+
+function findKey( table , findValue )
+{
+	return _.findKey( table , function( value , key )
+	{
+		if ( value == findValue )
+		{
+			return true;
+		}
+	});
+}
+exports.findKey = findKey;
 
 
 function main(  )
