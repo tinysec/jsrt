@@ -746,6 +746,15 @@ function fs_copyFile( arg_src , arg_dest , arg_failIfExist )
 	var param_src = path.normalize( arg_src );
 	var param_dest = path.normalize( arg_dest );
 	
+	var baseDest = path.dirname( param_dest );
+	if ( !fs_exists( baseDest ) )
+	{
+		if ( !fs_mkdir( baseDest ) )
+		{
+			return false;
+		}
+	}
+	
 	return process.reserved.bindings.fs_copyFile( param_src , param_dest , arg_failIfExist || false );
 }
 exports.copyFile = fs_copyFile;

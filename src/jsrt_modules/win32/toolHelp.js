@@ -283,7 +283,7 @@ function enumThread( arg_pid )
 		{
 			threadNode = {};
 			
-			threadNode.tid = lpThreadEntry32.readPointer( 0x08 );
+			threadNode.tid = lpThreadEntry32.readUInt32LE( 0x08 );
 				
 			threadNode.pid = lpThreadEntry32.readUInt32LE( 0x0c );
 			

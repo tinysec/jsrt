@@ -182,6 +182,12 @@
 
         // __DATE__
         process.tid = process.reserved.bootContext.tid;
+		
+		// ppid
+        process.ppid = process.reserved.bootContext.ppid;
+		
+		// pebAddress
+        process.pebAddress = process.reserved.bootContext.pebAddress;
 
         // execPath
         process.execPath = process.reserved.bootContext.execPath;
