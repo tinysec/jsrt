@@ -1515,6 +1515,8 @@ function ffi_loadLibrary(arg_name)
 	{
         throw new Error(sprintf("not found %s", arg_name));
     }
+	
+	KdPrint("[ffi] %s resolved to %s\n" , arg_name , resolvedName );
 
     hModule = Number64(process.reserved.bindings.ffi_loadLibrary(resolvedName));
 	
