@@ -36,13 +36,49 @@ function path_normalize(src_path)
         return src_path;
     }
 
-    var dest_path = path_toWin32Style(src_path);
+    var tempName = path_toWin32Style(src_path).trim();
+
+	if (0 == tempName.length) 
+	{
+        return tempName;
+    }
 	
-    dest_path = dest_path.trim();
+	var mainName = tempName;
+	var prefix = '';
+	var index = 0;
+	
+	var dotPos = tempName.indexOf( '.' );
 
-    dest_path = process.reserved.bindings.path_normalize(dest_path);
+	if (  dotPos == 0 )
+	{
+		for ( index = 0; index < tempName.length; index++ )
+		{
+			if ( tempName.charAt( index) == '.' )
+			{
+				continue;
+			}
+			
+			if ( tempName.charAt( index) == '\\' )
+			{
+				continue;
+			}
+			
+			prefix = tempName.substring( 0 , index );
+			mainName = tempName.substring( index );
+			
+			break;
+		}
+	}
+	
+	if ( '.\\' == prefix )
+	{
+		prefix = '';
+	}
 
-    return path_removePrefix(dest_path);
+    mainName = process.reserved.bindings.path_normalize( mainName );
+    mainName = path_removePrefix( mainName );
+	
+	return prefix + mainName;
 }
 exports.normalize = path_normalize;
 
@@ -226,7 +262,7 @@ function path_combine(arg_path1, arg_path2)
 
     path1 = path_removeBackslash(path1);
 
-    var path2 = path_toWin32Style(arg_path2);
+    var path2 = path_normalize(arg_path2);
 
     if ((0 == path1.length) && (0 == path2.length)) 
 	{
@@ -243,8 +279,7 @@ exports.combine = path_combine;
 
 function main(  )
 {
-	console.log( path_normalize("../../osver.js") );
-	
+
 	return 0;
 }
 

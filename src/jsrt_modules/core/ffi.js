@@ -384,7 +384,7 @@ function _resolveFile(arg_name) {
 
     assert(_.isString(arg_name));
 
-    var findName = path.toWin32Style(arg_name);
+    var findName = path.normalize(arg_name);
 
     if ( path.fileExists(findName) ) 
 	{

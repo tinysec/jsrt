@@ -301,7 +301,7 @@ Module._resolveFile = function (arg_name, arg_parent, arg_isMain)
 
     assert(_.isString(arg_name));
 
-    var findName = path.toWin32Style(arg_name);
+    var findName = path.normalize(arg_name);
 	
     if ( path.fileExists(findName) ) 
 	{
