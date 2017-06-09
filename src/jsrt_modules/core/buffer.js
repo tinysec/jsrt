@@ -242,7 +242,7 @@ Buffer.attachUnsafe = function(arg_address, arg_length)
 	return pNewBuf;
 }
 
-Buffer.from = function Buffer_from(arg_string, arg_encoding)
+Buffer.from = function (arg_string, arg_encoding)
 {
 	var param_codepage = 0;
 	var helper = null;
@@ -643,8 +643,20 @@ Buffer.prototype.readDoubleBE = function(offset)
 	return process.reserved.bindings.buffer_readDoubleBE(this.address, offset || 0);
 }
 
-Buffer.readDoubleBE = function(address, offset)
+Buffer.readDoubleBE = function(arg_address, offset)
 {
+	var address = null;
+	
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert(_.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset)  );
 
 	return process.reserved.bindings.buffer_readDoubleBE(address, offset || 0);
@@ -662,8 +674,20 @@ Buffer.prototype.readDoubleLE = function(offset)
 	return process.reserved.bindings.buffer_readDoubleLE(this.address, offset || 0);
 }
 
-Buffer.readDoubleLE = function(address, offset)
+Buffer.readDoubleLE = function(arg_address, offset)
 {
+	var address = null;
+	
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert(_.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset)  );
 	
 	return process.reserved.bindings.buffer_readDoubleLE(address, offset || 0);
@@ -681,8 +705,20 @@ Buffer.prototype.readFloatBE = function(offset)
 	return process.reserved.bindings.buffer_readFloatBE(this.address, offset || 0);
 }
 
-Buffer.readFloatBE = function(address, offset)
+Buffer.readFloatBE = function(arg_address, offset)
 {
+	var address = null; 
+	
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 	
 	return process.reserved.bindings.buffer_readFloatBE(address, offset || 0);
@@ -700,8 +736,20 @@ Buffer.prototype.readFloatLE = function(offset)
 	return process.reserved.bindings.buffer_readFloatLE(this.address, offset || 0);
 }
 
-Buffer.readFloatLE = function(address, offset)
+Buffer.readFloatLE = function(arg_address, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	return process.reserved.bindings.buffer_readFloatLE(address, offset || 0);
@@ -720,8 +768,20 @@ Buffer.prototype.readInt8 = function(offset)
 	return process.reserved.bindings.buffer_readInt8(this.address, offset || 0);
 }
 
-Buffer.readInt8 = function(address, offset)
+Buffer.readInt8 = function(arg_address, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert(_.isUndefined(offset) || _.isNumber(offset));
 
 	return process.reserved.bindings.buffer_readInt8(address, offset || 0);
@@ -732,8 +792,20 @@ Buffer.prototype.readInt8Array = function(offset, count)
 	return Buffer.readInt8Array(this.address, offset, count);
 }
 
-Buffer.readInt8Array = function(address, arg_offset, arg_count)
+Buffer.readInt8Array = function(arg_address, arg_offset, arg_count)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
@@ -761,8 +833,20 @@ Buffer.prototype.readUInt8 = function(offset)
 	return process.reserved.bindings.buffer_readUInt8(this.address, offset || 0);
 }
 
-Buffer.readUInt8 = function(address, offset)
+Buffer.readUInt8 = function(arg_address, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	return process.reserved.bindings.buffer_readUInt8(address, offset || 0);
@@ -775,8 +859,20 @@ Buffer.prototype.readUInt8Array = function(offset, count)
 	return Buffer.readUInt8Array(this.address, offset, count);
 }
 
-Buffer.readUInt8Array = function(address, arg_offset, arg_count)
+Buffer.readUInt8Array = function(arg_address, arg_offset, arg_count)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
@@ -805,8 +901,20 @@ Buffer.prototype.readInt16BE = function(offset)
 	return process.reserved.bindings.buffer_readInt16BE(this.address, offset || 0);
 }
 
-Buffer.readInt16BE = function(address, offset)
+Buffer.readInt16BE = function(arg_address, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	return process.reserved.bindings.buffer_readInt16BE(address, offset || 0);
@@ -817,8 +925,20 @@ Buffer.prototype.readInt16BEArray = function(offset, count)
 	return Buffer.readInt16BEArray(this.address, offset, count);
 }
 
-Buffer.readInt16BEArray = function(address, arg_offset, arg_count)
+Buffer.readInt16BEArray = function(arg_address, arg_offset, arg_count)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
@@ -848,8 +968,20 @@ Buffer.prototype.readInt16LE = function(offset)
 	return process.reserved.bindings.buffer_readInt16LE(this.address, offset || 0);
 }
 
-Buffer.readInt16LE = function(address, offset)
+Buffer.readInt16LE = function(arg_address, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	return process.reserved.bindings.buffer_readInt16LE(address, offset || 0);
@@ -860,8 +992,20 @@ Buffer.prototype.readInt16LEArray = function(offset, count)
 	return Buffer.readInt16LEArray(this.address, offset, count);
 }
 
-Buffer.readInt16LEArray = function(address, arg_offset, arg_count)
+Buffer.readInt16LEArray = function(arg_address, arg_offset, arg_count)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
@@ -891,8 +1035,20 @@ Buffer.prototype.readUInt16BE = function(offset)
 	return process.reserved.bindings.buffer_readUInt16BE(this.address, offset || 0);
 }
 
-Buffer.readUInt16BE = function(address, offset)
+Buffer.readUInt16BE = function(arg_address, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	return process.reserved.bindings.buffer_readUInt16BE(address, offset || 0);
@@ -903,8 +1059,20 @@ Buffer.prototype.readUInt16BEArray = function(offset, count)
 	return Buffer.readUInt16BEArray(this.address, offset, count);
 }
 
-Buffer.readUInt16BEArray = function(address, arg_offset, arg_count)
+Buffer.readUInt16BEArray = function(arg_address, arg_offset, arg_count)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
@@ -933,8 +1101,20 @@ Buffer.prototype.readUInt16LE = function(offset)
 	return process.reserved.bindings.buffer_readUInt16LE(this.address, offset || 0);
 }
 
-Buffer.readUInt16LE = function(address, offset)
+Buffer.readUInt16LE = function(arg_address, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert(_.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset)  );
 
 	return process.reserved.bindings.buffer_readUInt16LE(address, offset || 0);
@@ -946,8 +1126,20 @@ Buffer.prototype.readUInt16LEArray = function(offset, count)
 	return Buffer.readUInt16LEArray(this.address, offset, count);
 }
 
-Buffer.readUInt16LEArray = function(address, arg_offset, arg_count)
+Buffer.readUInt16LEArray = function(arg_address, arg_offset, arg_count)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
@@ -977,8 +1169,20 @@ Buffer.prototype.readInt32BE = function(offset)
 	return process.reserved.bindings.buffer_readInt32BE(this.address, offset || 0);
 }
 
-Buffer.readInt32BE = function(address, offset)
+Buffer.readInt32BE = function(arg_address, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	return process.reserved.bindings.buffer_readInt32BE(address, offset || 0);
@@ -989,8 +1193,20 @@ Buffer.prototype.readInt32BEArray = function(offset, count)
 	return Buffer.readInt32BEArray(this.address, offset, count);
 }
 
-Buffer.readInt32BEArray = function(address, arg_offset, arg_count)
+Buffer.readInt32BEArray = function(arg_address, arg_offset, arg_count)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
@@ -1019,8 +1235,20 @@ Buffer.prototype.readInt32LE = function(offset)
 	return process.reserved.bindings.buffer_readInt32LE(this.address, offset || 0);
 }
 
-Buffer.readInt32LE = function(address, offset)
+Buffer.readInt32LE = function(arg_address, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	return process.reserved.bindings.buffer_readInt32LE(address, offset || 0);
@@ -1031,8 +1259,20 @@ Buffer.prototype.readInt32LEArray = function(offset, count)
 	return Buffer.readInt32LEArray(this.address, offset, count);
 }
 
-Buffer.readInt32LEArray = function(address, arg_offset, arg_count)
+Buffer.readInt32LEArray = function(arg_address, arg_offset, arg_count)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
@@ -1061,8 +1301,20 @@ Buffer.prototype.readUInt32BE = function(offset)
 	return process.reserved.bindings.buffer_readUInt32BE(this.address, offset || 0);
 }
 
-Buffer.readUInt32BE = function(address, offset)
+Buffer.readUInt32BE = function(arg_address, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	return process.reserved.bindings.buffer_readUInt32BE(address, offset || 0);
@@ -1073,8 +1325,20 @@ Buffer.prototype.readUInt32BEArray = function(offset, count)
 	return Buffer.readUInt32BEArray(this.address, offset, count);
 }
 
-Buffer.readUInt32BEArray = function(address, arg_offset, arg_count)
+Buffer.readUInt32BEArray = function(arg_address, arg_offset, arg_count)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
@@ -1103,8 +1367,20 @@ Buffer.prototype.readUInt32LE = function(offset)
 	return process.reserved.bindings.buffer_readUInt32LE(this.address, offset || 0);
 }
 
-Buffer.readUInt32LE = function(address, offset)
+Buffer.readUInt32LE = function(arg_address, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	return process.reserved.bindings.buffer_readUInt32LE(address, offset || 0);
@@ -1115,8 +1391,20 @@ Buffer.prototype.readUInt32LEArray = function(offset, count)
 	return Buffer.readUInt32LEArray(this.address, offset, count);
 }
 
-Buffer.readUInt32LEArray = function(address, arg_offset, arg_count)
+Buffer.readUInt32LEArray = function(arg_address, arg_offset, arg_count)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
@@ -1145,8 +1433,20 @@ Buffer.prototype.readInt64BE = function(offset)
 	return Number64(process.reserved.bindings.buffer_readInt64BE(this.address, offset || 0));
 }
 
-Buffer.readInt64BE = function(address, offset)
+Buffer.readInt64BE = function(arg_address, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	return Number64(process.reserved.bindings.buffer_readInt64BE(address, offset || 0));
@@ -1157,8 +1457,20 @@ Buffer.prototype.readInt64BEArray = function(offset, count)
 	return Buffer.readInt64BEArray(this.address, offset, count);
 }
 
-Buffer.readInt64BEArray = function(address, arg_offset, arg_count)
+Buffer.readInt64BEArray = function(arg_address, arg_offset, arg_count)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
@@ -1187,8 +1499,20 @@ Buffer.prototype.readInt64LE = function(offset)
 	return Number64(process.reserved.bindings.buffer_readInt64LE(this.address, offset || 0));
 }
 
-Buffer.readInt64LE = function(address, offset)
+Buffer.readInt64LE = function(arg_address, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 	
 	return Number64(process.reserved.bindings.buffer_readInt64LE(address, offset || 0));
@@ -1199,8 +1523,20 @@ Buffer.prototype.readInt64LEArray = function(offset, count)
 	return Buffer.readInt64LEArray(this.address, offset, count);
 }
 
-Buffer.readInt64LEArray = function(address, arg_offset, arg_count)
+Buffer.readInt64LEArray = function(arg_address, arg_offset, arg_count)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
@@ -1229,8 +1565,20 @@ Buffer.prototype.readUInt64BE = function(offset)
 	return Number64(process.reserved.bindings.buffer_readUInt64BE(this.address, offset || 0));
 }
 
-Buffer.readUInt64BE = function(address, offset)
+Buffer.readUInt64BE = function(arg_address, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	return Number64(process.reserved.bindings.buffer_readUInt64BE(address, offset || 0));
@@ -1241,8 +1589,20 @@ Buffer.prototype.readUInt64BEArray = function(offset, count)
 	return Buffer.readUInt64BEArray(this.address, offset, count);
 }
 
-Buffer.readUInt64BEArray = function(address, arg_offset, arg_count)
+Buffer.readUInt64BEArray = function(arg_address, arg_offset, arg_count)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
@@ -1271,8 +1631,20 @@ Buffer.prototype.readUInt64LE = function(offset)
 	return Number64(process.reserved.bindings.buffer_readUInt64LE(this.address, offset || 0));
 }
 
-Buffer.readUInt64LE = function(address, offset)
+Buffer.readUInt64LE = function(arg_address, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	return Number64(process.reserved.bindings.buffer_readUInt64LE(address, offset || 0));
@@ -1283,8 +1655,20 @@ Buffer.prototype.readUInt64LEArray = function(offset, count)
 	return Buffer.readUInt64LEArray(this.address, offset, count);
 }
 
-Buffer.readUInt64LEArray = function(address, arg_offset, arg_count)
+Buffer.readUInt64LEArray = function(arg_address, arg_offset, arg_count)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
@@ -1361,6 +1745,20 @@ Buffer.prototype.toString = function(arg_encoding, arg_start, arg_end)
 
 Buffer.toString = function(arg_address, arg_encoding, arg_start, arg_end)
 {
+	
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
+	
 	var encoding = 'ascii';
 
 	var param_codepage = 0;
@@ -1415,12 +1813,12 @@ Buffer.toString = function(arg_address, arg_encoding, arg_start, arg_end)
 	if ("dump" == encoding)
 	{
 		// CRYPT_STRING_HEXASCIIADDR
-		return process.reserved.bindings.buffer_toBinaryString(arg_address, 0x0000000b, param_start, param_end);
+		return process.reserved.bindings.buffer_toBinaryString(address, 0x0000000b, param_start, param_end);
 	}
 	else if ("hex" == encoding)
 	{
 		// CRYPT_STRING_HEX
-		var helper = process.reserved.bindings.buffer_toBinaryString(arg_address, 4, param_start, param_end);
+		var helper = process.reserved.bindings.buffer_toBinaryString(address, 4, param_start, param_end);
 
 
 		var tempArray = helper.split("\r\n");
@@ -1445,18 +1843,18 @@ Buffer.toString = function(arg_address, arg_encoding, arg_start, arg_end)
 	else if ("base64" == encoding)
 	{
 		// CRYPT_STRING_BASE64
-		helperText = process.reserved.bindings.buffer_toBinaryString(arg_address, 1, param_start, param_end);
+		helperText = process.reserved.bindings.buffer_toBinaryString(address, 1, param_start, param_end);
 	}
 	else
 	{
 		// specail for unicode
 		if (1200 == param_codepage)
 		{
-			helperText = process.reserved.bindings.buffer_toWString(arg_address, param_start, param_end);
+			helperText = process.reserved.bindings.buffer_toWString(address, param_start, param_end);
 		}
 		else
 		{
-			helperText = process.reserved.bindings.buffer_toString(arg_address, param_codepage, param_start, param_end);
+			helperText = process.reserved.bindings.buffer_toString(address, param_codepage, param_start, param_end);
 		}
 	}
 
@@ -1593,8 +1991,20 @@ Buffer.prototype.writeDoubleBE = function(value, offset)
 	return this;
 }
 
-Buffer.writeDoubleBE = function(address, value, offset)
+Buffer.writeDoubleBE = function(arg_address, value, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert(_.isNumber(value), "value must be number");
 	assert((_.isUndefined(offset) || _.isNumber(offset)), "invalid offset");
 
@@ -1616,8 +2026,20 @@ Buffer.prototype.writeDoubleLE = function(value, offset)
 	return this;
 }
 
-Buffer.writeDoubleLE = function(address, value, offset)
+Buffer.writeDoubleLE = function(arg_address, value, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert(_.isNumber(value), "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
@@ -1640,8 +2062,20 @@ Buffer.prototype.writeFloatBE = function(value, offset)
 	return this;
 }
 
-Buffer.writeFloatBE = function(address, value, offset)
+Buffer.writeFloatBE = function(arg_address, value, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert(_.isNumber(value), "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
@@ -1664,8 +2098,20 @@ Buffer.prototype.writeFloatLE = function(value, offset)
 	return this;
 }
 
-Buffer.writeFloatLE = function(address, value, offset)
+Buffer.writeFloatLE = function(arg_address, value, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert(_.isNumber(value), "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
@@ -1688,8 +2134,20 @@ Buffer.prototype.writeInt8 = function(value, offset)
 	return this;
 }
 
-Buffer.writeInt8 = function(address, value, offset)
+Buffer.writeInt8 = function(arg_address, value, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert(_.isNumber(value), "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
@@ -1712,8 +2170,20 @@ Buffer.prototype.writeUInt8 = function(value, offset)
 	return this;
 }
 
-Buffer.writeUInt8 = function(address, value, offset)
+Buffer.writeUInt8 = function(arg_address, value, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert(_.isNumber(value), "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
@@ -1737,8 +2207,20 @@ Buffer.prototype.writeInt16BE = function(value, offset)
 	return this;
 }
 
-Buffer.writeInt16BE = function(address, value, offset)
+Buffer.writeInt16BE = function(arg_address, value, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert(_.isNumber(value), "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
@@ -1761,8 +2243,20 @@ Buffer.prototype.writeInt16LE = function(value, offset)
 	return this;
 }
 
-Buffer.writeInt16LE = function(address, value, offset)
+Buffer.writeInt16LE = function(arg_address, value, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert(_.isNumber(value), "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
@@ -1785,8 +2279,21 @@ Buffer.prototype.writeUInt16BE = function(value, offset)
 	return this;
 }
 
-Buffer.writeUInt16BE = function(address, value, offset)
+Buffer.writeUInt16BE = function(arg_address, value, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
+	
 	assert(_.isNumber(value), "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
@@ -1809,8 +2316,20 @@ Buffer.prototype.writeUInt16LE = function(value, offset)
 	return this;
 }
 
-Buffer.writeUInt16LE = function(address, value, offset)
+Buffer.writeUInt16LE = function(arg_address, value, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert(_.isNumber(value), "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
@@ -1833,8 +2352,20 @@ Buffer.prototype.writeInt32BE = function(value, offset)
 	return this;
 }
 
-Buffer.writeInt32BE = function(address, value, offset)
+Buffer.writeInt32BE = function(arg_address, value, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert(_.isNumber(value), "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
@@ -1858,8 +2389,20 @@ Buffer.prototype.writeInt32LE = function(value, offset)
 	return this;
 }
 
-Buffer.writeInt32LE = function(address, value, offset)
+Buffer.writeInt32LE = function(arg_address, value, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert(_.isNumber(value), "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
@@ -1882,8 +2425,20 @@ Buffer.prototype.writeUInt32BE = function(value, offset)
 	return this;
 }
 
-Buffer.writeUInt32BE = function(address, value, offset)
+Buffer.writeUInt32BE = function(arg_address, value, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert(_.isNumber(value), "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
@@ -1907,8 +2462,20 @@ Buffer.prototype.writeUInt32LE = function(value, offset)
 	return this;
 }
 
-Buffer.writeUInt32LE = function(address, value, offset)
+Buffer.writeUInt32LE = function(arg_address, value, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert(_.isNumber(value), "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
@@ -1930,8 +2497,20 @@ Buffer.prototype.writeInt64BE = function(value, offset)
 	return this;
 }
 
-Buffer.writeInt64BE = function(address, value, offset)
+Buffer.writeInt64BE = function(arg_address, value, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	return process.reserved.bindings.buffer_writeInt64BE(address, offset || 0, Number64(value));
@@ -1951,8 +2530,20 @@ Buffer.prototype.writeInt64LE = function(value, offset)
 	return this;
 }
 
-Buffer.writeInt64LE = function(address, value, offset)
+Buffer.writeInt64LE = function(arg_address, value, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	return process.reserved.bindings.buffer_writeInt64LE(address, offset || 0, Number64(value));
@@ -1972,8 +2563,20 @@ Buffer.prototype.writeUInt64BE = function(value, offset)
 	return this;
 }
 
-Buffer.writeUInt64BE = function(address, value, offset)
+Buffer.writeUInt64BE = function(arg_address, value, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	return process.reserved.bindings.buffer_writeUInt64BE(address, offset || 0, Number64(value));
@@ -1993,8 +2596,20 @@ Buffer.prototype.writeUInt64LE = function(value, offset)
 	return this;
 }
 
-Buffer.writeUInt64LE = function(address, value, offset)
+Buffer.writeUInt64LE = function(arg_address, value, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	return process.reserved.bindings.buffer_writeUInt64LE(address, offset || 0, Number64(value));
@@ -2091,39 +2706,89 @@ process.reserved.dumpBufferLeaks = function dumpBufferLeaks()
 	}
 }
 
-Buffer.prototype.writeULONG_PTR = function(value, offset)
+Buffer.prototype.writeULONG_PTR = function( arg_value , offset)
 {
 	if (!this.isValid())
 	{
 		throw new Error("try to operate with invalid buffer");
 	}
-
+	
+	var value = null;
+	
+	if ( Buffer.isBuffer(arg_value) )
+	{
+		value = arg_value.address;
+	}
+	else
+	{
+		if ( !arg_value )
+		{
+			value = Number64(0);
+		}
+		else
+		{
+			assert( Number64.isNumber64(arg_value) , sprintf('type is %s' , typeof arg_value) );
+			value = arg_value;	
+		}
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	if ('x64' == process.arch)
 	{
-		process.reserved.bindings.buffer_writeUInt64LE(this.address, offset || 0, Number64(value));
+		process.reserved.bindings.buffer_writeUInt64LE(this.address, offset || 0, value );
 	}
 	else
 	{
-		process.reserved.bindings.buffer_writeUInt32LE(this.address, offset || 0, Number64(value));
+		process.reserved.bindings.buffer_writeUInt32LE(this.address, offset || 0, value );
 	}
 
 	return this;
 }
 Buffer.prototype.writePointer = Buffer.prototype.writeULONG_PTR;
 
-Buffer.writeULONG_PTR = function(address, value, offset)
+Buffer.writeULONG_PTR = function(arg_address, arg_value, offset)
 {
+	var address = null;
+	
+	var value = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
+	if (Buffer.isBuffer(arg_value))
+	{
+		value = arg_value.address;
+	}
+	else
+	{
+		if ( !arg_value )
+		{
+			value = Number64(0);
+		}
+		else
+		{
+			assert( Number64.isNumber64(arg_value) , sprintf('type is %s' , typeof arg_value) );
+			value = arg_value;	
+		}
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	if ('x64' == process.arch)
 	{
-		process.reserved.bindings.buffer_writeUInt64LE(address, offset || 0, Number64(value));
+		process.reserved.bindings.buffer_writeUInt64LE(address, offset || 0, value );
 	}
 	else
 	{
-		process.reserved.bindings.buffer_writeUInt32LE(address, offset || 0, Number64(value));
+		process.reserved.bindings.buffer_writeUInt32LE(address, offset || 0, value );
 	}
 }
 Buffer.writePointer = Buffer.writeULONG_PTR;
@@ -2149,8 +2814,20 @@ Buffer.prototype.readULONG_PTR = function(offset)
 Buffer.prototype.readPointer = Buffer.prototype.readULONG_PTR;
 
 
-Buffer.readPointer = function(address, offset)
+Buffer.readPointer = function(arg_address, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	if ('x64' == process.arch)
@@ -2194,8 +2871,20 @@ Buffer.prototype.readNativePointer = function(offset)
 	}
 }
 
-Buffer.readNativePointer = function(address, offset)
+Buffer.readNativePointer = function(arg_address, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	if ('x64' == process.arch)
@@ -2244,8 +2933,21 @@ Buffer.prototype.writeNativePointer = function(value, offset)
 }
 
 
-Buffer.writeNativePointer = function(address, value, offset)
+Buffer.writeNativePointer = function(arg_address, value, offset)
 {
+	var address = null;
+
+	if (Buffer.isBuffer(arg_address))
+	{
+		address = arg_address.address;
+	}
+	else
+	{
+		assert(Number64.isNumber64(arg_address));
+		address = arg_address;
+	}
+	
+	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
 	if ('x64' == process.arch)

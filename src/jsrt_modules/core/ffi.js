@@ -12,31 +12,31 @@ const KdPrint = require("cprintf").KdPrint;
 // path
 
 var ENUM_TABLE_FFI_VALUE_TYPE = {
-    "char": 1,
-    "uchar": 2,
+    "char" : 1,
+    "uchar" : 2,
 
-    "short": 3,
-    "ushort": 4,
+    "short" : 3,
+    "ushort" : 4,
 
-    "long": 5,
-    "ulong": 6,
+    "long" : 5,
+    "ulong" : 6,
 
-    "longlong": 7,
-    "ulonglong": 8,
+    "longlong" : 7,
+    "ulonglong" : 8,
 
-    "long_ptr": 9,
-    "ulong_ptr": 10,
+    "long_ptr" : 9,
+    "ulong_ptr" : 10,
 
-    "handle": 11,
-    "buffer": 12,
+    "handle" : 11,
+    "buffer" : 12,
 
-    "float": 13,
-    "double": 14,
+    "float" : 13,
+    "double" : 14,
 
-    "string": 15,
-    "wstring": 16,
+    "string" : 15,
+    "wstring" : 16,
 
-    "void": 17 ,
+    "void" : 17 ,
 	
 	"VOID" : 17 ,
 	
@@ -44,151 +44,151 @@ var ENUM_TABLE_FFI_VALUE_TYPE = {
 };
 
 var ENUM_TABLE_FFI_STACK_TYPE = {
-    "__stdcall": 1,
-    "__cdecl": 2
+    "__stdcall" : 1,
+    "__cdecl" : 2
 };
 
 var WIN_TYPE_TO_FFI_TYPE_TABLE = {
-	"byte": "uchar",
-    "BYTE": "uchar",
-    "CHAR": "char",
-    "UCHAR": "uchar",
+	"byte" : "uchar",
+    "BYTE" : "uchar",
+    "CHAR" : "char",
+    "UCHAR" : "uchar",
 
-	"word": "ushort",
-    "WORD": "ushort",
-    "SHORT": "short",
-    "USHORT": "ushort",
+	"word" : "ushort",
+    "WORD" : "ushort",
+    "SHORT" : "short",
+    "USHORT" : "ushort",
 
-    "void*": "buffer",
+    "void*" : "buffer",
 
-    "int": "long",
-    "uint": "ulong",
+    "int" : "long",
+    "uint" : "ulong",
 
-    "INT": "long",
-    "UINT": "ulong",
+    "INT" : "long",
+    "UINT" : "ulong",
 
-    "DWORD": "ulong",
-    "LONG": "long",
-    "ULONG": "ulong",
+    "DWORD" : "ulong",
+    "LONG" : "long",
+    "ULONG" : "ulong",
 
-	"DWORD64": "ulonglong",
-    "QWORD": "ulonglong",
+	"DWORD64" : "ulonglong",
+    "QWORD" : "ulonglong",
 	
-    "LONG64": "longlong",
-    "ULONG64": "ulonglong",
+    "LONG64" : "longlong",
+    "ULONG64" : "ulonglong",
 	
-    "LONGLONG": "longlong",
-    "ULONGLONG": "ulonglong",
+    "LONGLONG" : "longlong",
+    "ULONGLONG" : "ulonglong",
 
-    "LONG_PTR": "long_ptr",
-    "ULONG_PTR": "ulong_ptr",
+    "LONG_PTR" : "long_ptr",
+    "ULONG_PTR" : "ulong_ptr",
 
-    "LPARAM": "long_ptr",
-    "WPARAM": "ulong_ptr",
+    "LPARAM" : "long_ptr",
+    "WPARAM" : "ulong_ptr",
 
-    "DWORD_PTR": "ulong_ptr",
+    "DWORD_PTR" : "ulong_ptr",
 
-    "INT_PTR": "long_ptr",
-    "UINT_PTR": "ulong_ptr",
+    "INT_PTR" : "long_ptr",
+    "UINT_PTR" : "ulong_ptr",
 
-    "size_t": "ulong_ptr", 
+    "size_t" : "ulong_ptr", 
 	"SIZE_T" : "ulong_ptr" ,
 	
 	"LRESULT" : "long_ptr",
 
-    "FLOAT": "float",
-    "DOUBLE": "DOUBLE",
+    "FLOAT" : "float",
+    "DOUBLE" : "DOUBLE",
 
     // basic pointer
-    "PBYTE": "buffer",
-    "PCHAR": "buffer",
-    "PUCHAR": "buffer",
+    "PBYTE" : "buffer",
+    "PCHAR" : "buffer",
+    "PUCHAR" : "buffer",
 
-    "PWORD": "buffer",
-    "PSHORT": "buffer",
-    "PUSHORT": "buffer",
+    "PWORD" : "buffer",
+    "PSHORT" : "buffer",
+    "PUSHORT" : "buffer",
 
-    "PINT": "buffer",
-    "PUINT": "buffer",
+    "PINT" : "buffer",
+    "PUINT" : "buffer",
 
-    "PDWORD": "buffer",
-    "PLONG": "buffer",
-    "PULONG": "buffer",
+    "PDWORD" : "buffer",
+    "PLONG" : "buffer",
+    "PULONG" : "buffer",
 
-    "PQWORD": "buffer",
-    "PLONG64": "buffer",
-    "PULONG64": "buffer",
-    "PDWORD64": "buffer",
-    "PLONGLONG": "buffer",
-    "PULONGLONG": "buffer",
+    "PQWORD" : "buffer",
+    "PLONG64" : "buffer",
+    "PULONG64" : "buffer",
+    "PDWORD64" : "buffer",
+    "PLONGLONG" : "buffer",
+    "PULONGLONG" : "buffer",
 
-    "PLONG_PTR": "buffer",
-    "PULONG_PTR": "buffer",
+    "PLONG_PTR" : "buffer",
+    "PULONG_PTR" : "buffer",
 
-    "PDWORD_PTR": "buffer",
+    "PDWORD_PTR" : "buffer",
 
-    "PINT_PTR": "buffer",
-    "PUINT_PTR": "buffer",
+    "PINT_PTR" : "buffer",
+    "PUINT_PTR" : "buffer",
 
-    "PFLOAT": "buffer",
-    "PDOUBLE": "buffer",
+    "PFLOAT" : "buffer",
+    "PDOUBLE" : "buffer",
 
     // long pointer
-    "LPBYTE": "buffer",
-    "LPCHAR": "buffer",
-    "LPUCHAR": "buffer",
+    "LPBYTE" : "buffer",
+    "LPCHAR" : "buffer",
+    "LPUCHAR" : "buffer",
 
-    "LPWORD": "buffer",
-    "LPSHORT": "buffer",
-    "LPUSHORT": "buffer",
+    "LPWORD" : "buffer",
+    "LPSHORT" : "buffer",
+    "LPUSHORT" : "buffer",
 
-    "LPINT": "buffer",
-    "LPUINT": "buffer",
+    "LPINT" : "buffer",
+    "LPUINT" : "buffer",
 
-    "LPDWORD": "buffer",
-    "LPLONG": "buffer",
-    "LPULONG": "buffer",
+    "LPDWORD" : "buffer",
+    "LPLONG" : "buffer",
+    "LPULONG" : "buffer",
 
-    "LPQWORD": "buffer",
-    "LPLONG64": "buffer",
-    "LPDWORD64": "buffer",
-    "LPULONG64": "buffer",
-    "LPLONGLONG": "buffer",
-    "LPULONGLONG": "buffer",
+    "LPQWORD" : "buffer",
+    "LPLONG64" : "buffer",
+    "LPDWORD64" : "buffer",
+    "LPULONG64" : "buffer",
+    "LPLONGLONG" : "buffer",
+    "LPULONGLONG" : "buffer",
 
-    "LPLONG_PTR": "buffer",
-    "LPULONG_PTR": "buffer",
+    "LPLONG_PTR" : "buffer",
+    "LPULONG_PTR" : "buffer",
 
-    "LPDWORD_PTR": "buffer",
+    "LPDWORD_PTR" : "buffer",
 
-    "LPINT_PTR": "buffer",
-    "LPUINT_PTR": "buffer",
+    "LPINT_PTR" : "buffer",
+    "LPUINT_PTR" : "buffer",
 
-    "LPFLOAT": "buffer",
-    "LPDOUBLE": "buffer",
+    "LPFLOAT" : "buffer",
+    "LPDOUBLE" : "buffer",
 	
 	"LPBOOL" : "buffer" ,
 	"PBOOL" : "buffer" ,
 
     // string
-    "LPCTSTR": "wstring",
-    "PCTSTR": "wstring",
+    "LPCTSTR" : "wstring",
+    "PCTSTR" : "wstring",
 
 
-    "LPCSTR": "string",
-    "LPCWSTR": "wstring",
+    "LPCSTR" : "string",
+    "LPCWSTR" : "wstring",
 
-    "PCSTR": "string",
-    "PCWSTR": "wstring",
+    "PCSTR" : "string",
+    "PCWSTR" : "wstring",
 
     // string buffer
-    "LPSTR": "buffer",
-    "LPTSTR": "buffer",
-    "LPWSTR": "buffer",
+    "LPSTR" : "buffer",
+    "LPTSTR" : "buffer",
+    "LPWSTR" : "buffer",
 
-    "PSTR": "buffer",
-    "PTSTR": "buffer",
-    "PWSTR": "buffer",
+    "PSTR" : "buffer",
+    "PTSTR" : "buffer",
+    "PWSTR" : "buffer",
 
     // handle
     "PVOID" : "buffer",
@@ -197,41 +197,42 @@ var WIN_TYPE_TO_FFI_TYPE_TABLE = {
 	"LPCVOID" : "buffer" ,
     "PPVOID" : "buffer",
     "HANDLE" : "handle",
-    "PHANDLE": "buffer",
+    "PHANDLE" : "buffer",
 
-    "HACCEL": "handle",
-    "HBITMAP": "handle",
-    "HCURSOR": "handle",
-    "HINSTANCE": "handle",
-    "HMODULE": "handle",
-    "HCONV": "handle",
+    "HACCEL" : "handle",
+    "HBITMAP" : "handle",
+    "HCURSOR" : "handle",
+    "HINSTANCE" : "handle",
+    "HMODULE" : "handle",
+    "HCONV" : "handle",
 
-    "HMENU": "handle",
-    "HWND": "handle",
-    "HBRUSH": "handle",
-    "HENHMETAFILE": "handle",
-    "HFONT": "handle",
-    "HPALETTE": "handle",
-    "HPEN": "handle",
-    "HRGN": "handle",
-    "HDC": "handle",
+    "HMENU" : "handle",
+    "HWND" : "handle",
+    "HBRUSH" : "handle",
+	"HDESK" : "handle" ,
+    "HENHMETAFILE" : "handle",
+    "HFONT" : "handle",
+    "HPALETTE" : "handle",
+    "HPEN" : "handle",
+    "HRGN" : "handle",
+    "HDC" : "handle",
 
 
     // typedef
-    "BOOL": "bool",
-    "BOOLEAN": "bool",
+    "BOOL" : "bool",
+    "BOOLEAN" : "bool",
 		
-	"NTSTATUS": "long",
+	"NTSTATUS" : "long",
 	"ACCESS_MASK" : "ulong" ,
 
-    "COLORREF": "ulong"
+    "COLORREF" : "ulong"
 
 	
 };
 
 var WIN_STACK_TYPE_TO_FFI_STACK_TYPE_TABLE = {
-    "WINAPI": "__stdcall",
-    "CALLBACK": "__stdcall"
+    "WINAPI" : "__stdcall",
+    "CALLBACK" : "__stdcall"
 };
 
 
@@ -1155,30 +1156,30 @@ function _castTo_bool(argValue)
 }
 
 var TYPE_CAST_TABLE = {
-    "char": _castTo_char,
-    "uchar": _castTo_uchar,
+    "char" : _castTo_char,
+    "uchar" : _castTo_uchar,
 
-    "short": _castTo_short,
-    "ushort": _castTo_ushort,
+    "short" : _castTo_short,
+    "ushort" : _castTo_ushort,
 
-    "long": _castTo_long,
-    "ulong": _castTo_ulong,
+    "long" : _castTo_long,
+    "ulong" : _castTo_ulong,
 
-    "longlong": _castTo_longlong,
-    "ulonglong": _castTo_ulonglong,
+    "longlong" : _castTo_longlong,
+    "ulonglong" : _castTo_ulonglong,
 
-    "long_ptr": _castTo_long_ptr,
-    "ulong_ptr": _castTo_ulong_ptr,
+    "long_ptr" : _castTo_long_ptr,
+    "ulong_ptr" : _castTo_ulong_ptr,
 
-    "buffer": _castTo_buffer,
+    "buffer" : _castTo_buffer,
 
-    "handle": _castTo_handle,
+    "handle" : _castTo_handle,
 
-    "float": _castTo_float,
-    "double": _castTo_double,
+    "float" : _castTo_float,
+    "double" : _castTo_double,
 
-    "string": _castTo_string,
-    "wstring": _castTo_wstring ,
+    "string" : _castTo_string,
+    "wstring" : _castTo_wstring ,
 	
 	"bool" : _castTo_bool 
 };
@@ -1516,7 +1517,7 @@ function ffi_loadLibrary(arg_name)
         throw new Error(sprintf("not found %s", arg_name));
     }
 	
-	KdPrint("[ffi] %s resolved to %s\n" , arg_name , resolvedName );
+	//KdPrint("[ffi] %s resolved to %s\n" , arg_name , resolvedName );
 
     hModule = Number64(process.reserved.bindings.ffi_loadLibrary(resolvedName));
 	

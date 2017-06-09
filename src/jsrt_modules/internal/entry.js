@@ -150,7 +150,7 @@
         var argOption = null;
 		
 		rawCmdline = process.reserved.entryContext.rawCmdline;
-		
+
 		process.reserved.entryContext = {};
 
         // reset
@@ -161,7 +161,6 @@
         process.execArgv = [];
         process.execArgs = {};
 		
-        
 
         if ("ida" == host.type) 
 		{
@@ -294,8 +293,8 @@
         }
 		
 		
-		KdPrint( "execArgv = %s\n", process.execArgv );
-        KdPrint( "execArgs = %s\n", process.execArgs );
+		//KdPrint( "execArgv = %s\n", process.execArgv );
+        //KdPrint( "execArgs = %s\n", process.execArgs );
 		
 		//
 		// convert argv to args

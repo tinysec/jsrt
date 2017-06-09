@@ -39,10 +39,9 @@ var ffi_kernel32 = ffi.loadAndBatchBind("kernel32.dll" , [
 	
 	"UINT WINAPI WinExec( _In_ LPCSTR lpCmdLine , _In_ UINT   uCmdShow);" ,
 	
-	"DWORD WINAPI GetTickCount(void);" 
+	"DWORD WINAPI GetTickCount(void);"  
 
 ]);
-
 
 function addEnvPaths(destPaths, envKeyName) 
 {
@@ -222,7 +221,7 @@ function help_child_process_spawn( param_commandline , param_options )
 	var arg_userCommandline = '';
 	
 	
-	var arg_dwCreationFlags = 0; // 0x00000400 = CREATE_UNICODE_ENVIRONMENT
+	var arg_dwCreationFlags = 0; 
 	var arg_lpEnvironment= null;
 	var arg_CurrentDirectory = null;
 	var arg_lpStartupInfo = null;
@@ -234,6 +233,7 @@ function help_child_process_spawn( param_commandline , param_options )
 	var option_maxBuffer = 200*1024;
 	var option_encoding = undefined;
 	var option_shell = false;
+	var option_console = false;
 	var option_useStdHandles = false;
 	
 	var starupFlags = 0;
@@ -256,24 +256,26 @@ function help_child_process_spawn( param_commandline , param_options )
 	do
 	{	
 		assert( _.isString( arguments[0] )  , "invalid arguments[0]" );
-	
+		
+
 		cmdlineArray = base.cmdlineToArgv( arguments[0] );
-		if ( cmdlineArray >= 1 )
+		
+		if ( cmdlineArray.length >= 1 )
 		{
 			arg_application = resolveFile( cmdlineArray[0] );
 			arg_userApplication = arg_application;
 			
-			cmdlineArray.unshift();
+			cmdlineArray.shift();
 			
 			for ( index = 0; index < cmdlineArray.length; index++ )
 			{
 				if ( -1 != cmdlineArray[index].indexOf(" ") )
 				{
-					arg_commandline += '"' + base.escapeDoubleQuotes( cmdlineArray[index] ) + '"';
+					arg_commandline += ' ' + '"' + base.escapeDoubleQuotes( cmdlineArray[index] ) + '"';
 				}
 				else
 				{
-					arg_commandline += cmdlineArray[index];
+					arg_commandline += ' ' + '"' + cmdlineArray[index] + '"';
 				}
 			}
 
@@ -282,6 +284,8 @@ function help_child_process_spawn( param_commandline , param_options )
 		else
 		{
 			arg_application = resolveFile( cmdlineArray[0] );
+			
+			assert( arg_application , sprintf('not found %s' , cmdlineArray[0] ) );
 			arg_userApplication = arg_application;
 		}
 		
@@ -302,8 +306,6 @@ function help_child_process_spawn( param_commandline , param_options )
 			{
 				assert( _.isObject( arg_options.env ) , "invalid option.env" );
 				arg_lpEnvironment = envTable2Block( arg_options , 'ucs2' );
-				
-				arg_dwCreationFlags = 0x400; // 0x00000400 = CREATE_UNICODE_ENVIRONMENT
 			}
 			
 			if ( !_.isUndefined( arg_options.cwd ) )
@@ -370,6 +372,12 @@ function help_child_process_spawn( param_commandline , param_options )
 				}
 			}
 			
+			// CREATE_NEW_CONSOLE
+			if ( arg_options.console )
+			{
+				option_console = true;
+			}
+			
 			if ( arg_options.useStdHandles )
 			{
 				option_useStdHandles = true;
@@ -378,15 +386,15 @@ function help_child_process_spawn( param_commandline , param_options )
 			if ( !_.isUndefined( arg_options.flags ) )
 			{
 				// 0x00000400 = CREATE_UNICODE_ENVIRONMENT
-				arg_dwCreationFlags = Number64( arg_options.flags ).and( 0x400 );
+				arg_dwCreationFlags = Number64( arg_options.flags );
 			}
 			
-			if ( !_.isUndefined( arg_options.showWindow ) )
+			if ( !_.isUndefined( arg_options.show ) )
 			{
-				assert( _.isNumber( arg_options.showWindow ) , "invalid option.showWindow" );
-				option_showWindow = arg_options.showWindow;
+				assert( _.isNumber( arg_options.show ) , "invalid option.showWindow" );
+				option_showWindow = arg_options.show;
 				
-				starupFlags |= 1;
+				starupFlags |= 1; // STARTF_USESHOWWINDOW
 			}
 	
 			if ( !_.isUndefined( arg_options.desktop ) )
@@ -404,6 +412,18 @@ function help_child_process_spawn( param_commandline , param_options )
 				lpTitle = Buffer.from( arg_options.title , 'ucs2' );
 			}
 		}
+		
+		// fix create flags
+		if ( arg_lpEnvironment )
+		{
+			arg_dwCreationFlags |= 0x400;  // CREATE_UNICODE_ENVIRONMENT
+		}
+		
+		if ( option_console )
+		{
+			arg_dwCreationFlags |= 0x10;	// CREATE_NEW_CONSOLE
+		}
+		
 		
 		// arg_lpCommandline
 		if ( 0 == arg_commandline.length )
@@ -425,14 +445,11 @@ function help_child_process_spawn( param_commandline , param_options )
 			}
 		}
 		
-		KdPrint("application='%s'\n" , arg_application );
-		KdPrint("commandline='%s'\n" , arg_commandline );
-		
 		if ( 0 != arg_commandline.length )
 		{
 			arg_lpCommandline = Buffer.from( arg_commandline , 'ucs2' );
 		}
-		
+
 		
 		if ( option_useStdHandles )
 		{
@@ -521,7 +538,7 @@ function help_child_process_spawn( param_commandline , param_options )
 				break;
 			}
 			
-			starupFlags |= 0x00000100;
+			starupFlags |= 0x00000100; // STARTF_USESTDHANDLES
 		}
 		
 
@@ -544,14 +561,10 @@ function help_child_process_spawn( param_commandline , param_options )
 			arg_lpStartupInfo.writePointer( lpTitle , 0x18 );
 			
 			// dwFlags
-			if ( _.isUndefined(option_showWindow ) )
+			arg_lpStartupInfo.writeUInt32LE( starupFlags , 60 );
+			
+			if ( base.FlagOn(starupFlags , 1 ) )
 			{
-				arg_lpStartupInfo.writeUInt32LE( starupFlags , 60 );
-			}
-			else
-			{
-				arg_lpStartupInfo.writeUInt32LE( starupFlags , 60 );
-				
 				// wShowWindow
 				arg_lpStartupInfo.writeUInt32LE( option_showWindow , 64 );
 			}
@@ -584,14 +597,10 @@ function help_child_process_spawn( param_commandline , param_options )
 			
 			
 			// dwFlags
-			if ( _.isUndefined(option_showWindow ) )
+			arg_lpStartupInfo.writeUInt32LE( starupFlags , 44 );
+			
+			if ( base.FlagOn(starupFlags , 1 ) )
 			{
-				arg_lpStartupInfo.writeUInt32LE( starupFlags , 44 );
-			}
-			else
-			{
-				arg_lpStartupInfo.writeUInt32LE( starupFlags , 44 );
-				
 				// wShowWindow
 				arg_lpStartupInfo.writeUInt32LE( option_showWindow , 48 );
 			}
@@ -619,7 +628,10 @@ function help_child_process_spawn( param_commandline , param_options )
 		{
 			arg_lpProcessInformation = Buffer.alloc( 16 );
 		}
-
+		
+		KdPrint("[CreateProcess] application='%s'\n" , arg_application );
+		KdPrint("[CreateProcess] commandline='%s'\n" , arg_commandline );
+			
 		bFlag = ffi_kernel32.CreateProcessW(
 				arg_application ,
 				arg_lpCommandline ,
@@ -1215,43 +1227,10 @@ function spawnSync( commandline , arg_options )
 }
 exports.spawnSync = spawnSync;
 
-// without shell , nowait , std output
-function system( commandline )
-{
-	var child = help_child_process_spawn( commandline );
-	
-	if ( child )
-	{
-		
-		help_close_handles( child );
-		
-		child = null;
-		
-		return 0;
-	}
-	
-	return -1;
-}
-exports.system = system;
-
-// without shell , will wait , direct output
-function systemSync( commandline , timeout )
-{
-	var child = help_child_process_spawn( commandline );
-	
-	if ( child )
-	{
-		return child.waitForExit( timeout );
-	}
-	
-	return -1;
-}
-exports.systemSync = systemSync;
-
-// without shell , not wait , not output
+// without shell , not wait
 function exec( commandline )
 {
-	var child = help_child_process_spawn( commandline , { useStdHandles : true } );
+	var child = help_child_process_spawn( commandline  );
 	
 	if( child )
 	{
@@ -1381,111 +1360,6 @@ function WaitForMultipleObjects( handleArray , bWaitAll  , timeout )
 	return waitRet;
 }
 
-// directly output
-function multi_system( fnProvider ,  arg_maxInstances )
-{
-	assert( _.isFunction(fnProvider) , "provider must be function" );
-
-	var childArray = [];
-	var child = null;
-	var handleArray = [];
-	var maxInstances = arg_maxInstances || 63;
-
-	var waitRet = 0;
-	
-	var signalHandle = null;
-	var index = 0;
-	
-	var commandline = null;
-	
-	var finalRet = true;
-	
-	while( true )
-	{
-		if ( handleArray.length >= maxInstances )
-		{
-			waitRet = WaitForMultipleObjects( handleArray , false , 1000 );
-			
-			if ( 0 == Number64.compareSigned32( waitRet , -1 ) )
-			{	
-				// wait faild
-				finalRet = false;
-				break;
-			}
-			else if ( 0x102 == waitRet )
-			{
-				// WAIT_TIMEOUT
-				base.sleep( 1000 );
-				continue;
-			}
-			else
-			{
-				assert(  ( waitRet <=  ( handleArray.length - 1) , "invalid wait ret" ) );
-				
-				// find and remove handle
-				
-				// close handle handle
-				signalHandle = handleArray[ waitRet ];
-				handleArray.splice( waitRet , 1 );
-				ffi_kernel32.CloseHandle( signalHandle ) ;
-				
-				// remove from childArray
-				childArray.splice( waitRet , 1 );
-			
-			}
-		}
-	
-	
-		if ( handleArray.length < maxInstances )
-		{
-			commandline = fnProvider( );
-			if ( !commandline )
-			{
-				break;
-			}
-			
-			child = help_child_process_spawn( commandline  );
-			if ( !child )
-			{
-				break;
-			}
-			
-			if ( child.hThread )
-			{
-				ffi_kernel32.CloseHandle( child.hThread ) ;
-				child.hThread = null;
-			}
-			
-			childArray.push( child );
-			handleArray.push( child.hProcess );
-		}
-	}
-	
-
-	// wait left all childs
-	if ( handleArray.length > 0 )
-	{
-		waitRet = WaitForMultipleObjects( handleArray , true , -1 );
-		
-		for( index = 0; index < handleArray.length; index++ )
-		{
-			// find and remove handle
-					
-			// close handle handle
-			signalHandle = handleArray[ index ];
-			handleArray.splice( index , 1 );
-			ffi_kernel32.CloseHandle( signalHandle ) ;
-					
-			// remove from childArray
-			childArray.splice( index , 1 );
-		}
-	}
-	
-	return finalRet;
-}
-exports.multi_system = multi_system;
-
-
 // no output
 function multi_exec( fnProvider ,  arg_maxInstances )
 {
@@ -1549,7 +1423,17 @@ function multi_exec( fnProvider ,  arg_maxInstances )
 				break;
 			}
 			
-			child = help_child_process_spawn( provideInfo.commandline , provideInfo.option  );
+			if ( _.isString(provideInfo) )
+			{
+				child = help_child_process_spawn( provideInfo );
+			}
+			else
+			{
+				assert( _.isObject(provideInfo) );
+				
+				child = help_child_process_spawn( provideInfo.commandline , provideInfo.option  );
+			}
+	
 			if ( !child )
 			{
 				break;
@@ -1592,7 +1476,6 @@ exports.multi_exec = multi_exec;
 function main(  )
 {
 	
-
 
 	return 0;
 }

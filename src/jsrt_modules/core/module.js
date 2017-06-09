@@ -310,7 +310,7 @@ Module._resolveFile = function (arg_name, arg_parent, arg_isMain)
 
     searchPaths = buildSearchPaths(findName, arg_parent ? arg_parent.searchPaths : null);
 
-    KdPrint("find %s use searchPath: %s\n", arg_name, searchPaths);
+    // KdPrint("find %s use searchPath: %s\n", arg_name, searchPaths);
 
     // add 
     for (index = 0; index < searchPaths.length; index++) 
