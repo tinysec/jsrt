@@ -244,7 +244,7 @@ function pdb_addressToName( symbolAddress )
 	}
 	else
 	{
-		return sprintf("%s+0x%X", symbolInfo.name , symbolInfo.offset);
+		return sprintf("%s+0x%X", symbolInfo.name , symbolInfo.offset );
 	}
 }
 exports.addressToName = pdb_addressToName;

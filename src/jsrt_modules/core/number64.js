@@ -169,15 +169,17 @@ Number64.prototype.toString = function (arg_radix)
     }
 }
 
-Number64.prototype.toRadixString = function (arg_radix)
- {
+Number64.prototype.toShortString = function (arg_radix) 
+{
     var radix = arg_radix || 10;
 
-    if (16 == radix) {
-        return this.hexText.substring(2);
+    if (16 == radix) 
+	{
+		return process.reserved.bindings.Number64_toShortString(this.hexText, 16);
     }
-    else {
-        return process.reserved.bindings.Number64_toString(this.hexText, 10);
+    else 
+	{
+        return process.reserved.bindings.Number64_toShortString(this.hexText, 10);
     }
 }
 
@@ -556,6 +558,11 @@ Number64.div = function ( item , other )
 
 Number64.prototype.mod = function (arg_other) 
 {
+	if ( 0 == arg_other )
+	{
+		throw new Error("arg_other must not be zero");
+	}
+	
     this.hexText = process.reserved.bindings.Number64_mod(this.hexText, cast2Number64(arg_other).hexText);
 
     return this;
@@ -563,6 +570,11 @@ Number64.prototype.mod = function (arg_other)
 
 Number64.mod = function ( item , other ) 
 {
+	if ( 0 == other )
+	{
+		throw new Error("other must not be zero");
+	}
+	
     return Number64(item).mod(other);
 }
 
@@ -783,6 +795,26 @@ Number64.swap64 = function Number64_swap64(value)
     return Number64(process.reserved.bindings.Number64_swap64(Number64(16).hexText));
 }
 
+
+
+Number64.IS_ALIGN_BY = function ( value , align ) 
+{
+	if ( 0 == align )
+	{
+		throw new Error("align must not be zero");
+	}
+	
+    return ( 0 == Number64.mod( value , align) );
+}
+
+
+
+
+
+
+
+
+//--------------------------------
 module.exports = Number64;
 
 function main(  )

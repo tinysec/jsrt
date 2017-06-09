@@ -431,7 +431,7 @@ Module.staticRunEval = function ()
 
     try 
 	{
-        execRet = NewModule._loadFromContent(filecontent, "eval code");
+        execRet = NewModule._loadFromContent(filecontent );
     }
     catch (err) 
 	{

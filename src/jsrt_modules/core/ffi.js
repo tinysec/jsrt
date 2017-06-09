@@ -1561,8 +1561,6 @@ function ffi_getLastError()
 exports.getLastError = ffi_getLastError;
 
 
-
-
 function ffi_bindFromRoutineAddressAndDeclareInfo(arg_address, declareInfo) 
 {
     var ffiHelper = {};
@@ -1715,6 +1713,7 @@ function ffi_bindModule(arg_hModule, arg_declareText)
     }
 
     routineAddress = ffi_getProcAddress(hModule, declareInfo.name);
+	
     if (routineAddress.isZero()) 
 	{
         return null;
@@ -1890,7 +1889,7 @@ function ffi_loadAndBatchBind( moduleName , arg_declares )
 	assert( _.isString( moduleName) );
 	
 	var hModule = ffi_loadLibrary( moduleName );
-	
+
 	if ( !hModule )
 	{
 		throw new Error(sprintf("load %s faild" , moduleName ));

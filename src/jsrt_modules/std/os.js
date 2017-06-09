@@ -16,7 +16,7 @@ const ffi = require("ffi");
 
 var ffi_ntdll = ffi.loadAndBatchBind("ntdll.dll" , [
 
-	"NTSTATUS __stdcall RtlGetVersion(_Inout_  void* lpVersionInformation);" 
+	"NTSTATUS __stdcall RtlGetVersion( void* lpVersionInformation);" 
 
 ]);
 

@@ -1097,7 +1097,7 @@ function queryBigPoolInformation()
 		stPoolNode.nonPaged = Number64.testBit(testValue , 0);
 		stPoolNode.address = testValue.clearBit( 0);
 		
-		stPoolNode.bytes =  lpBuffer.readULONG_PTR( entryBaseOffset + offset_SYSTEM_BIGPOOL_ENTRY_SizeInBytes );
+		stPoolNode.size =  lpBuffer.readULONG_PTR( entryBaseOffset + offset_SYSTEM_BIGPOOL_ENTRY_SizeInBytes );
 			
 		stPoolNode.tag = base.UInt32LEToTag( lpBuffer.readUInt32LE( entryBaseOffset + offset_SYSTEM_BIGPOOL_ENTRY_TagUlong ) );
 	

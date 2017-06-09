@@ -68,16 +68,26 @@ function path_normalize(src_path)
 			
 			break;
 		}
+		
+		if ( !prefix )
+		{
+			prefix = tempName;
+			mainName = '';
+		}
 	}
 	
 	if ( '.\\' == prefix )
 	{
 		prefix = '';
 	}
-
-    mainName = process.reserved.bindings.path_normalize( mainName );
-    mainName = path_removePrefix( mainName );
 	
+	if ( '' != mainName )
+	{
+		 mainName = process.reserved.bindings.path_normalize( mainName );
+	
+		mainName = path_removePrefix( mainName );
+	}
+
 	return prefix + mainName;
 }
 exports.normalize = path_normalize;
@@ -147,20 +157,28 @@ exports.dirname = path_dirname;
 // path.resolve([...paths])
 function path_resolve( ) 
 {
-	var index = 0;
-	var testPath = '';
-	
 	assert( arguments.length >= 1 );
 	
-	testPath = process.currentDirectory;
-	
-	for ( index = 0; index < arguments.length ; index++ )
+	if ( 1 == arguments.length )
 	{
-		testPath = path_combine(  testPath , arguments[index] );
+		return path_combine( process.currentDirectory , arguments[0] );
 	}
+	else if ( 2 == arguments.length )
+	{
+		return path_combine( arguments[0] , arguments[1] );
+	}
+	else
+	{
+		var index = 0;
+		var testPath = '';
 
-	return testPath;
-	
+		for ( index = 0; index < arguments.length - 1 ; index++ )
+		{
+			testPath = path_combine( arguments[index] , arguments[index+1] );
+		}
+
+		return testPath;
+	}
 }
 exports.resolve = path_resolve;
 
@@ -661,7 +679,6 @@ exports.parse = path_parse;
 
 function main(  )
 {
-
 	return 0;
 }
 

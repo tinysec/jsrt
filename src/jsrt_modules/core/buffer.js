@@ -17,7 +17,7 @@ process.reserved.tables.bufferTable = {};
 
 function add_to_buffer_table(address, length)
 {
-	var address_text = '0x' + Number64(address).toString(16);
+	var address_text = sprintf( "0x%p" , address );
 
 	assert(0 != length, "invalid buffer length");
 
@@ -311,7 +311,7 @@ Buffer.from = function (arg_string, arg_encoding)
 					helper = process.reserved.bindings.buffer_fromString(arguments[0], param_codepage);
 					if (!helper)
 					{
-						throw new Error(sprintf("buffer from string faild"));
+						throw new Error(sprintf("buffer from string '%s' faild" , arguments[0] ));
 					}
 					return Buffer.attachNative(helper.address, helper.length);
 				}
@@ -362,7 +362,7 @@ Buffer.prototype.free = function()
 	}
 
 
-	var address_text = sprintf("%s", this.address);
+	var address_text = sprintf( "0x%p" , this.address );
 
 	var bufferNode = process.reserved.tables.bufferTable[address_text];
 

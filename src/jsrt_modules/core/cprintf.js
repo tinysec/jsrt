@@ -709,7 +709,11 @@ function _handle_type_d(option, argv)
 		}
 		else if ('object' == typeof argv[0])
 		{
-			if ('function' === typeof argv[0].toString)
+			if ( Number64.isNumber64( argv[0]) )
+			{
+				strFinal = argv[0].toShortString(10);
+			}
+			else if ('function' === typeof argv[0].toString)
 			{
 				strFinal = argv[0].toString(10);
 			}
@@ -834,9 +838,9 @@ function _handle_type_i(option, argv)
 		}
 		else if ('object' == typeof argv[0])
 		{
-			if (('Number64' === argv[0].__TYPE__))
+			if ( Number64.isNumber64( argv[0] ) )
 			{
-				strFinal = argv[0].toRadixString(10);
+				strFinal = argv[0].toString(10);
 			}
 			else
 			{
@@ -997,15 +1001,13 @@ function _handle_type_p(option, argv)
 		}
 		else if ('object' == typeof argv[0])
 		{
-			if (('function' == typeof Buffer) && (Buffer.isBuffer(argv[0])))
+			if ( Buffer.isBuffer(argv[0]) )
 			{
 				strFinal = argv[0].address.toString(16);
 			}
-			else if (('Number64' === argv[0].__TYPE__))
+			else if ( Number64.isNumber64( argv[0] ) )
 			{
-
-				strFinal = argv[0].toRadixString(16);
-
+				strFinal = argv[0].toString(16);
 
 				if ('X' === option.type)
 				{
@@ -1148,7 +1150,11 @@ function _handle_type_u(option, argv)
 		}
 		else if ('object' == typeof argv[0])
 		{
-			if ('function' === typeof argv[0].toString)
+			if ( Number64.isNumber64() )
+			{
+				strFinal = argv[0].toShortString(10);
+			}
+			else if ('function' === typeof argv[0].toString)
 			{
 				strFinal = argv[0].toString(10);
 			}
@@ -1210,7 +1216,7 @@ function _handle_type_x(option, argv)
 
 			if (nValue < 0)
 			{
-				strFinal = Number64(nValue).toRadixString(16);
+				strFinal = Number64(nValue).toString(16);
 			}
 			else
 			{
@@ -1237,13 +1243,13 @@ function _handle_type_x(option, argv)
 		}
 		else if ('object' === typeof argv[0])
 		{
-			if (('function' == typeof Buffer) && (Buffer.isBuffer(argv[0])))
+			if ( Buffer.isBuffer(argv[0]) )
 			{
 				strFinal = argv[0].address.toString(16);
 			}
-			else if (('Number64' === argv[0].__TYPE__))
+			else if ( Number64.isNumber64( argv[0] ) )
 			{
-				strFinal = argv[0].toRadixString(16);
+				strFinal = argv[0].toShortString(16);
 			}
 			else
 			{
@@ -1681,15 +1687,12 @@ function isItemNeedIncLevel(input)
 	}
 	else if ('object' == typeof input)
 	{
-		if ('function' == typeof Buffer)
+		if (Buffer.isBuffer(input))
 		{
-			if (Buffer.isBuffer(input))
-			{
-				return false;
-			}
+			return false;
 		}
-
-		if (('Number64' === input.__TYPE__))
+		
+		if ( Number64.isNumber64( input ) )
 		{
 			// isNumber64
 			return false;
@@ -1764,15 +1767,14 @@ function isItemNeedQuota(input)
 	}
 	else if ('object' == typeof input)
 	{
-		if ('function' == typeof Buffer)
+		
+		if (Buffer.isBuffer(input))
 		{
-			if (Buffer.isBuffer(input))
-			{
-				return false;
-			}
+			return false;
 		}
+		
 
-		if (('Number64' === input.__TYPE__))
+		if ( Number64.isNumber64( input ) )
 		{
 			// isNumber64
 			return false;
@@ -1978,15 +1980,12 @@ function _inspect(input, level)
 	}
 	else if ('object' == typeof input)
 	{
-		if ('function' == typeof Buffer)
+		if (Buffer.isBuffer(input))
 		{
-			if (Buffer.isBuffer(input))
-			{
-				return _inspect_Buffer(input, level);
-			}
+			return _inspect_Buffer(input, level);
 		}
-
-		if (('Number64' === input.__TYPE__))
+	
+		if ( Number64.isNumber64( input ) )
 		{
 			return _inspect_Number64(input);
 		}
