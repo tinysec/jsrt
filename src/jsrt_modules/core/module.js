@@ -57,6 +57,7 @@ const BUILTIN_MODULE_NAME_TABLE = [
 	"path" ,
 	"serialize" ,
 	"intrinsic" ,
+	"chakra" ,
 	
 	// std
 	"os" ,

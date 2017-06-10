@@ -15,6 +15,8 @@
 	
 	const serialize = require("serialize").serialize;
 	const unserialize = require("serialize").unserialize;
+	
+	const chakra = require("chakra");
 
 
     var EXEC_ARG_OPTION_TABLE = [
@@ -383,6 +385,8 @@
 
 	function entryMain()
 	{
+		chakra.gc();
+		
 		if ( process.reserved.entryContext.threadMode )
 		{
 			threadEntry();
@@ -393,6 +397,8 @@
 		}
 	
 		entryPostCheck();	
+		
+		chakra.gc();
 	}
    
     return entryMain();

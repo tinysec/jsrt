@@ -161,8 +161,7 @@ function pdb_loadImage( imageFile , arg_imageName , arg_imageBase , arg_imageSiz
 		param_imageBase ,
 		param_imageSize
 	);
-		
-		
+
 	return loadedBase;
 }
 exports.loadImage = pdb_loadImage;

@@ -16,6 +16,9 @@ exports.toWin32Style = path_toWin32Style;
 
 function path_removePrefix(arg_src_path) 
 {
+	assert( _.isString(arg_src_path) , "arg_src_path is not a string" );
+	
+	
     if (0 == arg_src_path.indexOf("\\\\?\\")) 
 	{
         return arg_src_path.substring("\\\\?\\".length);
@@ -29,7 +32,7 @@ function path_removePrefix(arg_src_path)
 //---------------------------------------------------------
 function path_normalize(src_path) 
 {
-    assert(_.isString(src_path));
+    assert(_.isString(src_path) , "src_path is not a string");
 
     if (0 == src_path.length) 
 	{
@@ -81,7 +84,7 @@ function path_normalize(src_path)
 		prefix = '';
 	}
 	
-	if ( '' != mainName )
+	if ( 0 != mainName.length )
 	{
 		 mainName = process.reserved.bindings.path_normalize( mainName );
 	
@@ -161,10 +164,15 @@ function path_resolve( )
 	
 	if ( 1 == arguments.length )
 	{
+		assert( _.isString( arguments[0]  ) , "arguments[0]  is not a string" );
+		
 		return path_combine( process.currentDirectory , arguments[0] );
 	}
 	else if ( 2 == arguments.length )
 	{
+		assert( _.isString( arguments[0]  ) , "arguments[0]  is not a string" );
+		assert( _.isString( arguments[1]  ) , "arguments[1]  is not a string" );
+		
 		return path_combine( arguments[0] , arguments[1] );
 	}
 	else
@@ -174,6 +182,8 @@ function path_resolve( )
 
 		for ( index = 0; index < arguments.length - 1 ; index++ )
 		{
+			assert( _.isString( arguments[index]  ) ,  sprintf( "arguments[%d]  is not a string"  , index ) );
+			
 			testPath = path_combine( arguments[index] , arguments[index+1] );
 		}
 
