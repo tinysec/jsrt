@@ -49,180 +49,181 @@ var ENUM_TABLE_FFI_STACK_TYPE = {
 };
 
 var WIN_TYPE_TO_FFI_TYPE_TABLE = {
-	"byte" : "uchar",
-    "BYTE" : "uchar",
-    "CHAR" : "char",
-    "UCHAR" : "uchar",
+	"byte" : "uchar" ,
+    "BYTE" : "uchar" ,
+    "CHAR" : "char" ,
+    "UCHAR" : "uchar" ,
 
-	"word" : "ushort",
-    "WORD" : "ushort",
-    "SHORT" : "short",
-    "USHORT" : "ushort",
+	"word" : "ushort" ,
+    "WORD" : "ushort" ,
+    "SHORT" : "short" ,
+    "USHORT" : "ushort" ,
 
-    "void*" : "buffer",
+    "void*" : "buffer" ,
 
-    "int" : "long",
-    "uint" : "ulong",
+    "int" : "long" ,
+    "uint" : "ulong" ,
 
-    "INT" : "long",
-    "UINT" : "ulong",
+    "INT" : "long" ,
+    "UINT" : "ulong" ,
 
-    "DWORD" : "ulong",
-    "LONG" : "long",
-    "ULONG" : "ulong",
+    "DWORD" : "ulong" ,
+    "LONG" : "long" ,
+    "ULONG" : "ulong" ,
 
-	"DWORD64" : "ulonglong",
-    "QWORD" : "ulonglong",
+	"DWORD64" : "ulonglong" ,
+    "QWORD" : "ulonglong" ,
 	
-    "LONG64" : "longlong",
-    "ULONG64" : "ulonglong",
+    "LONG64" : "longlong" ,
+    "ULONG64" : "ulonglong" ,
 	
-    "LONGLONG" : "longlong",
-    "ULONGLONG" : "ulonglong",
+    "LONGLONG" : "longlong" ,
+    "ULONGLONG" : "ulonglong" ,
 
-    "LONG_PTR" : "long_ptr",
-    "ULONG_PTR" : "ulong_ptr",
+    "LONG_PTR" : "long_ptr" ,
+    "ULONG_PTR" : "ulong_ptr" ,
 
-    "LPARAM" : "long_ptr",
-    "WPARAM" : "ulong_ptr",
+    "LPARAM" : "long_ptr" ,
+    "WPARAM" : "ulong_ptr" ,
 
-    "DWORD_PTR" : "ulong_ptr",
+    "DWORD_PTR" : "ulong_ptr" ,
 
-    "INT_PTR" : "long_ptr",
-    "UINT_PTR" : "ulong_ptr",
+    "INT_PTR" : "long_ptr" ,
+    "UINT_PTR" : "ulong_ptr" ,
 
-    "size_t" : "ulong_ptr", 
+    "size_t" : "ulong_ptr" , 
 	"SIZE_T" : "ulong_ptr" ,
 	
-	"LRESULT" : "long_ptr",
+	"LRESULT" : "long_ptr" ,
 
-    "FLOAT" : "float",
-    "DOUBLE" : "DOUBLE",
+    "FLOAT" : "float" ,
+    "DOUBLE" : "DOUBLE" ,
 
     // basic pointer
-    "PBYTE" : "buffer",
-    "PCHAR" : "buffer",
-    "PUCHAR" : "buffer",
+    "PBYTE" : "buffer" ,
+    "PCHAR" : "buffer" ,
+    "PUCHAR" : "buffer" ,
 
-    "PWORD" : "buffer",
-    "PSHORT" : "buffer",
-    "PUSHORT" : "buffer",
+    "PWORD" : "buffer" ,
+    "PSHORT" : "buffer" ,
+    "PUSHORT" : "buffer" ,
 
-    "PINT" : "buffer",
-    "PUINT" : "buffer",
+    "PINT" : "buffer" ,
+    "PUINT" : "buffer" ,
 
-    "PDWORD" : "buffer",
-    "PLONG" : "buffer",
-    "PULONG" : "buffer",
+    "PDWORD" : "buffer" ,
+    "PLONG" : "buffer" ,
+    "PULONG" : "buffer" ,
 
-    "PQWORD" : "buffer",
-    "PLONG64" : "buffer",
-    "PULONG64" : "buffer",
-    "PDWORD64" : "buffer",
-    "PLONGLONG" : "buffer",
-    "PULONGLONG" : "buffer",
+    "PQWORD" : "buffer" ,
+    "PLONG64" : "buffer" ,
+    "PULONG64" : "buffer" ,
+    "PDWORD64" : "buffer" ,
+    "PLONGLONG" : "buffer" ,
+    "PULONGLONG" : "buffer" ,
 
-    "PLONG_PTR" : "buffer",
-    "PULONG_PTR" : "buffer",
+    "PLONG_PTR" : "buffer" ,
+    "PULONG_PTR" : "buffer" ,
 
-    "PDWORD_PTR" : "buffer",
+    "PDWORD_PTR" : "buffer" ,
 
-    "PINT_PTR" : "buffer",
-    "PUINT_PTR" : "buffer",
+    "PINT_PTR" : "buffer" ,
+    "PUINT_PTR" : "buffer" ,
 
-    "PFLOAT" : "buffer",
-    "PDOUBLE" : "buffer",
+    "PFLOAT" : "buffer" ,
+    "PDOUBLE" : "buffer" ,
 
     // long pointer
-    "LPBYTE" : "buffer",
-    "LPCHAR" : "buffer",
-    "LPUCHAR" : "buffer",
+    "LPBYTE" : "buffer" ,
+    "LPCHAR" : "buffer" ,
+    "LPUCHAR" : "buffer" ,
 
-    "LPWORD" : "buffer",
-    "LPSHORT" : "buffer",
-    "LPUSHORT" : "buffer",
+    "LPWORD" : "buffer" ,
+    "LPSHORT" : "buffer" ,
+    "LPUSHORT" : "buffer" ,
 
-    "LPINT" : "buffer",
-    "LPUINT" : "buffer",
+    "LPINT" : "buffer" ,
+    "LPUINT" : "buffer" ,
 
-    "LPDWORD" : "buffer",
-    "LPLONG" : "buffer",
-    "LPULONG" : "buffer",
+    "LPDWORD" : "buffer" ,
+    "LPLONG" : "buffer" ,
+    "LPULONG" : "buffer" ,
 
-    "LPQWORD" : "buffer",
-    "LPLONG64" : "buffer",
-    "LPDWORD64" : "buffer",
-    "LPULONG64" : "buffer",
-    "LPLONGLONG" : "buffer",
-    "LPULONGLONG" : "buffer",
+    "LPQWORD" : "buffer" ,
+    "LPLONG64" : "buffer" ,
+    "LPDWORD64" : "buffer" ,
+    "LPULONG64" : "buffer" ,
+    "LPLONGLONG" : "buffer" ,
+    "LPULONGLONG" : "buffer" ,
 
-    "LPLONG_PTR" : "buffer",
-    "LPULONG_PTR" : "buffer",
+    "LPLONG_PTR" : "buffer" ,
+    "LPULONG_PTR" : "buffer" ,
 
-    "LPDWORD_PTR" : "buffer",
+    "LPDWORD_PTR" : "buffer" ,
 
-    "LPINT_PTR" : "buffer",
-    "LPUINT_PTR" : "buffer",
+    "LPINT_PTR" : "buffer" ,
+    "LPUINT_PTR" : "buffer" ,
 
-    "LPFLOAT" : "buffer",
-    "LPDOUBLE" : "buffer",
+    "LPFLOAT" : "buffer" ,
+    "LPDOUBLE" : "buffer" ,
 	
 	"LPBOOL" : "buffer" ,
 	"PBOOL" : "buffer" ,
 
     // string
-    "LPCTSTR" : "wstring",
-    "PCTSTR" : "wstring",
+    "LPCTSTR" : "wstring" ,
+    "PCTSTR" : "wstring" ,
 
 
-    "LPCSTR" : "string",
-    "LPCWSTR" : "wstring",
+    "LPCSTR" : "string" ,
+    "LPCWSTR" : "wstring" ,
 
-    "PCSTR" : "string",
-    "PCWSTR" : "wstring",
+    "PCSTR" : "string" ,
+    "PCWSTR" : "wstring" ,
 
     // string buffer
-    "LPSTR" : "buffer",
-    "LPTSTR" : "buffer",
-    "LPWSTR" : "buffer",
+    "LPSTR" : "buffer" ,
+    "LPTSTR" : "buffer" ,
+    "LPWSTR" : "buffer" ,
 
-    "PSTR" : "buffer",
-    "PTSTR" : "buffer",
-    "PWSTR" : "buffer",
+    "PSTR" : "buffer" ,
+    "PTSTR" : "buffer" ,
+    "PWSTR" : "buffer" ,
 
     // handle
-    "PVOID" : "buffer",
-    "LPVOID" : "buffer",
+    "PVOID" : "buffer" ,
+    "LPVOID" : "buffer" ,
 	"PCVOID" : "buffer" ,
 	"LPCVOID" : "buffer" ,
-    "PPVOID" : "buffer",
-    "HANDLE" : "handle",
-    "PHANDLE" : "buffer",
+    "PPVOID" : "buffer" ,
+    "HANDLE" : "handle" ,
+    "PHANDLE" : "buffer" ,
 
-    "HACCEL" : "handle",
-    "HBITMAP" : "handle",
-    "HCURSOR" : "handle",
-    "HINSTANCE" : "handle",
-    "HMODULE" : "handle",
-    "HCONV" : "handle",
+    "HACCEL" : "handle" ,
+    "HBITMAP" : "handle" ,
+    "HCURSOR" : "handle" ,
+    "HINSTANCE" : "handle" ,
+    "HMODULE" : "handle" ,
+    "HCONV" : "handle" ,
 
-    "HMENU" : "handle",
-    "HWND" : "handle",
-    "HBRUSH" : "handle",
+    "HMENU" : "handle" ,
+    "HWND" : "handle" ,
+    "HBRUSH" : "handle" ,
 	"HDESK" : "handle" ,
-    "HENHMETAFILE" : "handle",
-    "HFONT" : "handle",
-    "HPALETTE" : "handle",
-    "HPEN" : "handle",
-    "HRGN" : "handle",
-    "HDC" : "handle",
+    "HENHMETAFILE" : "handle" ,
+    "HFONT" : "handle" ,
+    "HPALETTE" : "handle" ,
+    "HPEN" : "handle" ,
+    "HRGN" : "handle" ,
+    "HDC" : "handle" ,
+	"HDWP" : "handle" ,
 
 
     // typedef
-    "BOOL" : "bool",
-    "BOOLEAN" : "bool",
+    "BOOL" : "bool" ,
+    "BOOLEAN" : "bool" ,
 		
-	"NTSTATUS" : "long",
+	"NTSTATUS" : "long" ,
 	"ACCESS_MASK" : "ulong" ,
 
     "COLORREF" : "ulong"
@@ -231,27 +232,27 @@ var WIN_TYPE_TO_FFI_TYPE_TABLE = {
 };
 
 var WIN_STACK_TYPE_TO_FFI_STACK_TYPE_TABLE = {
-    "WINAPI" : "__stdcall",
+    "WINAPI" : "__stdcall" ,
     "CALLBACK" : "__stdcall"
 };
 
 
 var EMPTY_MARCO_ARRAY = [
 
-	 "_Inout_opt_",
+	 "_Inout_opt_" ,
 	  
 	 "_Outptr_opt_" ,
     
-    "_Inout_",
+    "_Inout_" ,
   
-    "_Outptr_",
+    "_Outptr_" ,
 
-    "_In_opt_",
+    "_In_opt_" ,
   
-    "_Out_opt_",
+    "_Out_opt_" ,
    
-	"_In_",
-	 "_Out_",
+	"_In_" ,
+	 "_Out_" ,
 
 ];
 
@@ -619,7 +620,7 @@ function _lexDeclare(arg_declareText)
 
 
     // argText
-    var rawArgvDeclares = tempArray4[0].split(",");
+    var rawArgvDeclares = tempArray4[0].split(" ,");
     rawArgvDeclares = _.map(rawArgvDeclares, function (item) 
 	{
         return item.trim();
@@ -699,7 +700,7 @@ function ffi_cleanDeclare(arg_declareText)
     }
 
     // argText
-    var rawArgvDeclares = tempArray4[0].split(",");
+    var rawArgvDeclares = tempArray4[0].split(" ,");
     rawArgvDeclares = _.map(rawArgvDeclares, function (item) 
 	{
         return item.trim();
@@ -787,7 +788,7 @@ function ffi_parseDeclare(arg_declareText)
         }
         else 
 		{
-            throw new Error(sprintf("unknown return type %s", lexInfo.returnType) );
+            throw new Error(sprintf("unknown return type %s" , lexInfo.returnType) );
         }
     }
 
@@ -808,7 +809,7 @@ function ffi_parseDeclare(arg_declareText)
         }
         else 
 		{
-            throw new Error(sprintf("unknown stack type %s", lexInfo.stackTyp));
+            throw new Error(sprintf("unknown stack type %s" , lexInfo.stackTyp));
         }
 
     }
@@ -832,7 +833,7 @@ function ffi_parseDeclare(arg_declareText)
             }
             else 
 			{
-                throw new Error(sprintf("unknown arg type %s of %s", item , arg_declareText) );
+                throw new Error(sprintf("unknown arg type %s of %s" , item , arg_declareText) );
             }
         }
     });
@@ -853,7 +854,7 @@ function _castTo_char(argValue)
     }
     else 
 	{
-        throw new Error(sprintf("want char but receive %s", typeof argValue));
+        throw new Error(sprintf("want char but receive %s" , typeof argValue));
     }
 }
 
@@ -879,7 +880,7 @@ function _castTo_uchar(argValue)
     }
     else 
 	{
-        throw new Error(sprintf("want uchar but receive %s", typeof argValue));
+        throw new Error(sprintf("want uchar but receive %s" , typeof argValue));
     }
 }
 
@@ -895,7 +896,7 @@ function _castTo_short(argValue)
     }
     else 
 	{
-        throw new Error(sprintf("want short but receive %s", typeof argValue));
+        throw new Error(sprintf("want short but receive %s" , typeof argValue));
     }
 }
 
@@ -911,7 +912,7 @@ function _castTo_ushort(argValue)
     }
     else 
 	{
-        throw new Error(sprintf("want ushort but receive %s", typeof argValue));
+        throw new Error(sprintf("want ushort but receive %s" , typeof argValue));
     }
 }
 
@@ -938,7 +939,7 @@ function _castTo_long(argValue)
     }
     else 
 	{
-        throw new Error(sprintf("want long but receive %s", typeof argValue));
+        throw new Error(sprintf("want long but receive %s" , typeof argValue));
     }
 }
 
@@ -954,7 +955,7 @@ function _castTo_ulong(argValue)
     }
     else 
 	{
-        throw new Error(sprintf("want ulong but receive %s", typeof argValue));
+        throw new Error(sprintf("want ulong but receive %s" , typeof argValue));
     }
 }
 
@@ -970,7 +971,7 @@ function _castTo_longlong(argValue)
     }
     else 
 	{
-        throw new Error(sprintf("want longlong but receive %s", typeof argValue));
+        throw new Error(sprintf("want longlong but receive %s" , typeof argValue));
     }
 }
 
@@ -986,7 +987,7 @@ function _castTo_ulonglong(argValue)
     }
     else 
 	{
-        throw new Error(sprintf("want ulonglong but receive %s", typeof argValue));
+        throw new Error(sprintf("want ulonglong but receive %s" , typeof argValue));
     }
 }
 
@@ -1006,7 +1007,7 @@ function _castTo_long_ptr(argValue)
     }
     else 
 	{
-        throw new Error(sprintf("want long_ptr but receive %s", typeof argValue));
+        throw new Error(sprintf("want long_ptr but receive %s" , typeof argValue));
     }
 
     return castedArgValue;
@@ -1028,7 +1029,7 @@ function _castTo_ulong_ptr(argValue)
     }
     else 
 	{
-        throw new Error(sprintf("want ulong_ptr but receive %s", typeof argValue));
+        throw new Error(sprintf("want ulong_ptr but receive %s" , typeof argValue));
     }
 
     return castedArgValue;
@@ -1055,7 +1056,7 @@ function _castTo_buffer(argValue)
     }
     else 
 	{
-        throw new Error(sprintf("want Buffer but receive %s", typeof argValue));
+        throw new Error(sprintf("want Buffer but receive %s" , typeof argValue));
     }
 }
 
@@ -1075,7 +1076,7 @@ function _castTo_handle(argValue)
     }
     else
 	{
-        throw new Error(sprintf("want buffer but receive %s", typeof argValue));
+        throw new Error(sprintf("want buffer but receive %s" , typeof argValue));
     }
 }
 
@@ -1091,7 +1092,7 @@ function _castTo_float(argValue)
     }
     else 
 	{
-        throw new Error(sprintf("want float but receive %s", typeof argValue));
+        throw new Error(sprintf("want float but receive %s" , typeof argValue));
     }
 }
 
@@ -1107,7 +1108,7 @@ function _castTo_double(argValue)
     }
     else 
 	{
-        throw new Error(sprintf("want double but receive %s", typeof argValue));
+        throw new Error(sprintf("want double but receive %s" , typeof argValue));
     }
 }
 
@@ -1123,7 +1124,7 @@ function _castTo_string(argValue)
     }
     else
 	{
-        throw new Error(sprintf("want string but receive %s", typeof argValue));
+        throw new Error(sprintf("want string but receive %s" , typeof argValue));
     }
 }
 
@@ -1139,7 +1140,7 @@ function _castTo_wstring(argValue)
     }
     else 
 	{
-        throw new Error(sprintf("want wstring but receive %s", typeof argValue));
+        throw new Error(sprintf("want wstring but receive %s" , typeof argValue));
     }
 }
 
@@ -1514,7 +1515,7 @@ function ffi_loadLibrary(arg_name)
     var resolvedName = _resolveFile(arg_name);
     if (!resolvedName) 
 	{
-        throw new Error(sprintf("not found %s", arg_name));
+        throw new Error(sprintf("not found %s" , arg_name));
     }
 	
 	//KdPrint("[ffi] %s resolved to %s\n" , arg_name , resolvedName );
@@ -1587,7 +1588,7 @@ function ffi_bindFromRoutineAddressAndDeclareInfo(arg_address, declareInfo)
     }
     else 
 	{
-        throw new Error(sprintf("invalid address type %s\n", typeof arg_address));
+        throw new Error(sprintf("invalid address type %s\n" , typeof arg_address));
     }
 
     if (routineAddress.isZero(0x10000)) 
@@ -1597,7 +1598,7 @@ function ffi_bindFromRoutineAddressAndDeclareInfo(arg_address, declareInfo)
 
     if (routineAddress.lessThan(0x10000)) 
 	{
-        throw new Error(sprintf("invalid address 0x%X\n", routineAddress));
+        throw new Error(sprintf("invalid address 0x%X\n" , routineAddress));
     }
 
     assert(ffiHelper["returnType"]);
@@ -1619,7 +1620,7 @@ function ffi_bindFromRoutineAddressAndDeclareInfo(arg_address, declareInfo)
         var rawInvokeRet = 0;
 
         if (invokeArgv.length != declareInfo.argTypes.length) {
-            throw new Error(sprintf("ffi routine require %d args but only recv %d", declareInfo.argTypes.length, invokeArgv.length));
+            throw new Error(sprintf("ffi routine require %d args but only recv %d" , declareInfo.argTypes.length, invokeArgv.length));
         }
 		
         var userArgvIndex = 0;
@@ -1631,7 +1632,7 @@ function ffi_bindFromRoutineAddressAndDeclareInfo(arg_address, declareInfo)
             }
             catch (err) 
 			{
-                throw new Error(sprintf("can not convert arg_%d from %s to %s",
+                throw new Error(sprintf("can not convert arg_%d from %s to %s" ,
                     userArgvIndex + 1,
                     typeof invokeArgv[userArgvIndex],
                     declareInfo.argTypes[userArgvIndex]
@@ -1664,7 +1665,7 @@ function ffi_bindRoutine(arg_address, arg_declareText)
     }
     catch (err) 
 	{
-        throw new Error(sprintf("parse declare %s error %s\n", declareText, err));
+        throw new Error(sprintf("parse declare %s error %s\n" , declareText, err));
     }
 
     return ffi_bindFromRoutineAddressAndDeclareInfo(arg_address, declareInfo);
@@ -1686,7 +1687,7 @@ function ffi_bindModule(arg_hModule, arg_declareText)
     }
     catch (err) 
 	{
-        throw new Error(sprintf("parse declare %s error %s\n", declareText, err.message));
+        throw new Error(sprintf("parse declare %s error %s\n" , declareText, err.message));
     }
 
     if (!declareInfo.name) 
@@ -1704,12 +1705,12 @@ function ffi_bindModule(arg_hModule, arg_declareText)
     }
     else 
 	{
-        throw new Error(sprintf("invalid module type %s\n", typeof arg_hModule));
+        throw new Error(sprintf("invalid module type %s\n" , typeof arg_hModule));
     }
 
     if (hModule.lessThan(0x10000)) 
 	{
-        throw new Error(sprintf("invalid hModule 0x%X\n", hModule.address));
+        throw new Error(sprintf("invalid hModule 0x%X\n" , hModule.address));
     }
 
     routineAddress = ffi_getProcAddress(hModule, declareInfo.name);
@@ -1737,7 +1738,7 @@ function ffi_sizeofThunk(arg_declareText)
     }
     catch (err) 
 	{
-        throw new Error(sprintf("parse declare %s error %s\n", declareText, err.message));
+        throw new Error(sprintf("parse declare %s error %s\n" , declareText, err.message));
     }
 
     ffiHelper["returnType"] = ENUM_TABLE_FFI_VALUE_TYPE[declareInfo.returnType];
@@ -1781,7 +1782,7 @@ function ffi_thunk(jsCallbackRoutine, arg_declareText, arg_thisObject, arg_reser
     }
     catch (err) 
 	{
-        throw new Error(sprintf("parse declare %s error %s\n", declareText, err.message));
+        throw new Error(sprintf("parse declare %s error %s\n" , declareText, err.message));
     }
 
 
@@ -1870,7 +1871,7 @@ function ffi_batchBind( arg_hModule , arg_declares )
 		}
 		catch (err) 
 		{
-			throw new Error(sprintf("parse declare %s error %s\n", declareText, err.message));
+			throw new Error(sprintf("parse declare %s error %s\n" , declareText, err.message));
 		}	
 		
 		assert( declareInfo.name );

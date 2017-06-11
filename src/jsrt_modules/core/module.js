@@ -84,14 +84,11 @@ const BUILTIN_MODULE_NAME_TABLE = [
 	
 	"win32/sysinfo",
 	
-	"win32/message" ,
-	
 	"win32/pe" ,
 	
 	"win32/fileversion" ,
 	
-	"win32/wtypes"
-	
+	"win32/wtypes" 
 
 ];
 process.builtInModules = BUILTIN_MODULE_NAME_TABLE;
