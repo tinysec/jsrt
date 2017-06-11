@@ -432,7 +432,7 @@ Module.staticRunEval = function ()
 
     try 
 	{
-        execRet = NewModule._loadFromContent(filecontent );
+        execRet = NewModule.loadFromContent(filecontent );
     }
     catch (err) 
 	{
@@ -450,7 +450,7 @@ Module.staticRunContentWithFilename = function ( filecontent , fileName )
     NewModule.id = '#';
 	NewModule.parent = {};
 	
-    NewModule._loadFromContent(filecontent , fileName);
+    NewModule.loadFromContent(filecontent , fileName);
    
     return NewModule.exports;
 }
@@ -484,7 +484,7 @@ Module._staticLoadBuildInModule = function (requestName, arg_parent, arg_isMain)
 
     try 
 	{
-        NewModule._loadFromContent(buildInFileInfo.content, buildInFileInfo.name);
+        NewModule.loadFromContent(buildInFileInfo.content, buildInFileInfo.name);
     }
     catch (err) 
 	{
@@ -512,13 +512,13 @@ Module.prototype._loadFile = function (arg_filename)
 	}
 	else
 	{
-		 return this._loadFromContent(fileContent, arg_filename);
+		 return this.loadFromContent(fileContent, arg_filename);
 	}
 }
 
 
 
-Module.prototype._loadFromContent = function (fileContent, arg_filename) {
+Module.prototype.loadFromContent = function (fileContent, arg_filename) {
     var self = this;
     var dirname;
 

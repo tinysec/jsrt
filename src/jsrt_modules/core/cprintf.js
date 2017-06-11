@@ -11,31 +11,28 @@ function escapeDoubleQuotes(str)
 
 function sprintf()
 {
-	var argv = Array.prototype.slice.call(arguments);
-	var text = '';
-
-	if (0 == argv.length)
+	if (0 == arguments.length)
 	{
 		return '';
 	}
 
-	if ('string' == typeof argv[0])
+	if ('string' == typeof arguments[0])
 	{
-		if (0 === argv[0].length)
+		if (0 === arguments[0].length)
 		{
 			return '';
 		}
 
-		if (-1 === argv[0].indexOf('%'))
+		if (-1 === arguments[0].indexOf('%'))
 		{
-			return argv[0];
+			return arguments[0];
 		}
 
-		return _internal_sprintf.apply(this, arguments);
+		return _internal_sprintf.apply(this , arguments);
 	}
 	else
 	{
-		return _inspect(argv[0], 0, 0);
+		return _inspect( arguments[0], 0, 0 );
 	}
 }
 exports.sprintf = sprintf;
@@ -45,6 +42,7 @@ function printf()
 	var totaltext = sprintf.apply(this, arguments);
 	if (0 == totaltext.length)
 	{
+		totaltext = null;
 		return;
 	}
 
@@ -78,7 +76,7 @@ exports.printf = printf;
 
 function KdPrint()
 {
-	if (process.verbose)
+	if ( process.verbose )
 	{
 		return printf.apply(this, arguments);
 	}
@@ -90,6 +88,7 @@ function DbgPrint()
 	var totaltext = sprintf.apply(this, arguments);
 	if (0 == totaltext.length)
 	{
+		totaltext = null;
 		return;
 	}
 
@@ -164,7 +163,7 @@ function _internal_sprintf()
 						}
 						else
 						{
-							final_text += _handle_single_type(option, argv);
+							final_text += _handle_single_type(option , argv);
 							argv.shift();
 						}
 					}
@@ -185,7 +184,9 @@ function _internal_sprintf()
 			continue;
 		}
 	}
-
+	
+	argv = null;
+	
 	return final_text;
 }
 
@@ -229,7 +230,8 @@ function _parse_single_format(format)
 		'type': ''
 	};
 
-	do {
+	do 
+	{
 		option.len = 0;
 		option.type = '';
 
@@ -467,7 +469,8 @@ function _handle_single_type(option, argv)
 	var strFinal = '';
 	var nIndex = 0;
 
-	do {
+	do 
+	{
 		if ('a' == option.type.toLowerCase())
 		{
 			strText = _handle_type_a(option, argv);
@@ -607,6 +610,8 @@ function _handle_single_type(option, argv)
 	}
 
 	strFinal = option.prefix + strFinal;
+	
+	strText = null;
 
 	return strFinal;
 }
@@ -614,27 +619,13 @@ function _handle_single_type(option, argv)
 // %a
 function _handle_type_a(option, argv)
 {
-	var strFinal = '';
 
-	do {
-		// reserved
-
-	} while (false);
-
-	return strFinal;
 }
 
 // %b
 function _handle_type_b(option, argv)
 {
-	var strFinal = '';
 
-	do {
-		// reserved
-
-	} while (false);
-
-	return strFinal;
 }
 
 // %c the character with that ASCII value
@@ -643,7 +634,8 @@ function _handle_type_c(option, argv)
 	var strFinal = '';
 	var nCharCode = 0;
 
-	do {
+	do 
+	{
 		if ('number' === typeof argv[0])
 		{
 			nCharCode = argv[0];
@@ -737,14 +729,7 @@ function _handle_type_d(option, argv)
 // %e
 function _handle_type_e(option, argv)
 {
-	var strFinal = '';
-
-	do {
-		// reserved
-
-	} while (false);
-
-	return strFinal;
+	
 }
 
 // %f
@@ -784,27 +769,13 @@ function _handle_type_f(option, argv)
 // %g
 function _handle_type_g(option, argv)
 {
-	var strFinal = '';
-
-	do {
-		// reserved
-
-	} while (false);
-
-	return strFinal;
+	
 }
 
 // %h
 function _handle_type_h(option, argv)
 {
-	var strFinal = '';
-
-	do {
-		// reserved
-
-	} while (false);
-
-	return strFinal;
+	
 }
 
 // %i
@@ -862,68 +833,31 @@ function _handle_type_i(option, argv)
 // %j
 function _handle_type_j(option, argv)
 {
-	var strFinal = '';
-
-	do {
-		// reserved
-
-	} while (false);
-
-	return strFinal;
+	
 }
 
 // %k
 function _handle_type_k(option, argv)
 {
-	var strFinal = '';
-
-	do {
-
-		// reserved
-
-	} while (false);
-
-	return strFinal;
+	
 }
 
 // %l
 function _handle_type_l(option, argv)
 {
-	var strFinal = '';
-
-	do {
-
-		// reserved
-
-	} while (false);
-
-	return strFinal;
+	
 }
 
 // %m
 function _handle_type_m(option, argv)
 {
-	var strFinal = '';
 
-	do {
-		// reserved
-
-	} while (false);
-
-	return strFinal;
 }
 
 // %n
 function _handle_type_n(option, argv)
 {
-	var strFinal = '';
 
-	do {
-		// reserved
-
-	} while (false);
-
-	return strFinal;
 }
 
 // %o
@@ -1035,28 +969,13 @@ function _handle_type_p(option, argv)
 // %q
 function _handle_type_q(option, argv)
 {
-	var strFinal = '';
-
-	do {
-
-		// reserved
-
-	} while (false);
-
-	return strFinal;
+	
 }
 
 // %r
 function _handle_type_r(option, argv)
 {
-	var strFinal = '';
 
-	do {
-		// reserved
-
-	} while (false);
-
-	return strFinal;
 }
 
 // %s
@@ -1105,15 +1024,7 @@ function _handle_type_s(option, argv)
 // %t
 function _handle_type_t(option, argv)
 {
-	var strFinal = '';
 
-	do {
-
-		// reserved
-
-	} while (false);
-
-	return strFinal;
 }
 
 // %u
@@ -1179,27 +1090,13 @@ function _handle_type_u(option, argv)
 // %v
 function _handle_type_v(option, argv)
 {
-	var strFinal = '';
 
-	do {
-		// reserved
-
-	} while (false);
-
-	return strFinal;
 }
 
 // %w
 function _handle_type_w(option, argv)
 {
-	var strFinal = '';
 
-	do {
-		// reserved
-
-	} while (false);
-
-	return strFinal;
 }
 
 // %x
@@ -1276,28 +1173,12 @@ function _handle_type_x(option, argv)
 // %y
 function _handle_type_y(option, argv)
 {
-	var strFinal = '';
-
-	do {
-
-		// reserved
-
-	} while (false);
-
-	return strFinal;
 }
 
 // %z
 function _handle_type_z(option, argv)
 {
-	var strFinal = '';
-
-	do {
-		// reserved
-
-	} while (false);
-
-	return strFinal;
+	
 }
 
 function _inspect_Function(input, level)
@@ -1352,6 +1233,8 @@ function _inspect_Function(input, level)
 	{
 		strFullText = "{\n" + strText + strTab + "}";
 	}
+	
+	strText= null;
 
 	return strFullText;
 }

@@ -24,45 +24,42 @@ function Number64(arg_1, arg_2)
         return new Number64(arg_1, arg_2);
     }
 
-    var argv = Array.prototype.slice.call(arguments);
-    var self = this;
+    this.__TYPE__ = "Number64";
+    this.hexText = "0x0000000000000000";
 
-    self.__TYPE__ = "Number64";
-    self.hexText = "0x0000000000000000";
-
-    if (0 == argv.length) 
+    if (0 == arguments.length) 
 	{
 
     }
     else 
 	{
         if (
-            (NaN === argv[0])
-            || (Infinity === argv[0])
-            || (undefined === argv[0])
-            || (null === argv[0])
-            || (false === argv[0])
+            (NaN === arguments[0])
+            || (Infinity === arguments[0])
+            || (undefined === arguments[0])
+            || (null === arguments[0])
+            || (false === arguments[0])
         ) {
             //nop
         }
-        else if ('number' == typeof argv[0]) 
+        else if ('number' == typeof arguments[0]) 
 		{
-            self.hexText = process.reserved.bindings.Number64_toString(argv[0], 16);
+            this.hexText = process.reserved.bindings.Number64_toString(arguments[0], 16);
         }
-        else if ('boolean' == typeof argv[0]) 
+        else if ('boolean' == typeof arguments[0]) 
 		{
-            if (argv[0]) 
+            if (arguments[0]) 
 			{
-                self.hexText = "0x0000000000000001";
+                this.hexText = "0x0000000000000001";
             }
             else 
 			{
                 //nop
             }
         }
-        else if ('string' == typeof argv[0]) 
+        else if ('string' == typeof arguments[0]) 
 		{
-            var input_text = argv[0].toLowerCase().trim();
+            var input_text = arguments[0].toLowerCase().trim();
             var nRadix = 10;
 
             if (0 == input_text.length) 
@@ -94,13 +91,13 @@ function Number64(arg_1, arg_2)
                 }
             }
 
-            self.hexText = process.reserved.bindings.Number64_fromString(input_text, nRadix);
+            this.hexText = process.reserved.bindings.Number64_fromString(input_text, nRadix);
         }
-        else if ('object' == typeof argv[0]) 
+        else if ('object' == typeof arguments[0]) 
 		{
-            if (argv[0] instanceof Number64) 
+            if ( Number64.isNumber64( arguments[0] ) ) 
 			{
-                self.hexText = argv[0].hexText;
+                this.hexText = arguments[0].hexText;
             }
             else 
 			{
@@ -144,7 +141,7 @@ Number64.isNumber64 = function (obj)
         return false;
     }
 
-    if ("object" == typeof obj) 
+    if ( "object" == typeof obj ) 
 	{
         if ("Number64" == obj.__TYPE__) 
 		{

@@ -55,8 +55,14 @@ function Buffer()
 			}
 
 			this.length = arguments[0];
-
-			this.address = Number64(process.reserved.bindings.buffer_alloc(this.length));
+		
+			var helper = process.reserved.bindings.buffer_alloc(this.length);
+			if ( !helper )
+			{
+				throw new Error(sprintf("alloc %d bytes faild" , length ) );
+			}
+			
+			this.address = Number64(helper);
 
 			add_to_buffer_table(this.address, this.length);
 
@@ -167,8 +173,15 @@ Buffer.alloc = function(length)
 		throw new Error("invalid param");
 	}
 
-	address = Number64(process.reserved.bindings.buffer_alloc(length));
-
+	var helper =  process.reserved.bindings.buffer_alloc(length) ;
+	
+	if ( !helper )
+	{
+		return null;
+	}
+	
+	address = Number64(helper);
+	
 	pNewBuf = new Buffer(length, address);
 
 	add_to_buffer_table(address, length);
@@ -188,8 +201,15 @@ Buffer.allocEx = function(length)
 		throw new Error("invalid param");
 	}
 
-	address = Number64(process.reserved.bindings.buffer_allocEx(length));
-
+	var helper = Number64(process.reserved.bindings.buffer_allocEx(length));
+	
+	if ( !helper )
+	{
+		return null;
+	}
+	
+	address = Number64(helper);
+	
 	pNewBuf = new Buffer(length, address);
 
 	add_to_buffer_table(address, length);
