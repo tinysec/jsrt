@@ -21,7 +21,7 @@ var ffi_dbghelp = ffi.loadAndBatchBind("dbghelp.dll" , [
 
 	"BOOL WINAPI SymCleanup(_In_ HANDLE hProcess);" , 
 	
-	"BOOL WINAPI SymInitializeW(_In_     HANDLE hProcess,_In_opt_ PCWSTR UserSearchPath,_In_     BOOL   fInvadeProcess);" ,
+	"BOOL WINAPI SymInitializeW(_In_     HANDLE hProcess , _In_opt_ PCWSTR UserSearchPath , _In_     BOOL   fInvadeProcess);" ,
 	
 	"BOOL WINAPI SymGetSearchPath( _In_  HANDLE hProcess , _Out_ void*  SearchPath , _In_  DWORD  SearchPathLength );" ,
 	

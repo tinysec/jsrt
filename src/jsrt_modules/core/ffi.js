@@ -252,7 +252,7 @@ var EMPTY_MARCO_ARRAY = [
     "_Out_opt_" ,
    
 	"_In_" ,
-	 "_Out_" ,
+	 "_Out_" 
 
 ];
 
@@ -620,7 +620,7 @@ function _lexDeclare(arg_declareText)
 
 
     // argText
-    var rawArgvDeclares = tempArray4[0].split(" ,");
+    var rawArgvDeclares = tempArray4[0].split(",");
     rawArgvDeclares = _.map(rawArgvDeclares, function (item) 
 	{
         return item.trim();
@@ -700,7 +700,7 @@ function ffi_cleanDeclare(arg_declareText)
     }
 
     // argText
-    var rawArgvDeclares = tempArray4[0].split(" ,");
+    var rawArgvDeclares = tempArray4[0].split(",");
     rawArgvDeclares = _.map(rawArgvDeclares, function (item) 
 	{
         return item.trim();
@@ -1619,8 +1619,9 @@ function ffi_bindFromRoutineAddressAndDeclareInfo(arg_address, declareInfo)
         var invokeArgv = Array.prototype.slice.call(arguments);
         var rawInvokeRet = 0;
 
-        if (invokeArgv.length != declareInfo.argTypes.length) {
-            throw new Error(sprintf("ffi routine require %d args but only recv %d" , declareInfo.argTypes.length, invokeArgv.length));
+        if ( invokeArgv.length != declareInfo.argTypes.length ) 
+		{
+            throw new Error(sprintf("ffi routine require %d args only recv %d" , declareInfo.argTypes.length, invokeArgv.length));
         }
 		
         var userArgvIndex = 0;
