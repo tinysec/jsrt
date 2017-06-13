@@ -457,16 +457,6 @@ function fs_readFile( arg_fd_or_name  )
 		throw new Error(sprintf("get file stats faild") );
 	}
 
-	if ( stats.size.greaterThanOrEqual( MAX_READED_FILE_SIZE ) )
-	{
-		if ( _.isString( arguments[0] ) )
-		{
-			fs_close( param_fd );
-		}
-	
-		throw new Error(sprintf("the file is too big for read entire , try fs.read") );
-	}
-
 	fileSize = stats.size.toUInt32LE();
 
 	if ( 0 == fileSize )
@@ -485,6 +475,15 @@ function fs_readFile( arg_fd_or_name  )
 	}
 	
 	param_buffer = Buffer.alloc( fileSize );
+	if ( !param_buffer )
+	{
+		if ( _.isString( arguments[0] ) )
+		{
+			fs_close( param_fd );
+		}
+		
+		return '';
+	}
 
 	readedSize = fs_read( param_fd , param_buffer , 0 , param_buffer.length , 0 );
 	if ( 0 == readedSize )
