@@ -230,60 +230,78 @@ Number64.prototype.isZeroOrNegative32 = function ()
     return (0 >= this.compareSigned32(0));
 }
 
-Number64.prototype.equals = function (arg_other) 
+Number64.prototype.equal = function (arg_other) 
 {
     return (0 == this.compare(arg_other));
 }
+Number64.prototype.eq = Number64.prototype.equal;
 
-Number64.prototype.equals32 = function (arg_other) 
+Number64.equal = function ( arg_1 , arg_2 ) 
+{
+    return ( 0 == Number64.compare(arg_1 , arg_2 ) );
+}
+Number64.eq = Number64.equal;
+
+
+Number64.prototype.equal32 = function (arg_other) 
 {
     return (0 == this.compare32(arg_other));
 }
+Number64.prototype.eq32 = Number64.prototype.equal32;
 
-Number64.equals32 = function ( arg_1 , arg_2 ) 
+Number64.equal32 = function ( arg_1 , arg_2 ) 
 {
     return ( 0 == Number64.compare32(arg_1 , arg_2 ) );
 }
+Number64.eq32 = Number64.equal32;
 
-Number64.prototype.notEquals = function (arg_other) 
+Number64.prototype.notEqual = function (arg_other) 
 {
     return (0 != this.compare(arg_other));
 }
+Number64.prototype.neq = Number64.prototype.notEqual;
 
-Number64.notEquals = function ( arg_1 , arg_2 ) 
+Number64.notEqual = function ( arg_1 , arg_2 ) 
 {
    return ( 0 != Number64.compare(arg_1 , arg_2 ) );
 }
+Number64.neq = Number64.notEqual;
 
-Number64.prototype.notEquals32 = function (arg_other) 
+Number64.prototype.notEqual32 = function (arg_other) 
 {
     return (0 != this.compare32(arg_other));
 }
+Number64.prototype.neq32 = Number64.prototype.notEqual32;
 
-Number64.notEquals32 = function ( arg_1 , arg_2 ) 
+Number64.notEqual32 = function ( arg_1 , arg_2 ) 
 {
     return ( 0 != Number64.compare32(arg_1 , arg_2 ) );
 }
+Number64.neq32 = Number64.notEqual32;
 
 Number64.prototype.lessThan = function (arg_other) 
 {
     return (0 > this.compare(arg_other));
 }
+Number64.prototype.smallThan = Number64.prototype.lessThan;
 
 Number64.lessThan = function ( arg_1 , arg_2 ) 
 {
     return ( 0 > Number64.compare(arg_1 , arg_2 ) );
 }
+Number64.smallThan = Number64.lessThan;
 
 Number64.prototype.lessThan32 = function ( arg_1 , arg_2) 
 {
     return (0 > this.compare32(arg_other));
 }
+Number64.prototype.smallThan32 = Number64.prototype.lessThan32;
 
 Number64.lessThan32 = function ( arg_1 , arg_2 ) 
 {
     return ( 0 > Number64.compare32(arg_1 , arg_2 ) );
 }
+Number64.smallThan32 = Number64.lessThan32;
 
 Number64.prototype.lessThanSigned = function (arg_other) 
 {
@@ -349,61 +367,89 @@ Number64.prototype.greaterThan = function (arg_other)
 {
     return (0 < this.compare(arg_other));
 }
+Number64.prototype.bigThan = Number64.prototype.greaterThan;
+Number64.prototype.largeThan = Number64.prototype.greaterThan;
+
 
 Number64.greaterThan = function (arg_other) 
 {
      return ( 0 < Number64.compare(arg_1 , arg_2 ) );
 }
+Number64.bigThan = Number64.greaterThan;
+Number64.largeThan = Number64.greaterThan;
 
 Number64.prototype.greaterThan32 = function (arg_other) 
 {
     return (0 < this.compare32(arg_other));
 }
+Number64.prototype.bigThan32 = Number64.prototype.greaterThan32;
+Number64.prototype.largeThan32 = Number64.prototype.greaterThan32;
+
 
 Number64.greaterThan32 = function ( arg_1 , arg_2 ) 
 {
     return ( 0 < Number64.compare32(arg_1 , arg_2 ) );
 }
+Number64.bigThan32 = Number64.greaterThan32;
+Number64.largeThan32 = Number64.greaterThan32;
 
 Number64.prototype.greaterThanSigned = function (arg_other) 
 {
     return (0 < this.compareSigned(arg_other));
 }
+Number64.prototype.bigThanSigned = Number64.prototype.greaterThanSigned;
+Number64.prototype.largeThanSigned = Number64.prototype.greaterThanSigned;
 
 Number64.greaterThanSigned = function ( arg_1 , arg_2 ) 
 {
     return ( 0 < Number64.compareSigned(arg_1 , arg_2 ) );
 }
+Number64.bigThanSigned = Number64.greaterThanSigned;
+Number64.largeThanSigned = Number64.greaterThanSigned ;
 
 Number64.prototype.greaterThanSigned32 = function (arg_other) 
 {
     return (0 < this.compareSigned32(arg_other));
 }
+Number64.prototype.bigThanSigned32 = Number64.prototype.greaterThanSigned32;
+Number64.prototype.largeThanSigned32 = Number64.prototype.greaterThanSigned32;
 
 Number64.greaterThanSigned32 = function ( arg_1 , arg_2 ) 
 {
     return ( 0 < Number64.compareSigned32(arg_1 , arg_2 ) );
 }
+Number64.bigThanSigned32 = Number64.greaterThanSigned32;
+Number64.largeThanSigned32 = Number64.greaterThanSigned32 ;
+
 
 Number64.prototype.greaterThanOrEqual = function (arg_other) 
 {
     return (0 <= this.compare(arg_other));
 }
+Number64.prototype.bigThanOrEqual = Number64.prototype.greaterThanOrEqual ;
+Number64.prototype.largeThanOrEqual = Number64.prototype.greaterThanOrEqual ;
 
 Number64.greaterThanOrEqual = function (arg_1 , arg_2) 
 {
     return ( 0 <= Number64.compare(arg_1 , arg_2 ) );
 }
+Number64.bigThanOrEqual = Number64.greaterThanOrEqual ;
+Number64.largeThanOrEqual = Number64.greaterThanOrEqual ;
+
 
 Number64.prototype.greaterThanOrEqual32 = function (arg_other) 
 {
     return (0 <= this.compare32(arg_other));
 }
+Number64.prototype.bigThanOrEqual32 = Number64.prototype.greaterThanOrEqual32 ;
+Number64.prototype.largeThanOrEqual32 = Number64.prototype.greaterThanOrEqual32 ;
 
 Number64.greaterThanOrEqual32 = function ( arg_1 , arg_2 ) 
 {
     return ( 0 <= Number64.compare32(arg_1 , arg_2 ) );
 }
+Number64.bigThanOrEqual32 = Number64.greaterThanOrEqual32 ;
+Number64.largeThanOrEqual32 = Number64.greaterThanOrEqual32 ;
 
 Number64.prototype.greaterThanOrEqualSigned = function (arg_other) 
 {
@@ -456,6 +502,7 @@ Number64.prototype.compare32 = function (arg_other)
 {
     return process.reserved.bindings.Number64_cmp32(this.hexText, cast2Number64(arg_other).hexText);
 }
+Number64.prototype.cmp32 = Number64.prototype.compare32;
 
 Number64.compare32 = function ( arg_1 , arg_2 ) 
 {
@@ -464,6 +511,7 @@ Number64.compare32 = function ( arg_1 , arg_2 )
 	
 	return process.reserved.bindings.Number64_cmp32(n1.hexText, n2.hexText);
 }
+Number64.cmp32 = Number64.compare32;
 
 Number64.prototype.compareSigned32 = function (arg_other) 
 {

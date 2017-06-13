@@ -402,7 +402,7 @@ Buffer.prototype.free = function()
 
 Buffer.prototype.isValid = function()
 {
-	if ((0 == this.length) || (this.address.equals(0)))
+	if ((0 == this.length) || (this.address.equal(0)))
 	{
 		return false;
 	}
@@ -571,7 +571,7 @@ Buffer.prototype.copy = function(arg_target, arg_targetStart, arg_sourceStart, a
 	return this;
 }
 
-Buffer.prototype.equals = function(arg_target)
+Buffer.prototype.equal = function(arg_target)
 {
 	var compareRet = 0;
 
@@ -596,6 +596,7 @@ Buffer.prototype.equals = function(arg_target)
 
 	return false;
 }
+
 
 Buffer.prototype.fill = function(arg_value, arg_offset, arg_end)
 {
