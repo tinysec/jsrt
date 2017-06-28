@@ -26,6 +26,7 @@ function Number64(arg_1, arg_2)
 
     this.__TYPE__ = "Number64";
     this.hexText = "0x0000000000000000";
+	this.bits32 = false;
 
     if (0 == arguments.length) 
 	{
@@ -156,13 +157,20 @@ Number64.prototype.toString = function (arg_radix)
 {
     var radix = arg_radix || 10;
 
-    if (16 == radix) 
+    if ( 16 == radix ) 
 	{
-        return this.hexText.substring(2);
+		if ( this.bits32 )
+		{
+			return this.hexText.substring( 2 + 8 );
+		}
+		else
+		{
+			return this.hexText.substring( 2 );
+		}
     }
     else 
 	{
-        return process.reserved.bindings.Number64_toString(this.hexText, 10);
+        return process.reserved.bindings.Number64_toString(this.hexText, 10 );
     }
 }
 
@@ -748,6 +756,7 @@ Number64.testBit = function ( item , index )
 
 Number64.prototype.cast2Number32 = function () 
 {
+	this.bits32 = true;
     return this.and("0x00000000FFFFFFFF");
 }
 

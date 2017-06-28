@@ -88,7 +88,11 @@ const BUILTIN_MODULE_NAME_TABLE = [
 	
 	"win32/fileversion" ,
 	
-	"win32/wtypes" 
+	"win32/wtypes" ,
+	
+	// host
+	"host/windbg" ,
+	"host/ida" 
 
 ];
 process.builtInModules = BUILTIN_MODULE_NAME_TABLE;
