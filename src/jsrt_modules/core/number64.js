@@ -11,11 +11,18 @@ function cast2Number64(arg_1)
 			{
                 return arg_1;
             }
+			else if ("Number64" == arg_1.__TYPE__) 
+			{
+				return arg_1;
+			}
         }
     }
 
     return Number64.apply(this, arguments);
 }
+
+
+
 
 function Number64(arg_1, arg_2)
 {
@@ -25,8 +32,18 @@ function Number64(arg_1, arg_2)
     }
 
     this.__TYPE__ = "Number64";
-    this.hexText = "0x0000000000000000";
-	this.bits32 = false;
+	this.signed = 0;
+
+	this.byte7 = 0;
+	this.byte6 = 0;
+	this.byte5 = 0;
+	this.byte4 = 0;
+	
+	this.byte3 = 0;
+	this.byte2 = 0;
+	this.byte1 = 0;
+	this.byte0 = 0;
+
 
     if (0 == arguments.length) 
 	{
@@ -43,19 +60,38 @@ function Number64(arg_1, arg_2)
         ) {
             //nop
         }
-        else if ('number' == typeof arguments[0]) 
+        else if ( 'number' == typeof arguments[0] ) 
 		{
-            this.hexText = process.reserved.bindings.Number64_toString(arguments[0], 16);
+			if (  ( 2 == arguments.length ) && (  'number' == typeof arguments[1] )  )
+			{
+				this.byte0 = process.reserved.bindings.Number64_getByteOfNumber.call( this , arguments[0] , 0 );
+				this.byte1 = process.reserved.bindings.Number64_getByteOfNumber.call( this , arguments[0] , 1 );
+				this.byte2 = process.reserved.bindings.Number64_getByteOfNumber.call( this , arguments[0] , 2 );
+				this.byte3 = process.reserved.bindings.Number64_getByteOfNumber.call( this , arguments[0] , 3 );
+				
+				this.byte4 = process.reserved.bindings.Number64_getByteOfNumber.call( this , arguments[1] , 0 );
+				this.byte5 = process.reserved.bindings.Number64_getByteOfNumber.call( this , arguments[1] , 1 );
+				this.byte6 = process.reserved.bindings.Number64_getByteOfNumber.call( this , arguments[1] , 2 );
+				this.byte7 = process.reserved.bindings.Number64_getByteOfNumber.call( this , arguments[1] , 3 );
+			}
+			else
+			{
+				this.byte0 = process.reserved.bindings.Number64_getByteOfNumber.call( this , arguments[0] , 0 );
+				this.byte1 = process.reserved.bindings.Number64_getByteOfNumber.call( this , arguments[0] , 1 );
+				this.byte2 = process.reserved.bindings.Number64_getByteOfNumber.call( this , arguments[0] , 2 );
+				this.byte3 = process.reserved.bindings.Number64_getByteOfNumber.call( this , arguments[0] , 3 );	
+			}
+			
         }
         else if ('boolean' == typeof arguments[0]) 
 		{
-            if (arguments[0]) 
+            if ( arguments[0] ) 
 			{
-                this.hexText = "0x0000000000000001";
+                this.byte0 = process.reserved.bindings.Number64_getByteOfNumber.call( this , 1 , 0 );
             }
             else 
 			{
-                //nop
+                this.byte0 = process.reserved.bindings.Number64_getByteOfNumber.call( this , 0 , 0 );
             }
         }
         else if ('string' == typeof arguments[0]) 
@@ -92,13 +128,32 @@ function Number64(arg_1, arg_2)
                 }
             }
 
-            this.hexText = process.reserved.bindings.Number64_fromString(input_text, nRadix);
+            process.reserved.bindings.Number64_fromString.call( this , input_text, nRadix );
         }
         else if ('object' == typeof arguments[0]) 
 		{
             if ( Number64.isNumber64( arguments[0] ) ) 
 			{
-                this.hexText = arguments[0].hexText;
+				this.signed = arguments[0].signed;
+				
+                this.byte0 = arguments[0].byte0;
+				this.byte1 = arguments[0].byte1;
+				this.byte2 = arguments[0].byte2;
+				this.byte3 = arguments[0].byte3;
+				
+				this.byte4 = arguments[0].byte4;
+				this.byte5 = arguments[0].byte5;
+				this.byte6 = arguments[0].byte6;
+				this.byte7 = arguments[0].byte7;
+            }
+			else if ( "Number32" == arguments[0].__TYPE__ ) 
+			{
+				this.signed = arguments[0].signed;
+				
+                this.byte0 = arguments[0].byte0;
+				this.byte1 = arguments[0].byte1;
+				this.byte2 = arguments[0].byte2;
+				this.byte3 = arguments[0].byte3;
             }
             else 
 			{
@@ -111,27 +166,6 @@ function Number64(arg_1, arg_2)
         }
     }
 
-    Object.defineProperty(
-        this,
-        "HighPart",
-        {
-            get: function () {
-                var HighPartText = "0x" + this.hexText.substring(0, 10);
-                return parseInt(HighPartText)
-            }
-        }
-    );
-
-    Object.defineProperty(
-        this,
-        "LowPart",
-        {
-            get: function () {
-                var LowPartText = "0x" + this.hexText.substring(10, 18);
-                return parseInt(LowPartText);
-            }
-        }
-    );
 }
 
 
@@ -159,43 +193,22 @@ Number64.prototype.toString = function (arg_radix)
 
     if ( 16 == radix ) 
 	{
-		if ( this.bits32 )
-		{
-			return this.hexText.substring( 2 + 8 );
-		}
-		else
-		{
-			return this.hexText.substring( 2 );
-		}
+		return process.reserved.bindings.Number64_toString(this, 16 );
     }
     else 
 	{
-        return process.reserved.bindings.Number64_toString(this.hexText, 10 );
-    }
-}
-
-Number64.prototype.toShortString = function (arg_radix) 
-{
-    var radix = arg_radix || 10;
-
-    if (16 == radix) 
-	{
-		return process.reserved.bindings.Number64_toShortString(this.hexText, 16);
-    }
-    else 
-	{
-        return process.reserved.bindings.Number64_toShortString(this.hexText, 10);
+        return process.reserved.bindings.Number64_toString(this, 10 );
     }
 }
 
 Number64.prototype.toJSNumber = function () 
 {
-    return process.reserved.bindings.Number64_toJSNumber(this.hexText);
+    return process.reserved.bindings.Number64_toJSNumber(this);
 }
 
 Number64.prototype.toNumber = function () 
 {
-    return process.reserved.bindings.Number64_toJSNumber(this.hexText);
+    return process.reserved.bindings.Number64_toJSNumber(this);
 }
 
 Number64.prototype.isZero = function () 
@@ -481,7 +494,7 @@ Number64.greaterThanOrEqualSigned32 = function ( arg_1 , arg_2 )
 
 Number64.prototype.compare = function (arg_other) 
 {
-    return process.reserved.bindings.Number64_cmp(this.hexText, cast2Number64(arg_other).hexText);
+    return process.reserved.bindings.Number64_cmp(this, cast2Number64(arg_other) );
 }
 Number64.prototype.cmp = Number64.prototype.compare;
 
@@ -490,12 +503,12 @@ Number64.compare = function ( arg_1 , arg_2 )
     var n1 = Number64( arg_1 );
 	var n2 = Number64( arg_2 );
 	
-	return process.reserved.bindings.Number64_cmp(n1.hexText, n2.hexText);
+	return process.reserved.bindings.Number64_cmp(n1 , n2 );
 }
 
 Number64.prototype.compareSigned = function (arg_other) 
 {
-    return process.reserved.bindings.Number64_scmp(this.hexText, cast2Number64(arg_other).hexText);
+    return process.reserved.bindings.Number64_scmp(this, cast2Number64(arg_other) );
 }
 
 Number64.compareSigned = function ( arg_1 , arg_2 ) 
@@ -503,12 +516,12 @@ Number64.compareSigned = function ( arg_1 , arg_2 )
     var n1 = Number64( arg_1 );
 	var n2 = Number64( arg_2 );
 	
-	return process.reserved.bindings.Number64_scmp(n1.hexText, n2.hexText);
+	return process.reserved.bindings.Number64_scmp(n1 , n2 );
 }
 
 Number64.prototype.compare32 = function (arg_other) 
 {
-    return process.reserved.bindings.Number64_cmp32(this.hexText, cast2Number64(arg_other).hexText);
+    return process.reserved.bindings.Number64_cmp32(this, cast2Number64(arg_other) );
 }
 Number64.prototype.cmp32 = Number64.prototype.compare32;
 
@@ -517,13 +530,13 @@ Number64.compare32 = function ( arg_1 , arg_2 )
     var n1 = Number64( arg_1 );
 	var n2 = Number64( arg_2 );
 	
-	return process.reserved.bindings.Number64_cmp32(n1.hexText, n2.hexText);
+	return process.reserved.bindings.Number64_cmp32(n1 , n2 );
 }
 Number64.cmp32 = Number64.compare32;
 
 Number64.prototype.compareSigned32 = function (arg_other) 
 {
-    return process.reserved.bindings.Number64_scmp32(this.hexText, cast2Number64(arg_other).hexText);
+    return process.reserved.bindings.Number64_scmp32(this, cast2Number64(arg_other) );
 }
 
 Number64.compareSigned32 = function ( arg_1 , arg_2 ) 
@@ -531,15 +544,25 @@ Number64.compareSigned32 = function ( arg_1 , arg_2 )
     var n1 = Number64( arg_1 );
 	var n2 = Number64( arg_2 );
 	
-	return process.reserved.bindings.Number64_scmp32(n1.hexText, n2.hexText);
+	return process.reserved.bindings.Number64_scmp32(n1 , n2 );
 }
 Number64.compareSigned32 = Number64.compareSigned32;
 
 
 Number64.prototype.add = function (arg_other)
 {
-    this.hexText = process.reserved.bindings.Number64_add(this.hexText, cast2Number64(arg_other).hexText);
-
+    var helper = process.reserved.bindings.Number64_add(this, cast2Number64(arg_other) );
+		
+    this.byte0 = helper.byte0;
+	this.byte1 = helper.byte1;
+	this.byte2 = helper.byte2;
+	this.byte3 = helper.byte3;
+				
+	this.byte4 = helper.byte4;
+	this.byte5 = helper.byte5;
+	this.byte6 = helper.byte6;
+	this.byte7 = helper.byte7;
+	
     return this;
 }
 
@@ -550,8 +573,18 @@ Number64.add = function ( item , other )
 
 Number64.prototype.addSigned = function (arg_other)
 {
-    this.hexText = process.reserved.bindings.Number64_addSigned(this.hexText, cast2Number64(arg_other).hexText);
-
+    var helper = process.reserved.bindings.Number64_addSigned(this, cast2Number64(arg_other) );
+	
+    this.byte0 = helper.byte0;
+	this.byte1 = helper.byte1;
+	this.byte2 = helper.byte2;
+	this.byte3 = helper.byte3;
+				
+	this.byte4 = helper.byte4;
+	this.byte5 = helper.byte5;
+	this.byte6 = helper.byte6;
+	this.byte7 = helper.byte7;
+	
     return this;
 }
 
@@ -563,8 +596,18 @@ Number64.addSigned = function ( item , other )
 
 Number64.prototype.sub = function (arg_other) 
 {
-    this.hexText = process.reserved.bindings.Number64_sub(this.hexText, cast2Number64(arg_other).hexText);
-
+    var helper = process.reserved.bindings.Number64_sub(this, cast2Number64(arg_other) );
+	
+	this.byte0 = helper.byte0;
+	this.byte1 = helper.byte1;
+	this.byte2 = helper.byte2;
+	this.byte3 = helper.byte3;
+				
+	this.byte4 = helper.byte4;
+	this.byte5 = helper.byte5;
+	this.byte6 = helper.byte6;
+	this.byte7 = helper.byte7;
+	
     return this;
 }
 
@@ -575,8 +618,18 @@ Number64.sub = function ( item , other )
 
 Number64.prototype.subSigned = function (arg_other) 
 {
-    this.hexText = process.reserved.bindings.Number64_subSigned(this.hexText, cast2Number64(arg_other).hexText);
-
+    var helper = process.reserved.bindings.Number64_subSigned(this, cast2Number64(arg_other) );
+	
+	this.byte0 = helper.byte0;
+	this.byte1 = helper.byte1;
+	this.byte2 = helper.byte2;
+	this.byte3 = helper.byte3;
+				
+	this.byte4 = helper.byte4;
+	this.byte5 = helper.byte5;
+	this.byte6 = helper.byte6;
+	this.byte7 = helper.byte7;
+	
     return this;
 }
 
@@ -587,8 +640,18 @@ Number64.subSigned = function ( item , other )
 
 Number64.prototype.mul = function (arg_other)
  {
-    this.hexText = process.reserved.bindings.Number64_mul(this.hexText, cast2Number64(arg_other).hexText);
-
+    var helper = process.reserved.bindings.Number64_mul(this, cast2Number64(arg_other) );
+	
+	this.byte0 = helper.byte0;
+	this.byte1 = helper.byte1;
+	this.byte2 = helper.byte2;
+	this.byte3 = helper.byte3;
+				
+	this.byte4 = helper.byte4;
+	this.byte5 = helper.byte5;
+	this.byte6 = helper.byte6;
+	this.byte7 = helper.byte7;
+	
     return this;
 }
 
@@ -599,8 +662,18 @@ Number64.mul = function ( item , other )
 
 Number64.prototype.div = function (arg_other)
  {
-    this.hexText = process.reserved.bindings.Number64_div(this.hexText, cast2Number64(arg_other).hexText);
-
+    var helper = process.reserved.bindings.Number64_div(this, cast2Number64(arg_other) );
+	
+	this.byte0 = helper.byte0;
+	this.byte1 = helper.byte1;
+	this.byte2 = helper.byte2;
+	this.byte3 = helper.byte3;
+				
+	this.byte4 = helper.byte4;
+	this.byte5 = helper.byte5;
+	this.byte6 = helper.byte6;
+	this.byte7 = helper.byte7;
+	
     return this;
 }
 
@@ -616,8 +689,18 @@ Number64.prototype.mod = function (arg_other)
 		throw new Error("arg_other must not be zero");
 	}
 	
-    this.hexText = process.reserved.bindings.Number64_mod(this.hexText, cast2Number64(arg_other).hexText);
-
+    var helper = process.reserved.bindings.Number64_mod(this, cast2Number64(arg_other) );
+	
+	this.byte0 = helper.byte0;
+	this.byte1 = helper.byte1;
+	this.byte2 = helper.byte2;
+	this.byte3 = helper.byte3;
+				
+	this.byte4 = helper.byte4;
+	this.byte5 = helper.byte5;
+	this.byte6 = helper.byte6;
+	this.byte7 = helper.byte7;
+	
     return this;
 }
 
@@ -633,8 +716,18 @@ Number64.mod = function ( item , other )
 
 Number64.prototype.not = function (arg_other) 
 {
-    this.hexText = process.reserved.bindings.Number64_not(this.hexText, cast2Number64(arg_other).hexText);
-
+    var helper = process.reserved.bindings.Number64_not(this, cast2Number64(arg_other) );
+	
+	this.byte0 = helper.byte0;
+	this.byte1 = helper.byte1;
+	this.byte2 = helper.byte2;
+	this.byte3 = helper.byte3;
+				
+	this.byte4 = helper.byte4;
+	this.byte5 = helper.byte5;
+	this.byte6 = helper.byte6;
+	this.byte7 = helper.byte7;
+	
     return this;
 }
 
@@ -645,8 +738,18 @@ Number64.not = function ( item , other )
 
 Number64.prototype.and = function (arg_other) 
 {
-    this.hexText = process.reserved.bindings.Number64_and(this.hexText, cast2Number64(arg_other).hexText);
-
+    var helper = process.reserved.bindings.Number64_and(this, cast2Number64(arg_other) );
+	
+	this.byte0 = helper.byte0;
+	this.byte1 = helper.byte1;
+	this.byte2 = helper.byte2;
+	this.byte3 = helper.byte3;
+				
+	this.byte4 = helper.byte4;
+	this.byte5 = helper.byte5;
+	this.byte6 = helper.byte6;
+	this.byte7 = helper.byte7;
+	
     return this;
 }
 
@@ -657,8 +760,18 @@ Number64.and = function ( item , other )
 
 Number64.prototype.or = function (arg_other) 
 {
-    this.hexText = process.reserved.bindings.Number64_or(this.hexText, cast2Number64(arg_other).hexText);
-
+    var helper = process.reserved.bindings.Number64_or(this, cast2Number64(arg_other) );
+	
+	this.byte0 = helper.byte0;
+	this.byte1 = helper.byte1;
+	this.byte2 = helper.byte2;
+	this.byte3 = helper.byte3;
+				
+	this.byte4 = helper.byte4;
+	this.byte5 = helper.byte5;
+	this.byte6 = helper.byte6;
+	this.byte7 = helper.byte7;
+	
     return this;
 }
 
@@ -669,8 +782,18 @@ Number64.or = function ( item , other )
 
 Number64.prototype.xor = function (arg_other) 
 {
-    this.hexText = process.reserved.bindings.Number64_xor(this.hexText, cast2Number64(arg_other).hexText);
-
+    var helper = process.reserved.bindings.Number64_xor(this, cast2Number64(arg_other) );
+	
+	this.byte0 = helper.byte0;
+	this.byte1 = helper.byte1;
+	this.byte2 = helper.byte2;
+	this.byte3 = helper.byte3;
+				
+	this.byte4 = helper.byte4;
+	this.byte5 = helper.byte5;
+	this.byte6 = helper.byte6;
+	this.byte7 = helper.byte7;
+	
     return this;
 }
 
@@ -681,8 +804,18 @@ Number64.xor = function ( item , other )
 
 Number64.prototype.shl = function (arg_other) 
 {
-    this.hexText = process.reserved.bindings.Number64_shl(this.hexText, cast2Number64(arg_other).hexText);
-
+    var helper = process.reserved.bindings.Number64_shl(this, cast2Number64(arg_other) );
+	
+	this.byte0 = helper.byte0;
+	this.byte1 = helper.byte1;
+	this.byte2 = helper.byte2;
+	this.byte3 = helper.byte3;
+				
+	this.byte4 = helper.byte4;
+	this.byte5 = helper.byte5;
+	this.byte6 = helper.byte6;
+	this.byte7 = helper.byte7;
+	
     return this;
 }
 Number64.prototype.shiftLeft = Number64.prototype.shl;
@@ -695,8 +828,18 @@ Number64.shl = Number64.shiftLeft;
 
 Number64.prototype.shr = function (arg_other) 
 {
-    this.hexText = process.reserved.bindings.Number64_shr(this.hexText, cast2Number64(arg_other).hexText);
-
+    var helper = process.reserved.bindings.Number64_shr(this, cast2Number64(arg_other) );
+	
+	this.byte0 = helper.byte0;
+	this.byte1 = helper.byte1;
+	this.byte2 = helper.byte2;
+	this.byte3 = helper.byte3;
+				
+	this.byte4 = helper.byte4;
+	this.byte5 = helper.byte5;
+	this.byte6 = helper.byte6;
+	this.byte7 = helper.byte7;
+	
     return this;
 }
 Number64.prototype.shiftRight = Number64.prototype.shr;
@@ -706,12 +849,6 @@ Number64.shiftRight = function ( item , other )
     return Number64(item).shiftRight(other);
 }
 Number64.shr = Number64.shiftRight;
-
-
-Number64.prototype.isNumber32 = function () 
-{
-    return (0 == parseInt(this.hexText.substring(0, 10)));
-}
 
 Number64.prototype.setBit = function ( index ) 
 {
@@ -754,99 +891,93 @@ Number64.testBit = function ( item , index )
 }
 
 
-Number64.prototype.cast2Number32 = function () 
-{
-	this.bits32 = true;
-    return this.and("0x00000000FFFFFFFF");
-}
-
 // cast
 Number64.prototype.toInt8 = function () 
 {
-    return process.reserved.bindings.Number64_toInt8(this.hexText);
+    return process.reserved.bindings.Number64_toInt8(this);
 }
 
 Number64.prototype.toUInt8 = function () 
 {
-    return process.reserved.bindings.Number64_toUInt8(this.hexText);
+    return process.reserved.bindings.Number64_toUInt8(this);
 }
 
 Number64.prototype.toInt16LE = function () 
 {
-    return process.reserved.bindings.Number64_toInt16LE(this.hexText);
+    return process.reserved.bindings.Number64_toInt16LE(this);
 }
 
 Number64.prototype.toInt16BE = function () 
 {
-    return process.reserved.bindings.Number64_toInt16BE(this.hexText);
+    return process.reserved.bindings.Number64_toInt16BE(this);
 }
 
 Number64.prototype.toUInt16LE = function () 
 {
-    return process.reserved.bindings.Number64_toUInt16LE(this.hexText);
+    return process.reserved.bindings.Number64_toUInt16LE(this);
 }
 
 Number64.prototype.toUInt16BE = function () 
 {
-    return process.reserved.bindings.Number64_toUInt16BE(this.hexText);
+    return process.reserved.bindings.Number64_toUInt16BE(this);
 }
 
 
 Number64.prototype.toInt32LE = function () 
 {
-    return process.reserved.bindings.Number64_toInt32LE(this.hexText);
+    return process.reserved.bindings.Number64_toInt32LE(this);
 }
 
 Number64.prototype.toInt32BE = function () 
 {
-    return process.reserved.bindings.Number64_toInt32BE(this.hexText);
+    return process.reserved.bindings.Number64_toInt32BE(this);
 }
 
 Number64.prototype.toUInt32LE = function () 
 {
-    return process.reserved.bindings.Number64_toUInt32LE(this.hexText);
+    return process.reserved.bindings.Number64_toUInt32LE(this);
 }
 
 Number64.prototype.toUInt32BE = function () 
 {
-    return process.reserved.bindings.Number64_toUInt32BE(this.hexText);
+    return process.reserved.bindings.Number64_toUInt32BE(this);
 }
 
 
 Number64.prototype.toFloatLE = function () 
 {
-    return process.reserved.bindings.Number64_toFloatLE(this.hexText);
+    return process.reserved.bindings.Number64_toFloatLE(this);
 }
 
 Number64.prototype.toFloatBE = function () 
 {
-    return process.reserved.bindings.Number64_toFloatBE(this.hexText);
+    return process.reserved.bindings.Number64_toFloatBE(this);
 }
 
 Number64.prototype.toDoubleLE = function () 
 {
-    return process.reserved.bindings.Number64_toDoubleLE(this.hexText);
+    return process.reserved.bindings.Number64_toDoubleLE(this);
 }
 
 Number64.prototype.toDoubleBE = function () 
 {
-    return process.reserved.bindings.Number64_toDoubleBE(this.hexText);
+    return process.reserved.bindings.Number64_toDoubleBE(this);
 }
 
 // swap
 Number64.swap16 = function Number64_swap16(value) 
 {
-    return process.reserved.bindings.Number64_swap16(Number64(16).hexText);
+    return process.reserved.bindings.Number64_swap16(Number64(16) );
 }
 
 Number64.swap32 = function Number64_swap32(value) 
 {
-    return process.reserved.bindings.Number64_swap32(Number64(16).hexText);
+    return process.reserved.bindings.Number64_swap32(Number64(16) );
 }
 
 Number64.swap64 = function Number64_swap64(value) 
 {
-    return Number64(process.reserved.bindings.Number64_swap64(Number64(16).hexText));
+    return Number64(process.reserved.bindings.Number64_swap64(Number64(16) ));
 }
 
 

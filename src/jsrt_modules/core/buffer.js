@@ -2886,7 +2886,7 @@ Buffer.prototype.readNativePointer = function(offset)
 		}
 		else
 		{
-			return Number64(process.reserved.bindings.buffer_readUInt32LE(this.address, offset || 0));
+			return Number32(process.reserved.bindings.buffer_readUInt32LE(this.address, offset || 0));
 		}
 
 	}
@@ -2920,7 +2920,7 @@ Buffer.readNativePointer = function(arg_address, offset)
 		}
 		else
 		{
-			return Number64(process.reserved.bindings.buffer_readUInt32LE(address, offset || 0));
+			return Number32(process.reserved.bindings.buffer_readUInt32LE(address, offset || 0));
 		}
 	}
 }
@@ -2942,11 +2942,11 @@ Buffer.prototype.writeNativePointer = function(value, offset)
 	{
 		if (process.wow64)
 		{
-			process.reserved.bindings.buffer_writeUInt64LE(this.address, offset || 0, Number64(value));
+			process.reserved.bindings.buffer_writeUInt64LE(this.address, offset || 0, Number32(value));
 		}
 		else
 		{
-			process.reserved.bindings.buffer_writeUInt32LE(this.address, offset || 0, Number64(value));
+			process.reserved.bindings.buffer_writeUInt32LE(this.address, offset || 0, Number32(value));
 		}
 	}
 
@@ -2979,11 +2979,11 @@ Buffer.writeNativePointer = function(arg_address, value, offset)
 	{
 		if (process.wow64)
 		{
-			process.reserved.bindings.buffer_writeUInt64LE(address, offset || 0, Number64(value));
+			process.reserved.bindings.buffer_writeUInt64LE(address, offset || 0, Number32(value));
 		}
 		else
 		{
-			process.reserved.bindings.buffer_writeUInt32LE(address, offset || 0, Number64(value));
+			process.reserved.bindings.buffer_writeUInt32LE(address, offset || 0, Number32(value));
 		}
 	}
 }

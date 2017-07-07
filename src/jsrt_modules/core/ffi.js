@@ -852,6 +852,10 @@ function _castTo_char(argValue)
 	{
         return argValue.toInt8();
     }
+	else if (Number32.isNumber32(argValue)) 
+	{
+        return argValue.toInt8();
+    }
     else 
 	{
         throw new Error(sprintf("want char but receive %s" , typeof argValue));
@@ -878,6 +882,10 @@ function _castTo_uchar(argValue)
 	{
         return argValue.toUInt8;
     }
+	else if (Number32.isNumber32(argValue)) 
+	{
+        return argValue.toUInt8;
+    }
     else 
 	{
         throw new Error(sprintf("want uchar but receive %s" , typeof argValue));
@@ -894,6 +902,10 @@ function _castTo_short(argValue)
 	{
         return argValue.toInt16LE;
     }
+	else if (Number32.isNumber32(argValue)) 
+	{
+        return argValue.toInt16LE;
+    }
     else 
 	{
         throw new Error(sprintf("want short but receive %s" , typeof argValue));
@@ -907,6 +919,10 @@ function _castTo_ushort(argValue)
         return process.reserved.bindings.Number64_toUInt16LE(argValue);
     }
     else if (Number64.isNumber64(argValue)) 
+	{
+        return argValue.toUInt16LE;
+    }
+	else if (Number32.isNumber32(argValue)) 
 	{
         return argValue.toUInt16LE;
     }
@@ -937,6 +953,10 @@ function _castTo_long(argValue)
 	{
         return argValue;
     }
+	else if (Number32.isNumber32(argValue)) 
+	{
+        return argValue;
+    }
     else 
 	{
         throw new Error(sprintf("want long but receive %s" , typeof argValue));
@@ -950,6 +970,10 @@ function _castTo_ulong(argValue)
         return process.reserved.bindings.Number64_toInt32LE(argValue);
     }
     else if (Number64.isNumber64(argValue)) 
+	{
+        return argValue;
+    }
+	else if (Number32.isNumber32(argValue)) 
 	{
         return argValue;
     }
@@ -1023,6 +1047,10 @@ function _castTo_ulong_ptr(argValue)
 	{
         return argValue;
     }
+	else if ( Number32.isNumber32(argValue) ) 
+	{
+        return argValue;
+    }
 	else if ( Buffer.isBuffer(argValue) )
 	{
         return argValue.address;
@@ -1067,6 +1095,10 @@ function _castTo_handle(argValue)
         return null;
     }
     else if ( Number64.isNumber64(argValue) ) 
+	{
+        return argValue;
+    }
+	else if ( Number32.isNumber32(argValue) ) 
 	{
         return argValue;
     }
@@ -1243,7 +1275,8 @@ function rawArgsToTypedArgs(argTypes, rawArgs)
         }
         else if ("ulonglong" == argTypes[typeIndex]) 
 		{
-            if ("x64" != process.arch) {
+            if ("x64" != process.arch) 
+			{
                 neededRawArgc++;
             }
         }
@@ -1358,54 +1391,55 @@ function rawArgsToTypedArgs(argTypes, rawArgs)
         }
         else if ("long_ptr" == argTypes[typeIndex]) 
 		{
-            helperValue = Number64(rawArgs[rawIndex]);
-
-            if ("x64" != process.arch) 
+            if ("x64" == process.arch) 
 			{
-                helperValue.cast2Number32();
+                typedArgv.push( Number64( rawArgs[rawIndex] ) );
             }
-
-            typedArgv.push(helperValue);
+			else
+			{
+				typedArgv.push( Number32( rawArgs[rawIndex] ) );
+			}
 
             rawIndex++;
         }
         else if ("ulong_ptr" == argTypes[typeIndex]) 
 		{
-            helperValue = Number64(rawArgs[rawIndex]);
-
-            if ("x64" != process.arch) 
+           if ("x64" == process.arch) 
 			{
-                helperValue.cast2Number32();
+                typedArgv.push( Number64( rawArgs[rawIndex] ) );
             }
-
-            typedArgv.push(helperValue);
+			else
+			{
+				typedArgv.push( Number32( rawArgs[rawIndex] ) );
+			}
 
             rawIndex++;
         }
         else if ("buffer" == argTypes[typeIndex]) 
 		{
             // we do not unknown the size , same as handle
-            helperValue = Number64(rawArgs[rawIndex]);
-
-            if ("x64" != process.arch) 
+			
+            if ("x64" == process.arch) 
 			{
-                helperValue.cast2Number32();
+                typedArgv.push( Number64( rawArgs[rawIndex] ) );
             }
-
-            typedArgv.push(helperValue);
+			else
+			{
+				typedArgv.push( Number32( rawArgs[rawIndex] ) );
+			}
 
             rawIndex++;
         }
         else if ("handle" == argTypes[typeIndex]) 
 		{
-            helperValue = Number64(rawArgs[rawIndex]);
-
-            if ("x64" != process.arch) 
+            if ("x64" == process.arch) 
 			{
-                helperValue.cast2Number32();
+                typedArgv.push( Number64( rawArgs[rawIndex] ) );
             }
-
-            typedArgv.push(helperValue);
+			else
+			{
+				typedArgv.push( Number32( rawArgs[rawIndex] ) );
+			}
 
             rawIndex++;
         }
@@ -1492,14 +1526,14 @@ function _fixRawValueToTypedValue(returnType, rawValue)
         || ("ulong_ptr" == returnType)
     )
 	{
-        var value64 = Number64(rawValue);
-
-        if ("x64" != process.arch) 
+        if ("x64" == process.arch) 
 		{
-            value64.cast2Number32();
+            return Number64(rawValue);
         }
-
-        return value64;
+		else
+		{
+			return Number32(rawValue);
+		}
     }
 
     return rawValue;

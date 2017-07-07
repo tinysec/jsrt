@@ -282,6 +282,25 @@ function unserialize_to_Number64(input)
 	return Number64(input.v);
 }
 
+function serialize_from_Number32(input)
+{
+	return {
+			"t": "n4",
+			"v": '0x' + input.toString(16)
+	};
+}
+
+function unserialize_to_Number32(input)
+{
+	if ("string" != typeof input.v)
+	{
+		throw new Error('invalid data');
+	}
+
+	return Number32(input.v);
+}
+
+
 function serialize_from_array(input, level)
 {
 	var output = [];
@@ -744,6 +763,10 @@ function recu_serialize(input, level)
 		{
 			return serialize_from_Number64(input);
 		}
+		else if ( Number64.isNumber32( input ) )
+		{
+			return serialize_from_Number32(input);
+		}
 
 		return serialize_from_object(input, level);
 	}
@@ -826,6 +849,11 @@ function recu_unserialize(input)
 	else if ("n6" === input.t)
 	{
 		return unserialize_to_Number64(input);
+
+	}
+	else if ("n4" === input.t)
+	{
+		return unserialize_to_Number32(input);
 
 	}
 	else if ("ob" === input.t)

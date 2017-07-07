@@ -26,21 +26,21 @@ var ffi_ntdll = ffi.loadAndBatchBind("ntdll.dll" , [
 
 function CTL_CODE(DeviceType, FunctionIndex, Method, Access)
 {
-	var param_DeviceType = Number64( DeviceType ).shiftLeft(16);
-	var param_Access = Number64( Access ).shiftLeft(14);
-	var param_FunctionIndex = Number64( FunctionIndex ).shiftLeft(2);
+	var param_DeviceType = Number32( DeviceType ).shiftLeft(16);
+	var param_Access = Number32( Access ).shiftLeft(14);
+	var param_FunctionIndex = Number32( FunctionIndex ).shiftLeft(2);
 	
-	var IoControlCode = Number64( param_DeviceType );
+	var IoControlCode = Number32( param_DeviceType );
 	
 	IoControlCode.or( param_Access ).or( param_FunctionIndex).or( Method );
 
-	return IoControlCode.cast2Number32();
+	return IoControlCode;
 }
 exports.CTL_CODE = CTL_CODE;
 
 function METHOD_FROM_CTL_CODE(ctrlCode)
 {
-	var IoControlCode = Number64( ctrlCode );
+	var IoControlCode = Number32( ctrlCode );
 	
 	IoControlCode.and( 3 );
 	
@@ -50,7 +50,7 @@ exports.METHOD_FROM_CTL_CODE = METHOD_FROM_CTL_CODE;
 
 function DEVICE_TYPE_FROM_CTL_CODE(ctrlCode)
 {
-	var IoControlCode = Number64( ctrlCode );
+	var IoControlCode = Number32( ctrlCode );
 	
 	IoControlCode.and( 0xffff0000 );
 	IoControlCode.shiftRight( 16 );

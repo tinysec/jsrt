@@ -712,7 +712,11 @@ function _handle_type_d(option, argv)
 		{
 			if ( Number64.isNumber64( argv[0]) )
 			{
-				strFinal = argv[0].toShortString(10);
+				strFinal = argv[0].toString(10);
+			}
+			else if ( Number32.isNumber32( argv[0]) )
+			{
+				strFinal = argv[0].toString(10);
 			}
 			else if ('function' === typeof argv[0].toString)
 			{
@@ -819,6 +823,10 @@ function _handle_type_i(option, argv)
 		else if ('object' == typeof argv[0])
 		{
 			if ( Number64.isNumber64( argv[0] ) )
+			{
+				strFinal = argv[0].toString(10);
+			}
+			else if ( Number32.isNumber32( argv[0] ) )
 			{
 				strFinal = argv[0].toString(10);
 			}
@@ -958,6 +966,16 @@ function _handle_type_p(option, argv)
 					break;
 				}
 			}
+			else if ( Number32.isNumber32( argv[0] ) )
+			{
+				strFinal = argv[0].toString(16);
+
+				if ('X' === option.type)
+				{
+					strFinal = strFinal.toUpperCase();
+					break;
+				}
+			}
 			else
 			{
 				nValue = Number(argv[0]);
@@ -1072,7 +1090,11 @@ function _handle_type_u(option, argv)
 		{
 			if ( Number64.isNumber64() )
 			{
-				strFinal = argv[0].toShortString(10);
+				strFinal = argv[0].toString(10);
+			}
+			else if ( Number32.isNumber32() )
+			{
+				strFinal = argv[0].toString(10);
 			}
 			else if ('function' === typeof argv[0].toString)
 			{
@@ -1155,7 +1177,11 @@ function _handle_type_x(option, argv)
 			}
 			else if ( Number64.isNumber64( argv[0] ) )
 			{
-				strFinal = argv[0].toShortString(16);
+				strFinal = argv[0].toString(16);
+			}
+			else if ( Number32.isNumber32( argv[0] ) )
+			{
+				strFinal = argv[0].toString(16);
 			}
 			else
 			{
@@ -1512,6 +1538,19 @@ function _inspect_Number64(input, level)
 	return strTab + "0x" + input.toString(16);
 }
 
+function _inspect_Number32(input, level)
+{
+	var strTab = '';
+	var index = 0;
+
+	for (index = 0; index < level; index++)
+	{
+		strTab += '\t';
+	}
+
+	return strTab + "0x" + input.toString(16);
+}
+
 function _inspect_moment(input, level)
 {
 	var strTab = '';
@@ -1587,6 +1626,12 @@ function isItemNeedIncLevel(input)
 		if ( Number64.isNumber64( input ) )
 		{
 			// isNumber64
+			return false;
+		}
+		
+		if ( Number32.isNumber32( input ) )
+		{
+			// Number32
 			return false;
 		}
 
@@ -1669,6 +1714,12 @@ function isItemNeedQuota(input)
 		if ( Number64.isNumber64( input ) )
 		{
 			// isNumber64
+			return false;
+		}
+		
+		if ( Number32.isNumber32( input ) )
+		{
+			// Number32
 			return false;
 		}
 
@@ -1880,6 +1931,11 @@ function _inspect(input, level)
 		if ( Number64.isNumber64( input ) )
 		{
 			return _inspect_Number64(input);
+		}
+		
+		if ( Number32.isNumber32( input ) )
+		{
+			return _inspect_Number32(input);
 		}
 
 		if (input._isAMomentObject)

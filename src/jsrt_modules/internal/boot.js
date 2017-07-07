@@ -345,13 +345,16 @@
 		
 		// zero-depends
 		pre_init_host();
-
+	
+		__GLOBAL["Number32"] = NativeModule.require("number32");
 		__GLOBAL["Number64"] = NativeModule.require("number64");
 		
 		init_console();
+
 	
 		__GLOBAL["Buffer"] = NativeModule.require("Buffer");
 		
+
 		// post init process
 		post_init_process();
 	
@@ -359,6 +362,7 @@
 		NativeModule.require("internal/extend");
 
 		NativeModule.require("host/common");
+	
 
         return 0;
     }
