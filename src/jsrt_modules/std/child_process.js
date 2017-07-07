@@ -5,8 +5,7 @@ const base = require("base");
 
 const printf = require("cprintf").printf;
 const sprintf = require("cprintf").sprintf;
-const KdPrint = require("cprintf").KdPrint;
-const DbgPrint = require("cprintf").DbgPrint;
+
 
 const path = require("path");
 
@@ -629,9 +628,7 @@ function help_child_process_spawn( param_commandline , param_options )
 			arg_lpProcessInformation = Buffer.alloc( 16 );
 		}
 		
-		KdPrint("[CreateProcess] application='%s'\n" , arg_application );
-		KdPrint("[CreateProcess] commandline='%s'\n" , arg_commandline );
-			
+
 		bFlag = ffi_kernel32.CreateProcessW(
 				arg_application ,
 				arg_lpCommandline ,
@@ -911,8 +908,6 @@ function help_child_process_capture( child , arg_options )
 				if ( ffi_kernel32.GetTickCount() - startTick >= option_timeout )
 				{
 					capture.timeout = true;
-					
-					KdPrint("capture timeout is reach\n");
 					break;
 				}
 			}

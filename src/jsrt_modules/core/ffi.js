@@ -5,9 +5,10 @@ const _ = require("underscore");
 const assert = require("assert");
 const path = require("path");
 
-const printf = require("cprintf").printf;
+
 const sprintf = require("cprintf").sprintf;
-const KdPrint = require("cprintf").KdPrint;
+const printf = require("cprintf").printf;
+const vprintf = require("cprintf").vprintf;
 
 // path
 
@@ -285,25 +286,11 @@ function buildSearchPaths()
     var searchPaths = [];
     var testPath = '';
 
-
-    testPath = process.currentDirectory.toLowerCase();
-    if (-1 == searchPaths.indexOf(testPath)) 
-	{
-        searchPaths.push(testPath);
-    }
-
     testPath = process.execDirectory.toLowerCase();
     if (-1 == searchPaths.indexOf(testPath)) 
 	{
         searchPaths.push(testPath);
     }
-
-    searchPaths = addEnvPaths(searchPaths, "Path");
-
-    searchPaths = _.filter(searchPaths, function (item) 
-	{
-        return (0 != item.length) && path.folderExists(item);
-    });
 
     searchPaths.forEach(function (item, index, thisArray) 
 	{
@@ -374,6 +361,19 @@ function buildSearchPaths()
         }
 
     });
+	
+	testPath = process.currentDirectory.toLowerCase();
+    if (-1 == searchPaths.indexOf(testPath)) 
+	{
+        searchPaths.push(testPath);
+    }
+	
+	searchPaths = addEnvPaths(searchPaths, "Path");
+
+    searchPaths = _.filter(searchPaths, function (item) 
+	{
+        return (0 != item.length) && path.folderExists(item);
+    });
 
     return searchPaths;
 }
@@ -394,7 +394,7 @@ function _resolveFile(arg_name) {
     }
 
     searchPaths = buildSearchPaths();
-
+	
     // add 
     for (index = 0; index < searchPaths.length; index++) 
 	{
@@ -1518,8 +1518,6 @@ function ffi_loadLibrary(arg_name)
         throw new Error(sprintf("not found %s" , arg_name));
     }
 	
-	//KdPrint("[ffi] %s resolved to %s\n" , arg_name , resolvedName );
-
     hModule = Number64(process.reserved.bindings.ffi_loadLibrary(resolvedName));
 	
 	if ( hModule.isZero() )

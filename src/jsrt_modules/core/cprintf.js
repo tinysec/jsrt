@@ -74,14 +74,14 @@ function printf()
 }
 exports.printf = printf;
 
-function KdPrint()
+function vprintf()
 {
 	if ( process.verbose )
 	{
 		return printf.apply(this, arguments);
 	}
 }
-exports.KdPrint = KdPrint;
+exports.vprintf = vprintf;
 
 function DbgPrint()
 {
@@ -119,6 +119,15 @@ function DbgPrint()
 	}
 }
 exports.DbgPrint = DbgPrint;
+
+function KdPrint()
+{
+	if ( process.verbose )
+	{
+		return DbgPrint.apply(this, arguments);
+	}
+}
+exports.KdPrint = KdPrint;
 
 //-----------------------------------------------------------------------------------------------------------------------
 

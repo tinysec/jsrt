@@ -3,7 +3,7 @@ const _ = require("underscore");
 
 const printf = require("cprintf").printf;
 const sprintf = require("cprintf").sprintf;
-const KdPrint = require("cprintf").KdPrint;
+
 
 const path = require("path");
 

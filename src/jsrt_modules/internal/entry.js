@@ -5,7 +5,6 @@
 
     const printf = require("cprintf").printf;
     const sprintf = require("cprintf").sprintf;
-    const KdPrint = require("cprintf").KdPrint;
 
     const _ = require("underscore");
 
@@ -288,15 +287,11 @@
             }
             else 
 			{
-                KdPrint("[jsrt] verbose mode off\n");
+                printf("[jsrt] verbose mode off\n");
             }
 
             process.verbose = process.execArgs.verbose || false;
         }
-		
-		
-		//KdPrint( "execArgv = %s\n", process.execArgv );
-        //KdPrint( "execArgs = %s\n", process.execArgs );
 		
 		//
 		// convert argv to args
@@ -322,10 +317,6 @@
 				process.args[argKey] = argValue;
 			}
         }
-		
-		// KdPrint("argv = %s\n", process.argv );
-       // KdPrint("args = %s\n", process.args );
-		
 
         // --version
         if (process.execArgs.version) 
@@ -345,7 +336,6 @@
             // process execArgs
             if (process.execArgs.eval) 
 			{
-                KdPrint("eval mode\n");
                 return Module.staticRunEval();
             }
             else 

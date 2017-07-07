@@ -6,7 +6,6 @@ const base = require("base");
 
 const printf = require("cprintf").printf;
 const sprintf = require("cprintf").sprintf;
-const KdPrint = require("cprintf").KdPrint;
 
 const fs = require("fs");
 

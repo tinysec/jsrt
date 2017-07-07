@@ -5,8 +5,7 @@ const assert = require("assert");
 
 const printf = require("cprintf").printf;
 const sprintf = require("cprintf").sprintf;
-const KdPrint = require("cprintf").KdPrint;
-	
+
 // print as dml
 
 //------------------------------------------------------------------------------------------------------------
