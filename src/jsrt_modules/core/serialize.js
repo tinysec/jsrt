@@ -763,7 +763,7 @@ function recu_serialize(input, level)
 		{
 			return serialize_from_Number64(input);
 		}
-		else if ( Number64.isNumber32( input ) )
+		else if ( Number32.isNumber32( input ) )
 		{
 			return serialize_from_Number32(input);
 		}
