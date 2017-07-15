@@ -712,6 +712,8 @@ function fs_unlink( arg_path )
 }
 exports.unlink = fs_unlink;
 exports.rmfile = fs_unlink;
+exports.deleteFile = fs_unlink;
+
 
 function fs_readdir( arg_path )
 {
@@ -816,6 +818,67 @@ function fs_rmdir( arg_path )
 	return recu_fs_rmdir( param_path );
 }
 exports.rmdir = fs_rmdir;
+exports.deleteFolder = fs_rmdir;
+
+
+function recu_fs_copyFolder( arg_src , arg_dest )
+{
+	var nameArray = fs_readdir( arg_src );
+	
+	var index = 0;
+	
+	var srcItem = '';
+	var destItem = '';
+	
+	var stats = null;
+	
+	if ( !path.existsFolder(arg_dest) )
+	{
+		fs_mkdir( arg_dest );
+	}
+
+	if ( 0 == nameArray.length )
+	{
+		return true;
+	}
+	
+	for ( index = 0; index < nameArray.length; index++ )
+	{
+		srcItem = path.combine( arg_src , nameArray[index] );
+		destItem = path.combine( arg_dest , nameArray[index] );
+		
+		stats = fs_stat( srcItem );
+		if ( stats.isFolder )
+		{
+			recu_fs_copyFolder( srcItem , destItem );
+		}
+		else
+		{
+			fs_copyFile( srcItem , destItem );
+		}
+	}
+	
+	return true;
+}
+
+
+function fs_copyFolder( arg_src , arg_dest )
+{
+	assert( _.isString( arg_src) , "path must be string" );
+	assert( _.isString( arg_dest) , "path must be string" );
+	
+	var param_src = path.normalize( arg_src );
+	var param_dest = path.normalize( arg_dest );
+	
+	if ( !path.existsFolder(arg_src) )
+	{
+		throw new Error(sprintf("%s is not exists" , arg_src ) );
+	}
+
+	return recu_fs_copyFolder( param_src ,  param_dest);
+}
+exports.copyFolder = fs_copyFolder;
+exports.copyDir = fs_copyFolder;
 
 
 function main(  )

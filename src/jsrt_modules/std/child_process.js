@@ -1264,6 +1264,11 @@ function execSync( commandline , options )
 		child = null;
 	}
 	
+	if ( !capture )
+	{
+		return "";
+	}
+	
 	return capture.stdout;
 }
 exports.execSync = execSync;
@@ -1308,6 +1313,11 @@ function shell_execSync( commandline , options )
 		help_close_handles( child );
 		
 		child = null;
+	}
+	
+	if ( !capture )
+	{
+		return "";
 	}
 	
 	return capture.stdout;
