@@ -5,7 +5,7 @@ const base = require("base");
 
 const printf = require("cprintf").printf;
 const sprintf = require("cprintf").sprintf;
-
+const vprintf = require("cprintf").vprintf;
 
 const path = require("path");
 
@@ -112,11 +112,11 @@ function resolveFile(arg_name)
 
     var findName = path.normalize(arg_name);
 
-    if (path.fileExists(findName)) 
+    if ( path.fileExists(findName) ) 
 	{
         return findName;
     }
-
+	
     searchPaths = buildSearchPaths();
 
     // add 
@@ -256,12 +256,18 @@ function help_child_process_spawn( param_commandline , param_options )
 	{	
 		assert( _.isString( arguments[0] )  , "invalid arguments[0]" );
 		
-
 		cmdlineArray = base.cmdlineToArgv( arguments[0] );
-		
+
 		if ( cmdlineArray.length >= 1 )
 		{
 			arg_application = resolveFile( cmdlineArray[0] );
+			
+			if ( !arg_application )
+			{
+				vprintf("not found application \"%s\"\n" , cmdlineArray[0] );
+				return null;
+			}
+			
 			arg_userApplication = arg_application;
 			
 			cmdlineArray.shift();
@@ -628,6 +634,8 @@ function help_child_process_spawn( param_commandline , param_options )
 			arg_lpProcessInformation = Buffer.alloc( 16 );
 		}
 		
+		//vprintf("arg_application='%s'\n" , arg_application );
+		//vprintf("arg_lpCommandline='%s'\n" , arg_lpCommandline );
 
 		bFlag = ffi_kernel32.CreateProcessW(
 				arg_application ,
