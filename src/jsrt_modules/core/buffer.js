@@ -827,7 +827,7 @@ Buffer.readInt8Array = function(arg_address, arg_offset, arg_count)
 		address = arg_address;
 	}
 	
-	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
+	assert( _.isUndefined(arg_offset) || _.isNumber(arg_offset) || Number64.isNumber64(arg_offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
 
@@ -894,7 +894,7 @@ Buffer.readUInt8Array = function(arg_address, arg_offset, arg_count)
 		address = arg_address;
 	}
 	
-	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
+	assert( _.isUndefined(arg_offset) || _.isNumber(arg_offset) || Number64.isNumber64(arg_offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
 
@@ -960,7 +960,7 @@ Buffer.readInt16BEArray = function(arg_address, arg_offset, arg_count)
 		address = arg_address;
 	}
 	
-	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
+	assert( _.isUndefined(arg_offset) || _.isNumber(arg_offset) || Number64.isNumber64(arg_offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
 
@@ -1027,7 +1027,7 @@ Buffer.readInt16LEArray = function(arg_address, arg_offset, arg_count)
 		address = arg_address;
 	}
 	
-	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
+	assert( _.isUndefined(arg_offset) || _.isNumber(arg_offset) || Number64.isNumber64(arg_offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
 
@@ -1094,7 +1094,7 @@ Buffer.readUInt16BEArray = function(arg_address, arg_offset, arg_count)
 		address = arg_address;
 	}
 	
-	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
+	assert( _.isUndefined(arg_offset) || _.isNumber(arg_offset) || Number64.isNumber64(arg_offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
 
@@ -1161,7 +1161,7 @@ Buffer.readUInt16LEArray = function(arg_address, arg_offset, arg_count)
 		address = arg_address;
 	}
 	
-	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
+	assert( _.isUndefined(arg_offset) || _.isNumber(arg_offset) || Number64.isNumber64(arg_offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
 
@@ -1228,7 +1228,7 @@ Buffer.readInt32BEArray = function(arg_address, arg_offset, arg_count)
 		address = arg_address;
 	}
 	
-	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
+	assert( _.isUndefined(arg_offset) || _.isNumber(arg_offset) || Number64.isNumber64(arg_offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
 
@@ -1294,7 +1294,7 @@ Buffer.readInt32LEArray = function(arg_address, arg_offset, arg_count)
 		address = arg_address;
 	}
 	
-	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
+	assert( _.isUndefined(arg_offset) || _.isNumber(arg_offset) || Number64.isNumber64(arg_offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
 
@@ -1360,7 +1360,7 @@ Buffer.readUInt32BEArray = function(arg_address, arg_offset, arg_count)
 		address = arg_address;
 	}
 	
-	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
+	assert( _.isUndefined(arg_offset) || _.isNumber(arg_offset) || Number64.isNumber64(arg_offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
 
@@ -1426,7 +1426,7 @@ Buffer.readUInt32LEArray = function(arg_address, arg_offset, arg_count)
 		address = arg_address;
 	}
 	
-	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
+	assert( _.isUndefined(arg_offset) || _.isNumber(arg_offset) || Number64.isNumber64(arg_offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
 
@@ -1492,7 +1492,7 @@ Buffer.readInt64BEArray = function(arg_address, arg_offset, arg_count)
 		address = arg_address;
 	}
 	
-	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
+	assert( _.isUndefined(arg_offset) || _.isNumber(arg_offset) || Number64.isNumber64(arg_offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
 
@@ -1558,7 +1558,7 @@ Buffer.readInt64LEArray = function(arg_address, arg_offset, arg_count)
 		address = arg_address;
 	}
 	
-	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
+	assert( _.isUndefined(arg_offset) || _.isNumber(arg_offset) || Number64.isNumber64(arg_offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
 
@@ -1624,7 +1624,7 @@ Buffer.readUInt64BEArray = function(arg_address, arg_offset, arg_count)
 		address = arg_address;
 	}
 	
-	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
+	assert( _.isUndefined(arg_offset) || _.isNumber(arg_offset) || Number64.isNumber64(arg_offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
 
@@ -1690,7 +1690,7 @@ Buffer.readUInt64LEArray = function(arg_address, arg_offset, arg_count)
 		address = arg_address;
 	}
 	
-	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
+	assert( _.isUndefined(arg_offset) || _.isNumber(arg_offset) || Number64.isNumber64(arg_offset) , "invalid offset" );
 	
 	assert(_.isNumber(arg_count));
 
