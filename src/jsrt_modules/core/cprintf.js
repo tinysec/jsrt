@@ -1535,7 +1535,7 @@ function _inspect_Number64(input, level)
 		strTab += '\t';
 	}
 
-	return strTab + "0x" + input.toString(16);
+	return strTab + "0x" + process.reserved.bindings.Number64_toString( input , 16 );;
 }
 
 function _inspect_Number32(input, level)
@@ -1548,7 +1548,7 @@ function _inspect_Number32(input, level)
 		strTab += '\t';
 	}
 
-	return strTab + "0x" + input.toString(16);
+	return strTab + "0x" + process.reserved.bindings.Number32_toString( input , 16 );;
 }
 
 function _inspect_moment(input, level)

@@ -4,6 +4,7 @@ const base = require("base");
 
 const printf = require("cprintf").printf;
 const sprintf = require("cprintf").sprintf;
+const vprintf = require("cprintf").vprintf;
 
 
 const path = require("path");

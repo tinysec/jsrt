@@ -40,8 +40,8 @@
             return cachedModule.exports;
         }
 
-        var buildInFileInfo = process.reserved.bindings.module_findInternalFile(requestName);
-        if (!buildInFileInfo) 
+        var builtInFileInfo = process.reserved.bindings.module_findInternalFile(requestName);
+        if (!builtInFileInfo) 
 		{
             throw new Error("not found build-in lib " + requestName);
         }
@@ -54,16 +54,17 @@
 
         try 
 		{
-            NewModule._loadFromContent(buildInFileInfo.content, buildInFileInfo.name);
+            NewModule._loadFromContent(builtInFileInfo.content, builtInFileInfo.name);
         }
         catch (err) 
 		{
             delete NativeModule._cache[requestName];
-            throw err;
+			
+			throw new Error("load builtIn " + requestName + " error " + err );
         }
 		
-		buildInFileInfo.content = null;
-		buildInFileInfo = null;
+		builtInFileInfo.content = null;
+		builtInFileInfo = null;
 		
         return NewModule.exports;
     }

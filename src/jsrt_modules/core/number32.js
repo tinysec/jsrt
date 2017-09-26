@@ -212,25 +212,22 @@ Number32.prototype.equal = function (arg_other)
 {
     return (0 == this.compare(arg_other));
 }
-Number32.prototype.eq = Number32.prototype.equal;
+
 
 Number32.equal = function ( arg_1 , arg_2 ) 
 {
     return ( 0 == Number32.compare(arg_1 , arg_2 ) );
 }
-Number32.eq = Number32.equal;
 
 Number32.prototype.notEqual = function (arg_other) 
 {
     return (0 != this.compare(arg_other));
 }
-Number32.prototype.neq = Number32.prototype.notEqual;
 
 Number32.notEqual = function ( arg_1 , arg_2 ) 
 {
    return ( 0 != Number32.compare(arg_1 , arg_2 ) );
 }
-Number32.neq = Number32.notEqual;
 
 Number32.prototype.lessThan = function (arg_other) 
 {
@@ -347,7 +344,6 @@ Number32.prototype.compare = function (arg_other)
 {
     return process.reserved.bindings.Number32_cmp(this, cast2Number32(arg_other) );
 }
-Number32.prototype.cmp = Number32.prototype.compare;
 
 Number32.compare = function ( arg_1 , arg_2 ) 
 {
@@ -517,6 +513,23 @@ Number32.prototype.not = function (arg_other)
 Number32.not = function ( item , other ) 
 {
     return Number32(item).not(other);
+}
+
+Number32.prototype.neg = function (arg_other) 
+{
+    var helper = process.reserved.bindings.Number32_neg(this, cast2Number32(arg_other) );
+	
+	this.byte0 = helper.byte0;
+	this.byte1 = helper.byte1;
+	this.byte2 = helper.byte2;
+	this.byte3 = helper.byte3;
+	
+    return this;
+}
+
+Number32.neg = function ( item , other ) 
+{
+    return Number32(item).neg(other);
 }
 
 Number32.prototype.and = function (arg_other) 

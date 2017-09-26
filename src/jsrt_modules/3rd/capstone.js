@@ -3,7 +3,7 @@ const _ = require("underscore");
 
 const printf = require("cprintf").printf;
 const sprintf = require("cprintf").sprintf;
-
+const vprintf = require("cprintf").vprintf;
 
 const path = require("path");
 
@@ -229,7 +229,7 @@ function cs_version( )
 
     return sprintf("%d.%d" , versionInfo.major , versionInfo.minor );
 }
-
+exports.version = cs_version;
 
 function cs_open( arg_arch , arg_mode )
 {
@@ -264,6 +264,7 @@ function cs_open( arg_arch , arg_mode )
 
     return hCapstone;
 }
+exports.open = cs_open;
 
 
 function cs_close( hCapstone )
@@ -279,6 +280,7 @@ function cs_close( hCapstone )
 
     return cs_strerror( errCode );
 }
+exports.close = cs_close;
 
 
 function cs_option(  hCapstone , arg_type , arg_value )
@@ -291,6 +293,7 @@ function cs_option(  hCapstone , arg_type , arg_value )
 
     return cs_strerror( errCode );
 }
+exports.setOption = cs_option;
 
 
 function cs_errno( hCapstone )
@@ -444,7 +447,7 @@ function parse_inst_x86( hCapstone  , lpBuffer , instAddress , instSize )
 			op_item.imm.imm16 = lpBuffer.readInt16LE( baseOffset + 0x08 );
 			op_item.imm.uimm16 = lpBuffer.readUInt16LE( baseOffset + 0x08 );
 			
-			op_item.imm.imm32 = lpBuffer.readInt32LE( baseOffset + 0x08 );
+			op_item.imm.imm32 =  lpBuffer.readInt32LE( baseOffset + 0x08 );
 			op_item.imm.uimm32 = lpBuffer.readUInt32LE( baseOffset + 0x08 );
 			
 			op_item.imm.imm64 = lpBuffer.readInt64LE( baseOffset + 0x08 );
@@ -514,19 +517,6 @@ function parse_inst_x86( hCapstone  , lpBuffer , instAddress , instSize )
 		
 		instx86.operands.push( op_item );
 	}
-	
-	if ( ( 0 != instx86.operands.length ) && ( "X86_OP_IMM" == instx86.operands[0].type ) )
-    {
-        instx86.relAddr = instx86.operands[0].imm;
-    }
-    else
-    {
-        instx86.relAddr = Number64( instAddress );
-        instx86.relAddr.add( instSize );
-		
-        instx86.relAddr.add( instx86.disp );
-    }
-	
 	
 	return instx86;
 }
@@ -853,7 +843,7 @@ CCapstone.prototype.close = function()
 	return cs_close( this.hCapstone );
 }
 
-CCapstone.prototype.disasm = cs_version;
+CCapstone.prototype.version = cs_version;
 
 
 CCapstone.prototype.setOption = function()
@@ -876,7 +866,7 @@ CCapstone.prototype.disasm = function()
 
 //---------------------------------------------------------------
 
-module.exports = CCapstone;
+exports.CCapstone = CCapstone;
 
 
 function main(  )

@@ -2,7 +2,10 @@
 
 const _ = require("underscore");
 const assert = require("assert");
+
+const printf = require("cprintf").printf;
 const sprintf = require("cprintf").sprintf;
+const vprintf = require("cprintf").vprintf;
 
 if ( 'x64' == process.arch )
 {
@@ -41,13 +44,13 @@ exports.HIWORD = HIWORD;
 
 function ALIGN_DOWN_BY(length, alignment) 
 {
-    return (length) & ~(alignment - 1);
+    return ( length & ( ~(alignment - 1) ) );
 }
 exports.ALIGN_DOWN_BY = ALIGN_DOWN_BY;
 
 function ALIGN_UP_BY(length, alignment)
 {
-    return ALIGN_DOWN_BY(length + alignment - 1, alignment);
+    return ALIGN_DOWN_BY( length + alignment - 1, alignment);
 }
 exports.ALIGN_UP_BY = ALIGN_UP_BY;
 
@@ -68,6 +71,52 @@ function ClearFlag( mask , flag )
     return ( mask &  ( ~flag ) );
 }
 exports.ClearFlag = ClearFlag;
+
+
+function SetBit( value , pos ) 
+{
+    return ( value | ( 1 << pos ) );
+}
+exports.SetBit = SetBit;
+
+
+function ClearBit( value , pos ) 
+{
+    return ( value & ( ~( 1 << pos ) ) );
+}
+exports.ClearBit = ClearBit;
+
+
+function NegBit( value , pos ) 
+{
+    return ( value ^ ( ~( 1 << pos ) ) );
+}
+exports.NegBit = NegBit;
+
+function TestBit( value , pos ) 
+{
+    return ( 1 == (  value >> pos )  );
+}
+exports.TestBit = TestBit;
+
+
+function MAKEUSHORT( low , high ) 
+{
+    return ( LOBYTE(low) | ( LOBYTE(high) << 8 ) ) & 0xFFFF;
+}
+exports.MAKEUSHORT = MAKEUSHORT;
+
+function MAKEULONG( low , high ) 
+{
+    return ( LOWORD(low) | ( LOWORD(high) << 16 ) ) & 0xFFFFFFFF;
+}
+exports.MAKEULONG = MAKEULONG;
+
+function RGB( r , g , b ) 
+{
+    return ( ( LOBYTE(r) | ( LOBYTE(g) << 8 ) ) | ( LOBYTE(b) << 16 ) );
+}
+exports.RGB = RGB;
 
 
 function getLastError() 

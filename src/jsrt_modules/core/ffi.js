@@ -2,7 +2,9 @@
 
 
 const _ = require("underscore");
+
 const assert = require("assert");
+
 const path = require("path");
 
 
@@ -262,17 +264,20 @@ function addEnvPaths(destPaths, envKeyName)
     var envPaths = null;
     var envValue = process.env[envKeyName];
 
-    if (!envValue) {
+    if ( !envValue ) 
+	{
         return destPaths;
     }
 
     envPaths = envValue.split(";");
 
-    envPaths = _.map(envPaths, function (item) {
+    envPaths = _.map(envPaths, function (item) 
+	{
         return path.normalize(item.trim().toLowerCase());
     });
 
-    envPaths = _.map(envPaths, function (item) {
+    envPaths = _.map(envPaths, function (item) 
+	{
         return path.removeBackslash(item);
     });
 
@@ -298,6 +303,30 @@ function buildSearchPaths()
 
         if ("ia32" == process.arch) 
 		{
+			if ( 'ida' == process.platform )
+			{
+				newItem = path.combine(item, ".\\jsida\\i386");
+
+				if (path.folderExists(newItem)) 
+				{
+					if (-1 == thisArray.indexOf(newItem.toLowerCase())) 
+					{
+						thisArray.splice(index + 1, 0, newItem.toLowerCase());
+					}
+				}
+				
+				newItem = path.combine(item, ".\\jsrt\\i386");
+
+				if (path.folderExists(newItem)) 
+				{
+					if (-1 == thisArray.indexOf(newItem.toLowerCase())) 
+					{
+						thisArray.splice(index + 1, 0, newItem.toLowerCase());
+					}
+				}
+			}
+			
+			
             newItem = path.combine(item, ".\\i386");
 
             if (path.folderExists(newItem)) 
@@ -326,9 +355,37 @@ function buildSearchPaths()
                     thisArray.splice(index + 1, 0, newItem.toLowerCase());
                 }
             }
+			
         }
         else if ("x64" == process.arch) 
 		{
+			if ( 'ida' == process.platform )
+			{
+				// dirty hack , idaq64.exe is a 32bit process
+				newItem = path.combine(item, ".\\jsida\\i386");
+
+				if (path.folderExists(newItem)) 
+				{
+					if (-1 == thisArray.indexOf(newItem.toLowerCase())) 
+					{
+						thisArray.splice(index + 1, 0, newItem.toLowerCase());
+					}
+				}
+				
+				newItem = path.combine(item, ".\\jsrt\\i386");
+
+				if (path.folderExists(newItem)) 
+				{
+					if (-1 == thisArray.indexOf(newItem.toLowerCase())) 
+					{
+						thisArray.splice(index + 1, 0, newItem.toLowerCase());
+					}
+				}
+			}
+			
+			
+			
+			
             newItem = path.combine(item, ".\\amd64");
 
             if (path.folderExists(newItem)) 
@@ -358,6 +415,8 @@ function buildSearchPaths()
                     thisArray.splice(index + 1, 0, newItem.toLowerCase());
                 }
             }
+			
+		
         }
 
     });
@@ -1926,7 +1985,7 @@ function ffi_loadAndBatchBind( moduleName , arg_declares )
 
 	if ( !hModule )
 	{
-		throw new Error(sprintf("load %s faild" , moduleName ));
+		throw new Error( sprintf("load %s faild %d " , moduleName , ffi_getLastError() ));
 	}
 	
 	var routineTable = {};

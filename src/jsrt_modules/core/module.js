@@ -7,7 +7,7 @@ const path = require("path");
 
 const printf = require("cprintf").printf;
 const sprintf = require("cprintf").sprintf;
-
+const vprintf = require("cprintf").vprintf;
 
 // fs
 function fs_readTextFile(arg_filename) 
@@ -91,7 +91,85 @@ const BUILTIN_MODULE_NAME_TABLE = [
 	
 	// host
 	"host/windbg" ,
-	"host/ida" 
+	
+	"host/ida"  ,
+	
+	// windbg
+	"host/windbg/binding/IDebugAdvanced" ,
+	
+	"host/windbg/binding/IDebugClient" ,
+	
+	"host/windbg/binding/IDebugControl" ,
+	
+	"host/windbg/binding/IDebugDataSpaces" ,
+	
+	"host/windbg/binding/IDebugSymbols" ,
+	
+	"host/windbg/binding/IDebugSystemObjects" ,
+	
+	// ida
+	"host/ida/binding/allins" ,
+	
+	"host/ida/binding/auto" ,
+	
+	"host/ida/binding/bytes" ,
+	
+	"host/ida/binding/dbg" ,
+	
+	"host/ida/binding/entry" ,
+	
+	"host/ida/binding/enum" ,
+	
+	"host/ida/binding/expr" ,
+	
+	"host/ida/binding/fixup" ,
+	
+	"host/ida/binding/frame" ,
+	
+	"host/ida/binding/func" ,
+	
+	"host/ida/binding/gdl" ,
+	
+	"host/ida/binding/graph" ,
+	
+	"host/ida/binding/hexrays" ,
+	
+	"host/ida/binding/ida" ,
+	
+	"host/ida/binding/idp" ,
+	
+	"host/ida/binding/kernelwin" ,
+	
+	"host/ida/binding/lines" ,
+	
+	"host/ida/binding/loader" ,
+	
+	"host/ida/binding/moves" ,
+	
+	"host/ida/binding/nalt" ,
+	
+	"host/ida/binding/name" ,
+	
+	"host/ida/binding/netnode" ,
+	
+	"host/ida/binding/offset" ,
+	
+	"host/ida/binding/search" ,
+	
+	"host/ida/binding/segment" ,
+	
+	"host/ida/binding/strlist" ,
+	
+	"host/ida/binding/struct" ,
+	
+	"host/ida/binding/typeinf" ,
+	
+	"host/ida/binding/ua" ,
+	
+	"host/ida/binding/xref" ,
+	
+	"host/ida/capstone" 
+	
 
 ];
 process.builtInModules = BUILTIN_MODULE_NAME_TABLE;

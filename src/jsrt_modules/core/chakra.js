@@ -3,6 +3,7 @@
 const _ = require("underscore");
 const assert = require("assert");
 const sprintf = require("cprintf").sprintf;
+const vprintf = require("cprintf").vprintf;
 
 
 function chakra_memoryUsage(  )

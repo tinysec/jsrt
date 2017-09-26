@@ -6,6 +6,7 @@ const base = require("base");
 
 const printf = require("cprintf").printf;
 const sprintf = require("cprintf").sprintf;
+const vprintf = require("cprintf").vprintf;
 
 
 const encoding2codepage = base.encoding2codepage;
@@ -1187,7 +1188,7 @@ Buffer.prototype.readInt32BE = function(offset)
 
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
-	return process.reserved.bindings.buffer_readInt32BE(this.address, offset || 0);
+	return Number32( process.reserved.bindings.buffer_readInt32BE(this.address, offset || 0) );
 }
 
 Buffer.readInt32BE = function(arg_address, offset)
@@ -1206,7 +1207,7 @@ Buffer.readInt32BE = function(arg_address, offset)
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
-	return process.reserved.bindings.buffer_readInt32BE(address, offset || 0);
+	return Number32( process.reserved.bindings.buffer_readInt32BE(address, offset || 0) );
 }
 
 Buffer.prototype.readInt32BEArray = function(offset, count)
@@ -1253,7 +1254,7 @@ Buffer.prototype.readInt32LE = function(offset)
 
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
-	return process.reserved.bindings.buffer_readInt32LE(this.address, offset || 0);
+	return Number32( process.reserved.bindings.buffer_readInt32LE(this.address, offset || 0) );
 }
 
 Buffer.readInt32LE = function(arg_address, offset)
@@ -1272,7 +1273,7 @@ Buffer.readInt32LE = function(arg_address, offset)
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
-	return process.reserved.bindings.buffer_readInt32LE(address, offset || 0);
+	return Number32( process.reserved.bindings.buffer_readInt32LE(address, offset || 0) );
 }
 
 Buffer.prototype.readInt32LEArray = function(offset, count)
@@ -1319,7 +1320,7 @@ Buffer.prototype.readUInt32BE = function(offset)
 
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
-	return process.reserved.bindings.buffer_readUInt32BE(this.address, offset || 0);
+	return Number32( process.reserved.bindings.buffer_readUInt32BE(this.address, offset || 0) );
 }
 
 Buffer.readUInt32BE = function(arg_address, offset)
@@ -1338,7 +1339,7 @@ Buffer.readUInt32BE = function(arg_address, offset)
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
-	return process.reserved.bindings.buffer_readUInt32BE(address, offset || 0);
+	return Number32( process.reserved.bindings.buffer_readUInt32BE(address, offset || 0) );
 }
 
 Buffer.prototype.readUInt32BEArray = function(offset, count)
@@ -1385,7 +1386,7 @@ Buffer.prototype.readUInt32LE = function(offset)
 
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
-	return process.reserved.bindings.buffer_readUInt32LE(this.address, offset || 0);
+	return Number32( process.reserved.bindings.buffer_readUInt32LE(this.address, offset || 0) );
 }
 
 Buffer.readUInt32LE = function(arg_address, offset)
@@ -1404,7 +1405,7 @@ Buffer.readUInt32LE = function(arg_address, offset)
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
-	return process.reserved.bindings.buffer_readUInt32LE(address, offset || 0);
+	return Number32( process.reserved.bindings.buffer_readUInt32LE(address, offset || 0) );
 }
 
 Buffer.prototype.readUInt32LEArray = function(offset, count)
@@ -2365,11 +2366,11 @@ Buffer.prototype.writeInt32BE = function(value, offset)
 		throw new Error("try to operate with invalid buffer");
 	}
 
-	assert(_.isNumber(value), "value must be number");
+	assert( ( _.isNumber(value) || Number32.isNumber32(value) || Number64.isNumber64(value)  ) , "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
-	process.reserved.bindings.buffer_writeInt32BE(this.address, offset || 0, Number64(value));
+	process.reserved.bindings.buffer_writeInt32BE(this.address, offset || 0, Number32(value));
 	return this;
 }
 
@@ -2387,11 +2388,11 @@ Buffer.writeInt32BE = function(arg_address, value, offset)
 		address = arg_address;
 	}
 	
-	assert(_.isNumber(value), "value must be number");
+	assert( ( _.isNumber(value) || Number32.isNumber32(value) || Number64.isNumber64(value)  ) , "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
-	return process.reserved.bindings.buffer_writeInt32BE(address, offset || 0, Number64(value));
+	return process.reserved.bindings.buffer_writeInt32BE(address, offset || 0, Number32(value));
 }
 
 
@@ -2402,11 +2403,11 @@ Buffer.prototype.writeInt32LE = function(value, offset)
 		throw new Error("try to operate with invalid buffer");
 	}
 
-	assert(_.isNumber(value), "value must be number");
+	assert( ( _.isNumber(value) || Number32.isNumber32(value) || Number64.isNumber64(value)  ) , "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
-	process.reserved.bindings.buffer_writeInt32LE(this.address, offset || 0, Number64(value));
+	process.reserved.bindings.buffer_writeInt32LE(this.address, offset || 0, Number32(value));
 	return this;
 }
 
@@ -2424,11 +2425,11 @@ Buffer.writeInt32LE = function(arg_address, value, offset)
 		address = arg_address;
 	}
 	
-	assert(_.isNumber(value), "value must be number");
+	assert( ( _.isNumber(value) || Number32.isNumber32(value) || Number64.isNumber64(value)  ) , "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
-	return process.reserved.bindings.buffer_writeInt32LE(address, offset || 0, Number64(value));
+	return process.reserved.bindings.buffer_writeInt32LE(address, offset || 0, Number32(value));
 }
 
 Buffer.prototype.writeUInt32BE = function(value, offset)
@@ -2438,11 +2439,11 @@ Buffer.prototype.writeUInt32BE = function(value, offset)
 		throw new Error("try to operate with invalid buffer");
 	}
 
-	assert(_.isNumber(value), "value must be number");
+	assert( ( _.isNumber(value) || Number32.isNumber32(value) || Number64.isNumber64(value)  ) , "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
-	process.reserved.bindings.buffer_writeUInt32BE(this.address, offset || 0, Number64(value));
+	process.reserved.bindings.buffer_writeUInt32BE(this.address, offset || 0, Number32(value));
 	return this;
 }
 
@@ -2460,11 +2461,11 @@ Buffer.writeUInt32BE = function(arg_address, value, offset)
 		address = arg_address;
 	}
 	
-	assert(_.isNumber(value), "value must be number");
+	assert( ( _.isNumber(value) || Number32.isNumber32(value) || Number64.isNumber64(value)  ) , "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
-	return process.reserved.bindings.buffer_writeUInt32BE(address, offset || 0, Number64(value));
+	return process.reserved.bindings.buffer_writeUInt32BE(address, offset || 0, Number32(value));
 }
 
 
@@ -2475,11 +2476,11 @@ Buffer.prototype.writeUInt32LE = function(value, offset)
 		throw new Error("try to operate with invalid buffer");
 	}
 
-	assert(_.isNumber(value), "value must be number");
+	assert( ( _.isNumber(value) || Number32.isNumber32(value) || Number64.isNumber64(value)  ) , "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
-	process.reserved.bindings.buffer_writeUInt32LE(this.address, offset || 0, Number64(value));
+	process.reserved.bindings.buffer_writeUInt32LE(this.address, offset || 0, Number32(value));
 	return this;
 }
 
@@ -2497,11 +2498,11 @@ Buffer.writeUInt32LE = function(arg_address, value, offset)
 		address = arg_address;
 	}
 	
-	assert(_.isNumber(value), "value must be number");
+	assert( ( _.isNumber(value) || Number32.isNumber32(value) || Number64.isNumber64(value)  ) , "value must be number");
 	
 	assert( _.isUndefined(offset) || _.isNumber(offset) || Number64.isNumber64(offset) , "invalid offset" );
 
-	return process.reserved.bindings.buffer_writeUInt32LE(address, offset || 0, Number64(value));
+	return process.reserved.bindings.buffer_writeUInt32LE(address, offset || 0, Number32(value));
 }
 
 Buffer.prototype.writeInt64BE = function(value, offset)

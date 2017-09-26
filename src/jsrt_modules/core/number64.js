@@ -255,26 +255,25 @@ Number64.prototype.equal = function (arg_other)
 {
     return (0 == this.compare(arg_other));
 }
-Number64.prototype.eq = Number64.prototype.equal;
 
 Number64.equal = function ( arg_1 , arg_2 ) 
 {
     return ( 0 == Number64.compare(arg_1 , arg_2 ) );
 }
-Number64.eq = Number64.equal;
+
 
 
 Number64.prototype.equal32 = function (arg_other) 
 {
     return (0 == this.compare32(arg_other));
 }
-Number64.prototype.eq32 = Number64.prototype.equal32;
+
 
 Number64.equal32 = function ( arg_1 , arg_2 ) 
 {
     return ( 0 == Number64.compare32(arg_1 , arg_2 ) );
 }
-Number64.eq32 = Number64.equal32;
+
 
 Number64.prototype.notEqual = function (arg_other) 
 {
@@ -292,13 +291,12 @@ Number64.prototype.notEqual32 = function (arg_other)
 {
     return (0 != this.compare32(arg_other));
 }
-Number64.prototype.neq32 = Number64.prototype.notEqual32;
+
 
 Number64.notEqual32 = function ( arg_1 , arg_2 ) 
 {
     return ( 0 != Number64.compare32(arg_1 , arg_2 ) );
 }
-Number64.neq32 = Number64.notEqual32;
 
 Number64.prototype.lessThan = function (arg_other) 
 {
@@ -496,7 +494,7 @@ Number64.prototype.compare = function (arg_other)
 {
     return process.reserved.bindings.Number64_cmp(this, cast2Number64(arg_other) );
 }
-Number64.prototype.cmp = Number64.prototype.compare;
+
 
 Number64.compare = function ( arg_1 , arg_2 ) 
 {
@@ -523,16 +521,7 @@ Number64.prototype.compare32 = function (arg_other)
 {
     return process.reserved.bindings.Number64_cmp32(this, cast2Number64(arg_other) );
 }
-Number64.prototype.cmp32 = Number64.prototype.compare32;
 
-Number64.compare32 = function ( arg_1 , arg_2 ) 
-{
-    var n1 = Number64( arg_1 );
-	var n2 = Number64( arg_2 );
-	
-	return process.reserved.bindings.Number64_cmp32(n1 , n2 );
-}
-Number64.cmp32 = Number64.compare32;
 
 Number64.prototype.compareSigned32 = function (arg_other) 
 {
@@ -735,6 +724,32 @@ Number64.not = function ( item , other )
 {
     return Number64(item).not(other);
 }
+
+
+Number64.prototype.neg = function (arg_other) 
+{
+    var helper = process.reserved.bindings.Number64_neg(this, cast2Number64(arg_other) );
+	
+	this.byte0 = helper.byte0;
+	this.byte1 = helper.byte1;
+	this.byte2 = helper.byte2;
+	this.byte3 = helper.byte3;
+				
+	this.byte4 = helper.byte4;
+	this.byte5 = helper.byte5;
+	this.byte6 = helper.byte6;
+	this.byte7 = helper.byte7;
+	
+    return this;
+}
+
+Number64.neg = function ( item , other ) 
+{
+    return Number64(item).neg(other);
+}
+
+
+
 
 Number64.prototype.and = function (arg_other) 
 {
