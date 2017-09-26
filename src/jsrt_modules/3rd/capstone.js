@@ -213,7 +213,7 @@ function findKeyByValue( maskTable , value )
 
 function cs_version( )
 {
-    var param_lpMajor = Buffer.alloc( 4 ).fill(0);
+    var param_lpMajor = Buffer.alloc( 4 );
     var param_lpMinor = Buffer.alloc( 4 ).fill(0 );
     var nRet = 0;
 
@@ -236,7 +236,7 @@ function cs_open( arg_arch , arg_mode )
     var param_arch = 0;
     var param_mode = 0;
 
-    var buffer_param_lpHandle = Buffer.alloc( 8 ).fill(0);
+    var buffer_param_lpHandle = Buffer.alloc( 8 );
 	
     var hCapstone = null;
 
@@ -254,7 +254,7 @@ function cs_open( arg_arch , arg_mode )
 		buffer_param_lpHandle.free();
 		buffer_param_lpHandle = null;
 		
-        throw new Error( cs_strerror( errCode ));
+		return null;
     }
 
 
@@ -269,7 +269,7 @@ exports.open = cs_open;
 
 function cs_close( hCapstone )
 {
-	var lphCapstone = Buffer.alloc( 8 ).fill(0);
+	var lphCapstone = Buffer.alloc( 8 );
 	
 	lphCapstone.writePointer( hCapstone );
 	
@@ -758,7 +758,7 @@ function cs_disasm( hCapstone , arg_code , arg_BaseAddress , arg_instNumber , ar
 	
 	for ( codeOffset = 0; codeOffset < codeBuffer.length; codeOffset = nextCodeOffset )
 	{
-		frameCode.fill(0);
+		frameCode;
 		
 		frameLength = Math.min( MAX_INS_LENGTH , codeBuffer.length - codeOffset );
 		

@@ -114,8 +114,10 @@ exports.open = fs_open;
 
 function fs_close( fd ) 
 {
-	assert( _.isNumber(fd) , "invalid fd" );
-	assert(  (fd > 0) , "invalid fd" );
+	if ( fd <= 0 )
+	{
+		return true;
+	}
 
 	return process.reserved.bindings.fs_close( fd );
 }
@@ -128,7 +130,7 @@ function fs_seek( fd , arg_fileoffset , arg_origin )
 	assert( _.isNumber(fd) , "invalid fd" );
 	assert( fd > 0 , sprintf("fd = %d" , fd ) );
 	
-	assert( _.isNumber(arg_fileoffset) || Number64.isNumber64( arg_fileoffset ) , sprintf("invalid arg_fileoffset") );
+	assert( _.isNumber(arg_fileoffset) || Number64.isNumber64( arg_fileoffset ) || Number32.isNumber32( arg_fileoffset )  , sprintf("invalid arg_fileoffset") );
 		
 	if ( arguments.length >= 3 )
 	{
@@ -211,7 +213,7 @@ function fs_read( fd , arg_buffer , arg_buffer_start , arg_buffer_length , arg_f
 
 	assert( _.isNumber( arg_buffer_length ) );
 	
-	assert( _.isNumber( arg_file_position ) || Number64.isNumber64( arg_file_position ) );
+	assert( _.isNumber( arg_file_position ) || Number64.isNumber64( arg_file_position ) || Number32.isNumber32( arg_file_position )  );
 
 	assert( ( arg_buffer_start >= 0) && ( arg_buffer_start <= arg_buffer.length )  );
 	
@@ -250,7 +252,7 @@ function helper_fs_write( fd , arg_buffer , arg_buffer_start , arg_buffer_length
 	assert( _.isNumber( arg_buffer_start ) );
 	assert( _.isNumber( arg_buffer_length ) );
 	
-	assert( ( _.isNumber( arg_file_position ) || Number64.isNumber64( arg_file_position ) ) );
+	assert( _.isNumber( arg_file_position ) || Number64.isNumber64( arg_file_position ) || Number32.isNumber32( arg_file_position )  );
 
 	assert( ( arg_buffer_start >= 0) && ( arg_buffer_start <= arg_buffer.length )  );
 	
@@ -366,7 +368,7 @@ function fs_appendFile( arg_fd_or_name  )
 
 		if ( param_fd <= 0 )
 		{
-			throw new Error(sprintf("open %s faild" , arguments[0] ));
+			return 0;
 		}
 	}
 
@@ -442,7 +444,7 @@ function fs_readFile( arg_fd_or_name  )
 		
 		if ( param_fd <= 0 )
 		{
-			throw new Error(sprintf("open %s faild" , arguments[0] ));
+			return;
 		}
 	}
 
@@ -454,7 +456,7 @@ function fs_readFile( arg_fd_or_name  )
 			fs_close( param_fd );
 		}
 	
-		throw new Error(sprintf("get file stats faild") );
+		return;
 	}
 
 	fileSize = stats.size.toUInt32LE();
@@ -463,7 +465,7 @@ function fs_readFile( arg_fd_or_name  )
 	{
 		if ( arguments.length >= 2 )
 		{
-			return "";
+			return;
 		}
 		
 		if ( _.isString( arguments[0] ) )
@@ -471,7 +473,7 @@ function fs_readFile( arg_fd_or_name  )
 			fs_close( param_fd );
 		}
 		
-		throw new Error("the file is empty");
+		return;
 	}
 	
 	param_buffer = Buffer.alloc( fileSize );
@@ -482,7 +484,7 @@ function fs_readFile( arg_fd_or_name  )
 			fs_close( param_fd );
 		}
 		
-		return '';
+		return;
 	}
 
 	readedSize = fs_read( param_fd , param_buffer , 0 , param_buffer.length , 0 );
@@ -492,7 +494,7 @@ function fs_readFile( arg_fd_or_name  )
 
 		if ( arguments.length >= 2 )
 		{
-			return "";
+			return;
 		}
 		
 		if ( _.isString( arguments[0] ) )
@@ -500,7 +502,7 @@ function fs_readFile( arg_fd_or_name  )
 			fs_close( param_fd );
 		}
 
-		throw new Error(sprintf("read file faild "  , fileSize  ));
+		return;
 	}
 	
 	if ( _.isString( arguments[0] ) )
@@ -561,7 +563,7 @@ function fs_writeFile( arg_fd_or_name  )
 		
 		if ( param_fd <= 0 )
 		{
-			throw new Error(sprintf("open %s faild" , arguments[0] ));
+			return 0;
 		}
 	}
 	
@@ -575,11 +577,6 @@ function fs_writeFile( arg_fd_or_name  )
 	}
 	else
 	{
-		if ( _.isString( arguments[0] ) )
-		{
-			fs_close( param_fd );
-		}
-		
 		throw new Error("invalid arguments 1" );
 	}
 	
@@ -666,7 +663,7 @@ function fs_mkdir( arg_path )
 	
 	if ( path.existsFolder(param_path) )
 	{
-		throw new Error(sprintf("%s already exists" , arg_path ) );
+		return true;
 	}
 
 	while( true )
@@ -724,7 +721,7 @@ function fs_readdir( arg_path )
 	
 	if ( !path.existsFolder(param_path) )
 	{
-		throw new Error(sprintf("folder %s is not exists" , arg_path ) );
+		return null;
 	}
 	
 	param_path = path.removeBackslash( param_path ) + "\\*.*";
@@ -732,7 +729,7 @@ function fs_readdir( arg_path )
 	var helper = process.reserved.bindings.fs_readdir( param_path ) ;
 	if ( !helper )
 	{
-		return [];
+		return null;
 	}
 		
 	return helper;
@@ -813,7 +810,7 @@ function fs_rmdir( arg_path )
 
 	if ( !path.existsFolder(param_path) )
 	{
-		throw new Error(sprintf("%s is not exists" , arg_path ) );
+		return true;
 	}
 
 	return recu_fs_rmdir( param_path );
@@ -873,7 +870,7 @@ function fs_copyFolder( arg_src , arg_dest )
 	
 	if ( !path.existsFolder(arg_src) )
 	{
-		throw new Error(sprintf("%s is not exists" , arg_src ) );
+		return false;
 	}
 
 	return recu_fs_copyFolder( param_src ,  param_dest);

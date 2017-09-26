@@ -112,7 +112,7 @@ function enumProcess()
 			
 			processArray.push( processNode );
 			
-			lpProcessEntry32.fill(0);
+			lpProcessEntry32;
 			
 			if ( 'x64' == process.arch )
 			{
@@ -215,7 +215,7 @@ function enumModule( arg_pid )
 			
 			moduleArray.push( moduleNode );
 			
-			lpModuleEntry32.fill(0);
+			lpModuleEntry32;
 			
 			if ( 'x64' == process.arch )
 			{
@@ -296,7 +296,7 @@ function enumThread( arg_pid )
 			
 			threadArray.push( threadNode );
 			
-			lpThreadEntry32.fill(0);
+			lpThreadEntry32;
 
 			lpThreadEntry32.writeUInt32LE( 0x1c , 0x00 );
 		

@@ -103,7 +103,7 @@ function enableProcessPrivilege( arg_hProcess , arg_Privilege , arg_Enable )
 			param_enable = arguments[2] || false;
 		}
 		
-		lpTokenHandle = Buffer.alloc( 8 ).fill(0);
+		lpTokenHandle = Buffer.alloc( 8 );
 		
 		bFlag = ffi_advapi32.OpenProcessToken( param_hProcess , 0x20 , lpTokenHandle );
 		if ( !bFlag )
@@ -117,7 +117,7 @@ function enableProcessPrivilege( arg_hProcess , arg_Privilege , arg_Enable )
 			break;
 		}
 		
-		lpLuid = Buffer.alloc( 8 ).fill(0);
+		lpLuid = Buffer.alloc( 8 );
 		
 		bFlag = ffi_advapi32.LookupPrivilegeValueW( 
 				null , 
@@ -129,7 +129,7 @@ function enableProcessPrivilege( arg_hProcess , arg_Privilege , arg_Enable )
 			break;
 		}
 		
-		lpTokenPrivileges = Buffer.alloc( 0x10 ).fill(0);
+		lpTokenPrivileges = Buffer.alloc( 0x10 );
 		
 		// PrivilegeCount
 		lpTokenPrivileges.writeUInt32LE( 1 , 0x00 );

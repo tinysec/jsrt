@@ -462,7 +462,7 @@ function help_child_process_spawn( param_commandline , param_options )
 			lpReadPipeBuffer = Buffer.alloc( 8 ).fill( 0 );
 			lpWritePipeBuffer = Buffer.alloc( 8 ).fill( 0 );
 				
-			lpPipeAttributes = Buffer.alloc( 24 ).fill(0);
+			lpPipeAttributes = Buffer.alloc( 24 );
 			if ( 'x64' == process.arch )
 			{
 				// nLength
@@ -500,8 +500,8 @@ function help_child_process_spawn( param_commandline , param_options )
 			}
 			
 			// hStdOutput
-			lpReadPipeBuffer.fill(0);
-			lpWritePipeBuffer.fill(0);
+			lpReadPipeBuffer;
+			lpWritePipeBuffer;
 			bFlag = ffi_kernel32.CreatePipe( lpReadPipeBuffer , lpWritePipeBuffer , lpPipeAttributes , 0 );
 			if ( !bFlag )
 			{
@@ -522,8 +522,8 @@ function help_child_process_spawn( param_commandline , param_options )
 			}
 			
 			// hStdError
-			lpReadPipeBuffer.fill(0);
-			lpWritePipeBuffer.fill(0);
+			lpReadPipeBuffer;
+			lpWritePipeBuffer;
 			bFlag = ffi_kernel32.CreatePipe( lpReadPipeBuffer , lpWritePipeBuffer , lpPipeAttributes , 0 );
 			if ( !bFlag )
 			{
@@ -678,7 +678,7 @@ function help_child_process_spawn( param_commandline , param_options )
 		
 		
 		// wow64
-		var lpWow64Buffer = Buffer.alloc(8).fill(0);
+		var lpWow64Buffer = Buffer.alloc(8);
 		ffi_kernel32.IsWow64Process( ChildProcess.hProcess , lpWow64Buffer );
 		
 		ChildProcess.wow64 = ( 1 == lpWow64Buffer.readUInt32LE(0) );
@@ -903,9 +903,9 @@ function help_child_process_capture( child , arg_options )
 		StdOutQuotaLeftSize = option_maxBuffer;
 		
 
-		lpFrameBuffer = Buffer.alloc( 1024 ).fill(0);
-		lpTotalBytesAvail = Buffer.alloc( 8 ).fill(0);
-		lpNumberOfBytesRead = Buffer.alloc( 8 ).fill(0);
+		lpFrameBuffer = Buffer.alloc( 1024 );
+		lpTotalBytesAvail = Buffer.alloc( 8 );
+		lpNumberOfBytesRead = Buffer.alloc( 8 );
 
 		startTick = ffi_kernel32.GetTickCount();
 		
@@ -1347,7 +1347,7 @@ function WaitForMultipleObjects( handleArray , bWaitAll  , timeout )
 		
 		assert( ( 0 != handleArray.length ) , "handleArray must not empty" );
 		
-		lpHandleArray = Buffer.alloc( pointerSize * handleArray.length ).fill(0);
+		lpHandleArray = Buffer.alloc( pointerSize * handleArray.length );
 		
 		for ( index = 0; index < handleArray.length; index++ )
 		{

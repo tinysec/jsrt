@@ -1899,7 +1899,7 @@ function ffi_thunk(jsCallbackRoutine, arg_declareText, arg_thisObject, arg_reser
         throw new Error(sprintf("calc thunk size faild"));
     }
 
-    lpThunkBuffer = Buffer.allocEx(nBufferSize).fill(0);
+    lpThunkBuffer = Buffer.allocEx(nBufferSize);
 
     function _thunk_helper(reserved) 
 	{

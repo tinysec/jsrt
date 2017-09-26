@@ -14,7 +14,7 @@ const fs = require("fs");
 
 function fd_read_IMAGE_DOS_HEADER( fd )
 {
-	var ioBuffer = Buffer.alloc( 0x40 ).fill(0);
+	var ioBuffer = Buffer.alloc( 0x40 );
 	var bytesRead = 0;
 	
 	var dosHeader = null;
@@ -64,7 +64,7 @@ function fd_read_IMAGE_DOS_HEADER( fd )
 		
 		dosHeader.e_res2 = ioBuffer.readUInt16LEArray( 0x028 , 10 ); // 
 		
-		dosHeader.e_lfanew = ioBuffer.readInt32LE( 0x03c  );
+		dosHeader.e_lfanew = ioBuffer.readInt32LE( 0x03c  ).toJSNumber();
 
 	}while(false);
 	
@@ -76,7 +76,7 @@ function fd_read_IMAGE_DOS_HEADER( fd )
 
 function fd_read_IMAGE_FILE_HEADER( fd , e_lfanew )
 {
-	var ioBuffer = Buffer.alloc( 0x14 ).fill(0);
+	var ioBuffer = Buffer.alloc( 0x14 );
 	var bytesRead = 0;
 	
 	var fileHeader = null;
@@ -114,7 +114,7 @@ function fd_read_IMAGE_FILE_HEADER( fd , e_lfanew )
 
 function fd_read_IMAGE_DATA_DIRECTORY_array( fd ,  e_lfanew , arch )
 {
-	var ioBuffer = Buffer.alloc( 8 ).fill(0);
+	var ioBuffer = Buffer.alloc( 8 );
 	var bytesRead = 0;
 	
 	var imageDataDirectory = null;
@@ -126,7 +126,7 @@ function fd_read_IMAGE_DATA_DIRECTORY_array( fd ,  e_lfanew , arch )
 	{
 		for ( index = 0; index < 16; index++ )
 		{
-			ioBuffer.fill(0);
+			ioBuffer;
 			
 			if ( 'x64' == arch )
 			{
@@ -162,7 +162,7 @@ function fd_read_IMAGE_DATA_DIRECTORY_array( fd ,  e_lfanew , arch )
 
 function fd_read_IMAGE_OPTIONAL_HEADER32( fd , e_lfanew )
 {
-	var ioBuffer = Buffer.alloc( 0xE0 ).fill(0);
+	var ioBuffer = Buffer.alloc( 0xE0 );
 	var bytesRead = 0;
 	
 	var optionaHeader = null;
@@ -249,7 +249,7 @@ function fd_read_IMAGE_OPTIONAL_HEADER32( fd , e_lfanew )
 
 function fd_read_IMAGE_OPTIONAL_HEADER64( fd , e_lfanew )
 {
-	var ioBuffer = Buffer.alloc( 0xF0 ).fill(0);
+	var ioBuffer = Buffer.alloc( 0xF0 );
 	var bytesRead = 0;
 	
 	var optionaHeader = null;
@@ -334,7 +334,7 @@ function fd_read_IMAGE_OPTIONAL_HEADER64( fd , e_lfanew )
 
 function fd_read_IMAGE_OPTIONAL_HEADER( fd , e_lfanew )
 {
-	var ioBuffer = Buffer.alloc( 0x1C ).fill(0);
+	var ioBuffer = Buffer.alloc( 0x1C );
 	var bytesRead = 0;
 	
 	var optionaHeader = null;
@@ -370,7 +370,7 @@ function fd_read_IMAGE_OPTIONAL_HEADER( fd , e_lfanew )
 
 function fd_read_IMAGE_NT_HEADER( fd , e_lfanew )
 {
-	var ioBuffer = Buffer.alloc( 4 ).fill(0);
+	var ioBuffer = Buffer.alloc( 4 );
 	var bytesRead = 0;
 	
 	var ntHeader = null;
@@ -403,7 +403,7 @@ function fd_read_IMAGE_NT_HEADER( fd , e_lfanew )
 
 function fd_read_IMAGE_SECTION_HEADER( fd , e_lfanew , ntHeader , sectionIndex )
 {
-	var ioBuffer = Buffer.alloc( 0x28 ).fill(0);
+	var ioBuffer = Buffer.alloc( 0x28 );
 	var bytesRead = 0;
 	
 	var sectionHeader = null;
@@ -609,7 +609,7 @@ function foa2rva( ntHeader , sectionHeaderArray , foa_offset )
 
 function fd_readUInt16LE( fd , offset )
 {
-	var ioBuffer = Buffer.alloc( 4 ).fill(0);
+	var ioBuffer = Buffer.alloc( 4 );
 	var bytesRead = 0;
 	var value = 0;
 	
@@ -625,7 +625,7 @@ function fd_readUInt16LE( fd , offset )
 
 function fd_readUInt32LE( fd , offset )
 {
-	var ioBuffer = Buffer.alloc( 4 ).fill(0);
+	var ioBuffer = Buffer.alloc( 4 );
 	var bytesRead = 0;
 	var value = 0;
 	
@@ -641,7 +641,7 @@ function fd_readUInt32LE( fd , offset )
 
 function fd_readUInt8Array( fd , arg_offset , count )
 {
-	var ioBuffer = Buffer.alloc( 4 ).fill(0);
+	var ioBuffer = Buffer.alloc( 4 );
 	var bytesRead = 0;
 	var value = 0;
 	var index = 0;
@@ -650,7 +650,7 @@ function fd_readUInt8Array( fd , arg_offset , count )
 	
 	for ( index = 0; index < count; index++ )
 	{
-		ioBuffer.fill(0);
+		ioBuffer;
 		bytesRead = fs.read( fd , ioBuffer , 0 , 1 , offset );
 	
 		value = ioBuffer.readUInt8(0);
@@ -668,7 +668,7 @@ function fd_readUInt8Array( fd , arg_offset , count )
 
 function fd_readUInt16LEArray( fd , arg_offset , count )
 {
-	var ioBuffer = Buffer.alloc( 4 ).fill(0);
+	var ioBuffer = Buffer.alloc( 4 );
 	var bytesRead = 0;
 	var value = 0;
 	var index = 0;
@@ -677,7 +677,7 @@ function fd_readUInt16LEArray( fd , arg_offset , count )
 	
 	for ( index = 0; index < count; index++ )
 	{
-		ioBuffer.fill(0);
+		ioBuffer;
 		bytesRead = fs.read( fd , ioBuffer , 0 , 2 , offset );
 	
 		value = ioBuffer.readUInt16LE(0);
@@ -695,7 +695,7 @@ function fd_readUInt16LEArray( fd , arg_offset , count )
 
 function fd_readUInt32LEArray( fd , arg_offset , count )
 {
-	var ioBuffer = Buffer.alloc( 4 ).fill(0);
+	var ioBuffer = Buffer.alloc( 4 );
 	var bytesRead = 0;
 	var value = 0;
 	var index = 0;
@@ -704,7 +704,7 @@ function fd_readUInt32LEArray( fd , arg_offset , count )
 	
 	for ( index = 0; index < count; index++ )
 	{
-		ioBuffer.fill(0);
+		ioBuffer;
 		
 		bytesRead = fs.read( fd , ioBuffer , 0 , 4 , offset );
 	
@@ -723,7 +723,7 @@ function fd_readUInt32LEArray( fd , arg_offset , count )
 
 function fd_readUInt64LEArray( fd , arg_offset , count )
 {
-	var ioBuffer = Buffer.alloc( 8 ).fill(0);
+	var ioBuffer = Buffer.alloc( 8 );
 	var bytesRead = 0;
 	var value = 0;
 	var index = 0;
@@ -732,7 +732,7 @@ function fd_readUInt64LEArray( fd , arg_offset , count )
 	
 	for ( index = 0; index < count; index++ )
 	{
-		ioBuffer.fill(0);
+		ioBuffer;
 		
 		bytesRead = fs.read( fd , ioBuffer , 0 , 8 , offset );
 	
@@ -751,7 +751,7 @@ function fd_readUInt64LEArray( fd , arg_offset , count )
 
 function fd_readString( fd  , offset , arg_encoding )
 {
-	var ioBuffer = Buffer.alloc( 100 ).fill(0);
+	var ioBuffer = Buffer.alloc( 100 );
 	var bytesRead = 0;
 	var value = 0;
 	
@@ -765,7 +765,7 @@ function fd_readString( fd  , offset , arg_encoding )
 	
 	while( !foundZero )
 	{
-		ioBuffer.fill(0);
+		ioBuffer;
 		
 		bytesRead = fs.read( 
 			fd , 
@@ -820,7 +820,7 @@ function fd_readString( fd  , offset , arg_encoding )
 
 function fd_read_IMAGE_DIRECTORY_ENTRY_EXPORT( fd , ntHeader , sectionHeaderArray )
 {
-	var ioBuffer = Buffer.alloc( 0x28 ).fill(0);
+	var ioBuffer = Buffer.alloc( 0x28 );
 	var bytesRead = 0;
 	var value = 0;
 	
@@ -1128,15 +1128,68 @@ CPEFile.prototype.readExports = function()
 
 //---------------------------------------------------------------
 
-module.exports = CPEFile;
+exports.CPEFile = CPEFile;
 
+//---------------------------------------------------------------
 
+function isPEFile( arg_filename )
+{
+	var fd = 0;
+	
+	var dosHeader = null;
+	
+	var ntHeader = null;
+	
+	var finalFlag = false;
+	
+	do
+	{
+		fd = fs.open( arg_filename , 'r' );
+		if ( fd <= 0 )
+		{
+			break;
+		}
+		
+		dosHeader = fd_read_IMAGE_DOS_HEADER( fd );
+		if ( !dosHeader )
+		{
+			break;
+		}
+		
+		if ( 0x5A4D != dosHeader.e_magic )
+		{
+			break;
+		}
+		
+		ntHeader = fd_read_IMAGE_NT_HEADER( fd , dosHeader.e_lfanew );
+		if ( !ntHeader )
+		{
+			break;
+		}
+		
+		if ( 0x4550 != ntHeader.Signature )
+		{
+			break;
+		}
+		
+		finalFlag = true;
+		
+	}while(false);
+	
+	if ( fd > 0 )
+	{
+		printf("fd = %s\n" , fd );
+		fs.close( fd );
+		fd = 0;
+	}
+	
+	return finalFlag;
+}
+exports.isPEFile = isPEFile;
 
 
 function main(  )
 {
-	
-
 	return 0;
 }
 

@@ -101,10 +101,10 @@ function pdb_loadSymbolFile( imageFile )
 	var bFlag = false;
 	
 	nSymbolFileLength = 260;
-    pszSymbolFile = Buffer.alloc( (nSymbolFileLength + 1)* 2 ).fill(0);
+    pszSymbolFile = Buffer.alloc( (nSymbolFileLength + 1)* 2 );
 
     nDbgFileLength = 260;
-    pszDbgFile = Buffer.alloc( (nDbgFileLength + 1)* 2 ).fill(0);
+    pszDbgFile = Buffer.alloc( (nDbgFileLength + 1)* 2 );
 	
 	bFlag = ffi_dbghelp.SymGetSymbolFileW(
 		g_hCurrentProcess ,
@@ -182,7 +182,7 @@ function pdb_addressToSymbol( symbolAddress )
 	
 	var symbolInfo = null;
 
-	var lpDisplacement = Buffer.alloc( 8 ).fill(0);
+	var lpDisplacement = Buffer.alloc( 8 );
 	
 	
 	nSymbol64BufferSize = 0x20 + ( MaxNameLength + 1 ) * 2;

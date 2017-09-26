@@ -59,13 +59,13 @@ function queryFixFileInfo( lpAnsiVersionInfo , lpWideVersionInfo )
 {
 	var fixedFileInfo = null;
 	
-	var ppBlockData = Buffer.alloc( 8 ).fill(0);
+	var ppBlockData = Buffer.alloc( 8 );
 	
 	var lpBlockDataAddress = null;
 	
 	var lpBlockData = null;
 	
-	var lpBlockDataLength = Buffer.alloc( 8 ).fill(0);
+	var lpBlockDataLength = Buffer.alloc( 8 );
 	var blockDataLength = 0;
 	
 	var blockData = null;
@@ -86,8 +86,8 @@ function queryFixFileInfo( lpAnsiVersionInfo , lpWideVersionInfo )
 		{
 			if ( lpWideVersionInfo )
 			{
-				ppBlockData.fill(0);
-				lpBlockDataLength.fill(0);
+				ppBlockData;
+				lpBlockDataLength;
 				ansiFlag = ffi_kernel32.VerQueryValueA( lpWideVersionInfo , queryName , ppBlockData , lpBlockDataLength );
 			}
 		}
@@ -150,13 +150,13 @@ function queryTranslationInfo( lpAnsiVersionInfo , lpWideVersionInfo )
 {
 	var fixedFileInfo = null;
 	
-	var ppBlockData = Buffer.alloc( 8 ).fill(0);
+	var ppBlockData = Buffer.alloc( 8 );
 	
 	var lpBlockDataAddress = null;
 	
 	var lpBlockData = null;
 	
-	var lpBlockDataLength = Buffer.alloc( 8 ).fill(0);
+	var lpBlockDataLength = Buffer.alloc( 8 );
 	var blockDataLength = 0;
 	
 	var blockData = null;
@@ -177,8 +177,8 @@ function queryTranslationInfo( lpAnsiVersionInfo , lpWideVersionInfo )
 		{
 			if ( lpWideVersionInfo )
 			{
-				ppBlockData.fill(0);
-				lpBlockDataLength.fill(0);
+				ppBlockData;
+				lpBlockDataLength;
 				ansiFlag = ffi_kernel32.VerQueryValueA( lpWideVersionInfo , queryName , ppBlockData , lpBlockDataLength );
 			}
 		}
@@ -224,13 +224,13 @@ function queryVarFileInfo( lpAnsiVersionInfo , lpWideVersionInfo , translationIn
 {
 	var fixedFileInfo = null;
 	
-	var ppBlockData = Buffer.alloc( 8 ).fill(0);
+	var ppBlockData = Buffer.alloc( 8 );
 	
 	var lpBlockDataAddress = null;
 	
 	var lpBlockData = null;
 	
-	var lpBlockDataLength = Buffer.alloc( 8 ).fill(0);
+	var lpBlockDataLength = Buffer.alloc( 8 );
 	var blockDataLength = 0;
 	var blockDataSize = 0;
 	
@@ -258,8 +258,8 @@ function queryVarFileInfo( lpAnsiVersionInfo , lpWideVersionInfo , translationIn
 		{
 			if ( lpWideVersionInfo )
 			{
-				ppBlockData.fill(0);
-				lpBlockDataLength.fill(0);
+				ppBlockData;
+				lpBlockDataLength;
 				ansiFlag = ffi_kernel32.VerQueryValueA( lpWideVersionInfo , queryName , ppBlockData , lpBlockDataLength );
 			}
 		}
@@ -302,7 +302,7 @@ function queryFileVersion( arg_filename )
 	var wideVersionInfoSize = 0;
 	var ansiVersionInfoSize = 0;
 	
-	var lpdwHandle = Buffer.alloc(8).fill(0);
+	var lpdwHandle = Buffer.alloc(8);
 	
 	var lpWideVersionInfo = null;
 	var lpAnsiVersionInfo = null;
@@ -324,21 +324,21 @@ function queryFileVersion( arg_filename )
 		assert( _.isString(arg_filename) , "arg_filename must be string" );
 		
 		// wide
-		lpdwHandle.fill(0);
+		lpdwHandle;
 		wideVersionInfoSize = ffi_kernel32.GetFileVersionInfoSizeW( arg_filename , lpdwHandle );
 		if ( 0 != wideVersionInfoSize )
 		{
-			lpWideVersionInfo = Buffer.alloc( wideVersionInfoSize ).fill(0);
+			lpWideVersionInfo = Buffer.alloc( wideVersionInfoSize );
 			
 			wideFlag = ffi_kernel32.GetFileVersionInfoW( arg_filename , 0 , wideVersionInfoSize , lpWideVersionInfo );
 		}
 		
 		// asni
-		lpdwHandle.fill(0);
+		lpdwHandle;
 		ansiVersionInfoSize = ffi_kernel32.GetFileVersionInfoSizeA( arg_filename , lpdwHandle );
 		if ( 0 != ansiVersionInfoSize )
 		{
-			lpAnsiVersionInfo = Buffer.alloc( ansiVersionInfoSize ).fill(0);
+			lpAnsiVersionInfo = Buffer.alloc( ansiVersionInfoSize );
 			
 			ansiFlag = ffi_kernel32.GetFileVersionInfoA( arg_filename , 0 , ansiVersionInfoSize , lpAnsiVersionInfo );
 		}

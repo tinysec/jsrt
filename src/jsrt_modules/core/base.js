@@ -392,6 +392,10 @@ function stringToFlags( maskTable , arg_textFlags )
 			{
 				finalFlags.or( tableValue );
 			}
+			else if ( Number32.isNumber32(tableValue) )
+			{
+				finalFlags.or( tableValue );
+			}
 			else if ( _.isNumber(tableValue) )
 			{
 				finalFlags.or( tableValue );

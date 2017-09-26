@@ -120,7 +120,7 @@ function WaitForMultipleObjects( handleArray , bWaitAll  , timeout )
 		
 		assert( ( 0 != handleArray.length ) , "handleArray must not empty" );
 		
-		lpHandleArray = Buffer.alloc( pointerSize * handleArray.length ).fill(0);
+		lpHandleArray = Buffer.alloc( pointerSize * handleArray.length );
 		
 		for ( index = 0; index < handleArray.length; index++ )
 		{

@@ -106,7 +106,7 @@ exports.SearchVirtual = SearchVirtual;
 
 function ReadVirtualDoubleBE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -145,7 +145,7 @@ exports.ReadVirtualDoubleBE = ReadVirtualDoubleBE;
 
 function ReadVirtualDoubleLE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -184,7 +184,7 @@ exports.ReadVirtualDoubleLE = ReadVirtualDoubleLE;
 
 function ReadVirtualFloatBE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -223,7 +223,7 @@ exports.ReadVirtualFloatBE = ReadVirtualFloatBE;
 
 function ReadVirtualFloatLE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -263,7 +263,7 @@ exports.ReadVirtualFloatLE = ReadVirtualFloatLE;
 // 1 byte
 function ReadVirtualInt8( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 1;
 	var ioBytes = 0;
@@ -303,7 +303,7 @@ exports.ReadVirtualInt8 = ReadVirtualInt8;
 
 function ReadVirtualUInt8( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 1;
 	var ioBytes = 0;
@@ -344,7 +344,7 @@ exports.ReadVirtualUInt8 = ReadVirtualUInt8;
 // 2 bytes
 function ReadVirtualInt16BE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 2;
 	var ioBytes = 0;
@@ -384,7 +384,7 @@ exports.ReadVirtualInt16BE = ReadVirtualInt16BE;
 
 function ReadVirtualInt16LE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 2;
 	var ioBytes = 0;
@@ -423,7 +423,7 @@ exports.ReadVirtualInt16LE = ReadVirtualInt16LE;
 
 function ReadVirtualUInt16BE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 2;
 	var ioBytes = 0;
@@ -463,7 +463,7 @@ exports.ReadVirtualUInt16BE = ReadVirtualUInt16BE;
 
 function ReadVirtualUInt16LE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 2;
 	var ioBytes = 0;
@@ -503,7 +503,7 @@ exports.ReadVirtualUInt16LE = ReadVirtualUInt16LE;
 // 4 bytes
 function ReadVirtualInt32BE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -543,7 +543,7 @@ exports.ReadVirtualInt32BE = ReadVirtualInt32BE;
 
 function ReadVirtualInt32LE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -583,7 +583,7 @@ exports.ReadVirtualInt32LE = ReadVirtualInt32LE;
 
 function ReadVirtualUInt32BE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -623,7 +623,7 @@ exports.ReadVirtualUInt32BE = ReadVirtualUInt32BE;
 
 function ReadVirtualUInt32LE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -663,7 +663,7 @@ exports.ReadVirtualUInt32LE = ReadVirtualUInt32LE;
 // 8 bytes
 function ReadVirtualInt64BE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -703,7 +703,7 @@ exports.ReadVirtualInt64BE = ReadVirtualInt64BE;
 
 function ReadVirtualInt64LE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -743,7 +743,7 @@ exports.ReadVirtualInt64LE = ReadVirtualInt64LE;
 
 function ReadVirtualUInt64BE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -783,7 +783,7 @@ exports.ReadVirtualUInt64BE = ReadVirtualUInt64BE;
 
 function ReadVirtualUInt64LE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -837,7 +837,7 @@ exports.ReadVirtualPointer = ReadVirtualPointer;
 // write 
 function WriteVirtualDoubleBE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -874,7 +874,7 @@ exports.WriteVirtualDoubleBE = WriteVirtualDoubleBE;
 
 function WriteVirtualDoubleLE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -913,7 +913,7 @@ exports.WriteVirtualDoubleLE = WriteVirtualDoubleLE;
 //float
 function WriteVirtualFloatBE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -950,7 +950,7 @@ exports.WriteVirtualFloatBE = WriteVirtualFloatBE;
 
 function WriteVirtualFloatLE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -988,7 +988,7 @@ exports.WriteVirtualFloatLE = WriteVirtualFloatLE;
 // 1 byte
 function WriteVirtualInt8( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 1;
 	var ioBytes = 0;
@@ -1025,7 +1025,7 @@ exports.WriteVirtualInt8 = WriteVirtualInt8;
 
 function WriteVirtualUInt8( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 1;
 	var ioBytes = 0;
@@ -1064,7 +1064,7 @@ exports.WriteVirtualUInt8 = WriteVirtualUInt8;
 
 function WriteVirtualInt16BE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 2;
 	var ioBytes = 0;
@@ -1101,7 +1101,7 @@ exports.WriteVirtualInt16BE = WriteVirtualInt16BE;
 
 function WriteVirtualInt16LE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 2;
 	var ioBytes = 0;
@@ -1139,7 +1139,7 @@ exports.WriteVirtualInt16LE = WriteVirtualInt16LE;
 
 function WriteVirtualUInt16BE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 2;
 	var ioBytes = 0;
@@ -1176,7 +1176,7 @@ exports.WriteVirtualUInt16BE = WriteVirtualUInt16BE;
 
 function WriteVirtualUInt16LE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 2;
 	var ioBytes = 0;
@@ -1214,7 +1214,7 @@ exports.WriteVirtualUInt16LE = WriteVirtualUInt16LE;
 // 4 bytes
 function WriteVirtualInt32BE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -1251,7 +1251,7 @@ exports.WriteVirtualInt32BE = WriteVirtualInt32BE;
 
 function WriteVirtualInt32LE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -1289,7 +1289,7 @@ exports.WriteVirtualInt32LE = WriteVirtualInt32LE;
 
 function WriteVirtualUInt32BE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -1326,7 +1326,7 @@ exports.WriteVirtualUInt32BE = WriteVirtualUInt32BE;
 
 function WriteVirtualUInt32LE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -1365,7 +1365,7 @@ exports.WriteVirtualUInt32LE = WriteVirtualUInt32LE;
 
 function WriteVirtualInt64BE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -1402,7 +1402,7 @@ exports.WriteVirtualInt64BE = WriteVirtualInt64BE;
 
 function WriteVirtualInt64LE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -1440,7 +1440,7 @@ exports.WriteVirtualInt64LE = WriteVirtualInt64LE;
 
 function WriteVirtualUInt64BE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -1477,7 +1477,7 @@ exports.WriteVirtualUInt64BE = WriteVirtualUInt64BE;
 
 function WriteVirtualUInt64LE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -1544,7 +1544,7 @@ exports.WriteVirtualPointer = WriteVirtualPointer;
 
 function ReadVirtualUnCachedDoubleBE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -1583,7 +1583,7 @@ exports.ReadVirtualUnCachedDoubleBE = ReadVirtualUnCachedDoubleBE;
 
 function ReadVirtualUnCachedDoubleLE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -1622,7 +1622,7 @@ exports.ReadVirtualUnCachedDoubleLE = ReadVirtualUnCachedDoubleLE;
 
 function ReadVirtualUnCachedFloatBE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -1661,7 +1661,7 @@ exports.ReadVirtualUnCachedFloatBE = ReadVirtualUnCachedFloatBE;
 
 function ReadVirtualUnCachedFloatLE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -1701,7 +1701,7 @@ exports.ReadVirtualUnCachedFloatLE = ReadVirtualUnCachedFloatLE;
 // 1 byte
 function ReadVirtualUnCachedInt8( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 1;
 	var ioBytes = 0;
@@ -1741,7 +1741,7 @@ exports.ReadVirtualUnCachedInt8 = ReadVirtualUnCachedInt8;
 
 function ReadVirtualUnCachedUInt8( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 1;
 	var ioBytes = 0;
@@ -1782,7 +1782,7 @@ exports.ReadVirtualUnCachedUInt8 = ReadVirtualUnCachedUInt8;
 // 2 bytes
 function ReadVirtualUnCachedInt16BE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 2;
 	var ioBytes = 0;
@@ -1822,7 +1822,7 @@ exports.ReadVirtualUnCachedInt16BE = ReadVirtualUnCachedInt16BE;
 
 function ReadVirtualUnCachedInt16LE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 2;
 	var ioBytes = 0;
@@ -1861,7 +1861,7 @@ exports.ReadVirtualUnCachedInt16LE = ReadVirtualUnCachedInt16LE;
 
 function ReadVirtualUnCachedUInt16BE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 2;
 	var ioBytes = 0;
@@ -1901,7 +1901,7 @@ exports.ReadVirtualUnCachedUInt16BE = ReadVirtualUnCachedUInt16BE;
 
 function ReadVirtualUnCachedUInt16LE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 2;
 	var ioBytes = 0;
@@ -1941,7 +1941,7 @@ exports.ReadVirtualUnCachedUInt16LE = ReadVirtualUnCachedUInt16LE;
 // 4 bytes
 function ReadVirtualUnCachedInt32BE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -1981,7 +1981,7 @@ exports.ReadVirtualUnCachedInt32BE = ReadVirtualUnCachedInt32BE;
 
 function ReadVirtualUnCachedInt32LE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -2021,7 +2021,7 @@ exports.ReadVirtualUnCachedInt32LE = ReadVirtualUnCachedInt32LE;
 
 function ReadVirtualUnCachedUInt32BE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -2061,7 +2061,7 @@ exports.ReadVirtualUnCachedUInt32BE = ReadVirtualUnCachedUInt32BE;
 
 function ReadVirtualUnCachedUInt32LE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -2101,7 +2101,7 @@ exports.ReadVirtualUnCachedUInt32LE = ReadVirtualUnCachedUInt32LE;
 // 8 bytes
 function ReadVirtualUnCachedInt64BE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -2141,7 +2141,7 @@ exports.ReadVirtualUnCachedInt64BE = ReadVirtualUnCachedInt64BE;
 
 function ReadVirtualUnCachedInt64LE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -2181,7 +2181,7 @@ exports.ReadVirtualUnCachedInt64LE = ReadVirtualUnCachedInt64LE;
 
 function ReadVirtualUnCachedUInt64BE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -2221,7 +2221,7 @@ exports.ReadVirtualUnCachedUInt64BE = ReadVirtualUnCachedUInt64BE;
 
 function ReadVirtualUnCachedUInt64LE( arg_address , arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -2275,7 +2275,7 @@ exports.ReadVirtualUnCachedPointer = ReadVirtualUnCachedPointer;
 // write 
 function WriteVirtualUnCachedDoubleBE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -2312,7 +2312,7 @@ exports.WriteVirtualUnCachedDoubleBE = WriteVirtualUnCachedDoubleBE;
 
 function WriteVirtualUnCachedDoubleLE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -2351,7 +2351,7 @@ exports.WriteVirtualUnCachedDoubleLE = WriteVirtualUnCachedDoubleLE;
 //float
 function WriteVirtualUnCachedFloatBE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -2388,7 +2388,7 @@ exports.WriteVirtualUnCachedFloatBE = WriteVirtualUnCachedFloatBE;
 
 function WriteVirtualUnCachedFloatLE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -2426,7 +2426,7 @@ exports.WriteVirtualUnCachedFloatLE = WriteVirtualUnCachedFloatLE;
 // 1 byte
 function WriteVirtualUnCachedInt8( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 1;
 	var ioBytes = 0;
@@ -2463,7 +2463,7 @@ exports.WriteVirtualUnCachedInt8 = WriteVirtualUnCachedInt8;
 
 function WriteVirtualUnCachedUInt8( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 1;
 	var ioBytes = 0;
@@ -2502,7 +2502,7 @@ exports.WriteVirtualUnCachedUInt8 = WriteVirtualUnCachedUInt8;
 
 function WriteVirtualUnCachedInt16BE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 2;
 	var ioBytes = 0;
@@ -2539,7 +2539,7 @@ exports.WriteVirtualUnCachedInt16BE = WriteVirtualUnCachedInt16BE;
 
 function WriteVirtualUnCachedInt16LE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 2;
 	var ioBytes = 0;
@@ -2577,7 +2577,7 @@ exports.WriteVirtualUnCachedInt16LE = WriteVirtualUnCachedInt16LE;
 
 function WriteVirtualUnCachedUInt16BE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 2;
 	var ioBytes = 0;
@@ -2614,7 +2614,7 @@ exports.WriteVirtualUnCachedUInt16BE = WriteVirtualUnCachedUInt16BE;
 
 function WriteVirtualUnCachedUInt16LE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 2;
 	var ioBytes = 0;
@@ -2652,7 +2652,7 @@ exports.WriteVirtualUnCachedUInt16LE = WriteVirtualUnCachedUInt16LE;
 // 4 bytes
 function WriteVirtualUnCachedInt32BE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -2689,7 +2689,7 @@ exports.WriteVirtualUnCachedInt32BE = WriteVirtualUnCachedInt32BE;
 
 function WriteVirtualUnCachedInt32LE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -2727,7 +2727,7 @@ exports.WriteVirtualUnCachedInt32LE = WriteVirtualUnCachedInt32LE;
 
 function WriteVirtualUnCachedUInt32BE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -2764,7 +2764,7 @@ exports.WriteVirtualUnCachedUInt32BE = WriteVirtualUnCachedUInt32BE;
 
 function WriteVirtualUnCachedUInt32LE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(4).fill(0);
+	var lpBuffer = Buffer.alloc(4);
 	var ioError = null;
 	var wantedBytes = 4;
 	var ioBytes = 0;
@@ -2803,7 +2803,7 @@ exports.WriteVirtualUnCachedUInt32LE = WriteVirtualUnCachedUInt32LE;
 
 function WriteVirtualUnCachedInt64BE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -2840,7 +2840,7 @@ exports.WriteVirtualUnCachedInt64BE = WriteVirtualUnCachedInt64BE;
 
 function WriteVirtualUnCachedInt64LE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -2878,7 +2878,7 @@ exports.WriteVirtualUnCachedInt64LE = WriteVirtualUnCachedInt64LE;
 
 function WriteVirtualUnCachedUInt64BE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;
@@ -2915,7 +2915,7 @@ exports.WriteVirtualUnCachedUInt64BE = WriteVirtualUnCachedUInt64BE;
 
 function WriteVirtualUnCachedUInt64LE( arg_address , arg_value ,  arg_offset )
 {
-	var lpBuffer = Buffer.alloc(8).fill(0);
+	var lpBuffer = Buffer.alloc(8);
 	var ioError = null;
 	var wantedBytes = 8;
 	var ioBytes = 0;

@@ -242,7 +242,7 @@ exports.release = os_release;
 
 function os_tmpdir()
 {
-	var lpBuffer = Buffer.alloc( 261 * 2 ).fill(0);
+	var lpBuffer = Buffer.alloc( 261 * 2 );
 
 	ffi_kernel32.GetTempPathW( 260 , lpBuffer );
 	

@@ -43,7 +43,7 @@ function string2UNICODE_STRING( arg_string  )
 		bufferLength = 0x08 + ( arg_string.length  + 1) * 2;
 	}
 	
-	lpUnicodeString = Bufer.alloc( bufferLength ).fill(0);
+	lpUnicodeString = Bufer.alloc( bufferLength );
 	
 	if ( 0 == arg_string.length )
 	{
@@ -117,7 +117,7 @@ function string2ANSI_STRING( arg_string  )
 		bufferLength = 0x08 + ( arg_string.length  + 1) * 1;
 	}
 	
-	lpAnsiString = Bufer.alloc( bufferLength ).fill(0);
+	lpAnsiString = Bufer.alloc( bufferLength );
 	
 	
 	if ( 0 == arg_string.length )
@@ -188,7 +188,7 @@ function allocAndInitializeObjectAttributes( ObjectName , Attributes , RootDirec
 	{
 		ObjectArributesBufferSize = 0x30 + 0x10 + ( ObjectName.length + 1 ) * 2;
 		
-		lpObjectArributes = Buffer.alloc( ObjectArributesBufferSize ).fill(0);
+		lpObjectArributes = Buffer.alloc( ObjectArributesBufferSize );
 		
 		// Length 
 		lpObjectArributes.writeUInt32LE( 0x30 , 0x00 );
@@ -212,7 +212,7 @@ function allocAndInitializeObjectAttributes( ObjectName , Attributes , RootDirec
 	{
 		ObjectArributesBufferSize = 0x18 + 0x08 + ( ObjectName.length + 1 ) * 2;
 		
-		lpObjectArributes = Buffer.alloc( ObjectArributesBufferSize ).fill(0);
+		lpObjectArributes = Buffer.alloc( ObjectArributesBufferSize );
 		
 		// Length 
 		lpObjectArributes.writeUInt32LE( 0x18 , 0x00 );
@@ -297,7 +297,7 @@ function openObject( ObjectName , arg_options )
 		}
 	}
 	
-	var param_lpFileHandle = Buffer.alloc( 8 ).fill(0);
+	var param_lpFileHandle = Buffer.alloc( 8 );
 	var param_DesiredAccess = 0; // 
 	var param_lpObjectAttributes = null;
 	var param_IoStatusBlock = Buffer.alloc( 0x10 );

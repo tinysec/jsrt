@@ -44,7 +44,7 @@ function sqlite3_open( filename )
 	assert( ( filename.length != 0 ) , "invalid filename" );
 	
 	lpFileName = Buffer.from( filename , "utf-8" );
-	lpHandle = Buffer.alloc( 8 ).fill(0);
+	lpHandle = Buffer.alloc( 8 );
 	
 	
 	retCode = ffi_sqlite3.sqlite3_open( lpFileName , lpHandle );
@@ -56,7 +56,7 @@ function sqlite3_open( filename )
 		lpHandle.free();
 		lpHandle = null;
 		
-		throw new Error(sprintf("open %s faild %d" , filename , retCode ) );
+		return null;
 	}
 	
 	hSQLite = lpHandle.readPointer( 0 );
@@ -101,7 +101,7 @@ function sqlite3_exec( hSQLite , sql )
 		
 	lpSQL = Buffer.from( sql , "utf-8" );
 
-	lppErrMsg = Buffer.alloc( 8 ).fill(0);
+	lppErrMsg = Buffer.alloc( 8 );
 	
 	result.code = ffi_sqlite3.sqlite3_exec( hSQLite , lpSQL , null , null , lppErrMsg);
 
@@ -225,7 +225,7 @@ function sqlite3_execSync( hSQLite , sql )
 		
 	lpSQL = Buffer.from( sql , "utf-8" );
 
-	lppErrMsg = Buffer.alloc( 8 ).fill(0);
+	lppErrMsg = Buffer.alloc( 8 );
 	
 	context.callback = callback;
 	context.result = {};
