@@ -1178,7 +1178,6 @@ function isPEFile( arg_filename )
 	
 	if ( fd > 0 )
 	{
-		printf("fd = %s\n" , fd );
 		fs.close( fd );
 		fd = 0;
 	}
