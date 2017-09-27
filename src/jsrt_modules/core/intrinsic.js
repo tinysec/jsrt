@@ -21,7 +21,7 @@ function readfsUInt32LE( offset )
 {
 	assert( _.isNumber(offset) , "offset must be number" );
 	
-	return process.reserved.bindings.intrinsic_readfsdword( offset );
+	return Number32( process.reserved.bindings.intrinsic_readfsdword( offset ) );
 }
 exports.readfsUInt32LE = readfsUInt32LE;
 
@@ -35,7 +35,7 @@ function readfsPointer( offset )
 	}
 	else
 	{
-		return Number64( process.reserved.bindings.intrinsic_readfsdword( offset ) );
+		return Number32( process.reserved.bindings.intrinsic_readfsdword( offset ) );
 	}
 }
 exports.readfsPointer = readfsPointer;
@@ -53,7 +53,7 @@ function readgsUInt32LE( offset )
 {
 	assert( _.isNumber(offset) , "offset must be number" );
 	
-	return process.reserved.bindings.intrinsic_readfsdword( offset );
+	return Number32( process.reserved.bindings.intrinsic_readfsdword( offset ) );
 }
 exports.readgsUInt32LE = readgsUInt32LE;
 
@@ -75,7 +75,7 @@ function readgsPointer( offset )
 	}
 	else
 	{
-		return Number64( process.reserved.bindings.intrinsic_readgsdword( offset ) );
+		return Number32( process.reserved.bindings.intrinsic_readgsdword( offset ) );
 	}
 }
 exports.readgsPointer = readgsPointer;

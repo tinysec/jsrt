@@ -90,6 +90,8 @@ const BUILTIN_MODULE_NAME_TABLE = [
 	"win32/wtypes" ,
 	
 	// host
+	"host/console"  ,
+		
 	"host/windbg" ,
 	
 	"host/ida"  ,

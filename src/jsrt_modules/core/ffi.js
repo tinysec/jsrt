@@ -1557,8 +1557,6 @@ function _fixRawValueToTypedValue(returnType, rawValue)
         || ("uchar" == returnType)
         || ("short" == returnType)
         || ("ushort" == returnType)
-        || ("long" == returnType)
-        || ("ulong" == returnType)
         || ("float" == returnType)
         || ("double" == returnType)
         || ("string" == returnType)
@@ -1574,6 +1572,12 @@ function _fixRawValueToTypedValue(returnType, rawValue)
     else if ("buffer" == returnType) 
 	{
         return Number64(rawValue);
+    }
+	else if (("long" == returnType)
+        || ("ulong" == returnType)
+    ) 
+	{
+        return Number32(rawValue);
     }
     else if (("longlong" == returnType)
         || ("ulonglong" == returnType)
