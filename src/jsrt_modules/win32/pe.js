@@ -64,7 +64,7 @@ function fd_read_IMAGE_DOS_HEADER( fd )
 		
 		dosHeader.e_res2 = ioBuffer.readUInt16LEArray( 0x028 , 10 ); // 
 		
-		dosHeader.e_lfanew = ioBuffer.readInt32LE( 0x03c  ).toJSNumber();
+		dosHeader.e_lfanew = ioBuffer.readInt32LE( 0x03c  );
 
 	}while(false);
 	
