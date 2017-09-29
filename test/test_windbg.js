@@ -13,10 +13,7 @@ const windbg = require("host/windbg");
 function main(  )
 {
 	
-	windbg.execute(".reload /f nt");
 
-	
-	printf( windbg.isPointer64Bit( ) );
 	
 	return 0;
 }
