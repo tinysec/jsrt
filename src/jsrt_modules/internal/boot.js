@@ -18,7 +18,7 @@
 		this.parent = parent;
     }
 
-    NativeModule._cache = {};
+    NativeModule.staticCache = {};
 
     function removeSheBang(content) 
 	{
@@ -34,7 +34,7 @@
 	{
         var cachedModule = null;
 
-        cachedModule = NativeModule._cache[requestName];
+        cachedModule = NativeModule.staticCache[requestName];
         if (cachedModule) 
 		{
             return cachedModule.exports;
@@ -50,15 +50,18 @@
         var NewModule = new NativeModule(requestName , parent || {} );
 
 
-        NativeModule._cache[requestName] = NewModule;
+        NativeModule.staticCache[requestName] = NewModule;
 
         try 
 		{
-            NewModule._loadFromContent(builtInFileInfo.content, builtInFileInfo.name);
+            NewModule._loadFromContent(
+						builtInFileInfo.content, 
+						builtInFileInfo.fullname ? builtInFileInfo.fullname : builtInFileInfo.name
+				);
         }
         catch (err) 
 		{
-            delete NativeModule._cache[requestName];
+            delete NativeModule.staticCache[requestName];
 			
 			throw new Error("load builtIn " + requestName + " error " + err );
         }
@@ -79,7 +82,7 @@
             return;
         }
 
-        var fileAsRoutine = NativeModule.prototype._compile(fileContent, arg_filename);
+        var fileAsRoutine = NativeModule.prototype.compile(fileContent, arg_filename);
 
         var param0_this = {};
         var param2_require = function require(arg_requestName) 
@@ -87,7 +90,7 @@
             var requestName = arg_requestName.toLowerCase();
             var cachedModule = null;
 
-            cachedModule = NativeModule._cache[requestName];
+            cachedModule = NativeModule.staticCache[requestName];
             if (cachedModule) 
 			{
                 return cachedModule.exports;
@@ -116,7 +119,7 @@
         return MODULE_WRAPPER[0] + script + MODULE_WRAPPER[1];
     };
 
-    NativeModule.prototype._compile = function (fileContent, filename) 
+    NativeModule.prototype.compile = function (fileContent, filename) 
 	{
         if (0 == fileContent.length) 
 		{
@@ -125,9 +128,9 @@
 
         var wrappedContent = wrap_source(fileContent);
 
-        return process.reserved.bindings.chakra_runScript(wrappedContent, filename);
+        return process.reserved.bindings.chakra_runScript( wrappedContent, filename );
     }
-
+	
 
     function pre_init_process() 
 	{
@@ -143,6 +146,9 @@
 
         // verbose
         process.verbose = false;
+
+		// debug
+		process.debug = process.reserved.bootContext.debug;
 
         // version
         process.version = "";

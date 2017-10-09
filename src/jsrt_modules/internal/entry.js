@@ -41,7 +41,13 @@
             "name": "eval",
             "type": "boolean",
             "description": "eval mode"
-        }
+        } ,
+
+		{
+            "name": "debug",
+            "type": "boolean",
+            "description": "debug mode"
+        },
     ];
 
    
@@ -104,11 +110,14 @@
 
         _.each(EXEC_ARG_OPTION_TABLE, function (item) 
 		{
-            if (item.name.length <= 4) {
-                if ("windbg" == host.type) {
+            if (item.name.length <= 4) 
+			{
+                if ("windbg" == host.type) 
+				{
                     printf(" --%s\t%s\n", item.name, item.description);
                 }
-                else {
+                else 
+				{
                     printf(" --%s\t\t%s\n", item.name, item.description);
                 }
             }
@@ -120,10 +129,16 @@
         printf("\n\n");
 
         printf("Environment: \n");
+		
 		printf("JSRT_SYSTEM_MODULE_PATH\t\tsystem jsrt module search path\n");
+		
         printf("JSRT_MODULE_PATH\t\tcommon jsrt module search path\n");
+		
         printf("JSRT_IDA_MODULE_PATH\t\tjsrt-ida module search path\n");
+		
         printf("JSRT_WINDBG_MODULE_PATH\t\tjsrt-windbg module search path\n");
+		
+		printf("JSRT_SOURCE_PATH\t\tjsrt debug source path\n");
 
         printf("\n\n");
 

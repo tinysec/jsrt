@@ -39,7 +39,7 @@ function Module(id, parent) {
     this.searchPaths = [];
 }
 
-Module._cache = {};
+Module.staticCache = {};
 
 const BUILTIN_MODULE_NAME_TABLE = [
 	
@@ -373,7 +373,7 @@ function getMainFileFromDirectory(basefolder)
     return;
 }
 
-Module._resolveFile = function (arg_name, arg_parent, arg_isMain) 
+Module.resolveFile = function (arg_name, arg_parent, arg_isMain) 
 {
     var searchPaths = [];
     var mainFileName = '';
@@ -432,7 +432,7 @@ Module.staticLoadFile = function (arg_requestName, arg_parent, arg_isMain)
     var filename = null;
     var cachedModule = null;
 	
-    filename = Module._resolveFile(requestName, arg_parent, arg_isMain);
+    filename = Module.resolveFile(requestName, arg_parent, arg_isMain);
 
     cachedModule = null;
 
@@ -445,7 +445,7 @@ Module.staticLoadFile = function (arg_requestName, arg_parent, arg_isMain)
 
     if (!arg_isMain) 
 	{
-        cachedModule = Module._cache[filename];
+        cachedModule = Module.staticCache[filename];
         if (cachedModule) 
 		{
             return cachedModule.exports;
@@ -461,18 +461,18 @@ Module.staticLoadFile = function (arg_requestName, arg_parent, arg_isMain)
     }
     else 
 	{
-        Module._cache[filename] = NewModule;
+        Module.staticCache[filename] = NewModule;
     }
 
     var execRet;
 
     try 
 	{
-        execRet = NewModule._loadFile(filename);
+        execRet = NewModule.loadFile(filename);
     }
     catch (err) 
 	{
-        delete Module._cache[filename];
+        delete Module.staticCache[filename];
         printf("load file %s error %s\n", filename, err);
     }
 
@@ -528,53 +528,13 @@ Module.staticRunContentWithFilename = function ( filecontent , fileName )
     NewModule.id = '#';
 	NewModule.parent = {};
 	
-    NewModule.loadFromContent(filecontent , fileName);
+    NewModule.loadFromContent(filecontent , fileName );
    
     return NewModule.exports;
 }
 
 
-Module._staticLoadBuildInModule = function (requestName, arg_parent, arg_isMain) 
-{
-    var cachedModule = null;
-
-    cachedModule = Module._cache[requestName];
-    if (cachedModule) 
-	{
-        return cachedModule.exports;
-    }
-
-    var buildInFileInfo = process.reserved.bindings.module_findInternalFile(requestName);
-    if (!buildInFileInfo) 
-	{
-        throw new Error(sprintf("not found build-in lib %s", requestName));
-    }
-
-    var NewModule = new Module(requestName, arg_parent);
-
-    if (arg_isMain) 
-	{
-        process.mainModule = NewModule;
-        NewModule.id = '.';
-    }
-
-    Module._cache[requestName] = NewModule;
-
-    try 
-	{
-        NewModule.loadFromContent(buildInFileInfo.content, buildInFileInfo.name);
-    }
-    catch (err) 
-	{
-        delete Module._cache[requestName];
-
-        throw err;
-    }
-
-    return NewModule.exports;
-}
-
-Module.prototype._loadFile = function (arg_filename) 
+Module.prototype.loadFile = function (arg_filename) 
 {
     this.searchPaths.push(path.removeFileSpec(arg_filename));
 
@@ -594,9 +554,8 @@ Module.prototype._loadFile = function (arg_filename)
 	}
 }
 
-
-
-Module.prototype.loadFromContent = function (fileContent, arg_filename) {
+Module.prototype.loadFromContent = function (fileContent, arg_filename ) 
+{
     var self = this;
     var dirname;
 
@@ -616,53 +575,77 @@ Module.prototype.loadFromContent = function (fileContent, arg_filename) {
         return;
     }
 
-    var fileAsRoutine = Module.prototype._compile(fileContent, arg_filename);
+    var fileAsRoutine = Module.prototype.compile(fileContent, arg_filename);
 
     var param0_this = {};
 
     var param2_require = function require(arg_requestName) 
 	{
-        assert(_.isString(arg_requestName));
-        assert(0 != arg_requestName.length);
+        assert( _.isString(arg_requestName) );
+        assert( 0 != arg_requestName.length );
 
         var requestName = arg_requestName.toLowerCase();
         var cachedModule = null;
 		var newExports = null;
 
-		cachedModule = process.reserved.NativeModule._cache[requestName];
-        if (cachedModule) 
+		do 
 		{
-             return cachedModule.exports;
-        }
+			cachedModule = process.reserved.NativeModule.staticCache[requestName];
+			if (cachedModule) 
+			{
+				 newExports =  cachedModule.exports;
+				 break;
+			}
 
-		cachedModule = Module._cache[requestName];
-        if (cachedModule) 
-		{
-             return cachedModule.exports;
-        }
+			cachedModule = Module.staticCache[requestName];
+			if (cachedModule) 
+			{
+				 newExports =  cachedModule.exports;
+				 break;
+			}
 
-		if ( -1 != BUILTIN_MODULE_NAME_TABLE.indexOf( requestName ) )
-		{
-			return process.reserved.NativeModule.require(requestName);
-		}
-		else
-		{
-			return Module.staticLoadFile(requestName, self, false);
-		}
-		
+			if ( -1 != BUILTIN_MODULE_NAME_TABLE.indexOf( requestName ) )
+			{
+				newExports = process.reserved.NativeModule.require(requestName);
+				break;
+			}
+			else
+			{
+				newExports = Module.staticLoadFile(requestName, self, false);
+				break;
+			}
+				
+		} while( false );
+
+		return newExports;
     };
 
+	if ( process.debug && ( '.' == this.id ) )
+	{
+		return process.reserved.bindings.chakra_runScriptDebug(
+				 fileContent , 
+				 arg_filename ,
 
-    return fileAsRoutine.call(
-        param0_this,
-        this.exports,
-        param2_require,
-        this,
-        this.filename,
-        dirname
-    );
+				 param0_this,
+				 this.exports,
+				 param2_require,
+				 this,
+				 this.filename,
+				 dirname
+		);
+	}
+	else
+	{
+		return fileAsRoutine.call(
+			param0_this,
+			this.exports,
+			param2_require,
+			this,
+			this.filename,
+			dirname
+		);
+	}
 }
-
 
 
 const MODULE_WRAPPER = [
@@ -675,17 +658,17 @@ function wrap_source(script)
     return MODULE_WRAPPER[0] + script + MODULE_WRAPPER[1];
 };
 
-Module.prototype._compile = function (fileContent, filename) 
+
+Module.prototype.compile = function (fileContent, filename) 
 {
     if (0 == fileContent.length) {
         return;
     }
 
-    var wrappedContent = wrap_source(fileContent);
+    var wrappedContent = wrap_source( fileContent );
 
     return process.reserved.bindings.chakra_runScript(wrappedContent, filename);
 }
-
 
 module.exports = Module;
 //---------------------------------------------------------
