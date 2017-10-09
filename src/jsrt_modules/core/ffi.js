@@ -318,18 +318,17 @@ function buildSearchPaths(  )
 						thisArray.splice( index + 1, 0, newItem.toLowerCase(  ) );
 					}
 				}
-				
-				newItem = path.combine( item, ".\\jsrt\\i386" );
-
-				if ( path.folderExists( newItem ) ) 
-				{
-					if ( -1 == thisArray.indexOf( newItem.toLowerCase(  ) ) ) 
-					{
-						thisArray.splice( index + 1, 0, newItem.toLowerCase(  ) );
-					}
-				}
 			}
 			
+			newItem = path.combine( item, ".\\jsrt\\i386" );
+
+			if ( path.folderExists( newItem ) ) 
+			{
+				if ( -1 == thisArray.indexOf( newItem.toLowerCase(  ) ) ) 
+				{
+					thisArray.splice( index + 1, 0, newItem.toLowerCase(  ) );
+				}
+			}
 			
             newItem = path.combine( item, ".\\i386" );
 
@@ -386,9 +385,18 @@ function buildSearchPaths(  )
 					}
 				}
 			}
-			
-			
-			
+			else
+			{
+				newItem = path.combine( item, ".\\jsrt\\amd64" );
+
+				if ( path.folderExists( newItem ) ) 
+				{
+					if ( -1 == thisArray.indexOf( newItem.toLowerCase(  ) ) ) 
+					{
+						thisArray.splice( index + 1, 0, newItem.toLowerCase(  ) );
+					}
+				}
+			}
 			
             newItem = path.combine( item, ".\\amd64" );
 
@@ -432,6 +440,177 @@ function buildSearchPaths(  )
     }
 	
 	searchPaths = addEnvPaths( searchPaths, "Path" );
+	
+	
+	searchPaths.forEach( function ( item, index, thisArray ) 
+	{
+        var newItem = null;
+
+        if ( "ia32" == process.arch ) 
+		{
+			if (  'ida' == process.platform  )
+			{
+				newItem = path.combine( item, ".\\jsida\\i386" );
+
+				if ( path.folderExists( newItem ) ) 
+				{
+					if ( -1 == thisArray.indexOf( newItem.toLowerCase(  ) ) ) 
+					{
+						thisArray.splice( index + 1, 0, newItem.toLowerCase(  ) );
+					}
+				}
+				
+				
+				newItem = path.combine( item, ".\\jsida\\bin\\i386" );
+
+				if ( path.folderExists( newItem ) ) 
+				{
+					if ( -1 == thisArray.indexOf( newItem.toLowerCase(  ) ) ) 
+					{
+						thisArray.splice( index + 1, 0, newItem.toLowerCase(  ) );
+					}
+				}
+				
+			}
+			
+			
+			newItem = path.combine( item, ".\\jsrt\\i386" );
+
+			if ( path.folderExists( newItem ) ) 
+			{
+				if ( -1 == thisArray.indexOf( newItem.toLowerCase(  ) ) ) 
+				{
+					thisArray.splice( index + 1, 0, newItem.toLowerCase(  ) );
+				}
+			}
+			
+			newItem = path.combine( item, ".\\jsrt\\bin\\i386" );
+
+			if ( path.folderExists( newItem ) ) 
+			{
+				if ( -1 == thisArray.indexOf( newItem.toLowerCase(  ) ) ) 
+				{
+					thisArray.splice( index + 1, 0, newItem.toLowerCase(  ) );
+				}
+			}
+			
+			
+            newItem = path.combine( item, ".\\i386" );
+
+            if ( path.folderExists( newItem ) ) 
+			{
+                if ( -1 == thisArray.indexOf( newItem.toLowerCase(  ) ) ) 
+				{
+                    thisArray.splice( index + 1, 0, newItem.toLowerCase(  ) );
+                }
+            }
+
+            newItem = path.combine( item, ".\\bin\\i386" );
+
+            if ( path.folderExists( newItem ) ) 
+			{
+                if ( -1 == thisArray.indexOf( newItem.toLowerCase(  ) ) ) {
+                    thisArray.splice( index + 1, 0, newItem.toLowerCase(  ) );
+                }
+            }
+			
+        }
+        else if ( "x64" == process.arch ) 
+		{
+			if (  'ida' == process.platform  )
+			{
+				// dirty hack , idaq64.exe is a 32bit process
+				newItem = path.combine( item, ".\\jsida\\i386" );
+
+				if ( path.folderExists( newItem ) ) 
+				{
+					if ( -1 == thisArray.indexOf( newItem.toLowerCase(  ) ) ) 
+					{
+						thisArray.splice( index + 1, 0, newItem.toLowerCase(  ) );
+					}
+				}
+				
+				newItem = path.combine( item, ".\\jsida\\bin\\i386" );
+
+				if ( path.folderExists( newItem ) ) 
+				{
+					if ( -1 == thisArray.indexOf( newItem.toLowerCase(  ) ) ) 
+					{
+						thisArray.splice( index + 1, 0, newItem.toLowerCase(  ) );
+					}
+				}
+				
+				
+				newItem = path.combine( item, ".\\jsrt\\bin\\i386" );
+
+				if ( path.folderExists( newItem ) ) 
+				{
+					if ( -1 == thisArray.indexOf( newItem.toLowerCase(  ) ) ) 
+					{
+						thisArray.splice( index + 1, 0, newItem.toLowerCase(  ) );
+					}
+				}
+				
+				newItem = path.combine( item, ".\\jsrt\\i386" );
+
+				if ( path.folderExists( newItem ) ) 
+				{
+					if ( -1 == thisArray.indexOf( newItem.toLowerCase(  ) ) ) 
+					{
+						thisArray.splice( index + 1, 0, newItem.toLowerCase(  ) );
+					}
+				}
+				
+				
+			}
+			else
+			{
+				newItem = path.combine( item, ".\\jsrt\\amd64" );
+
+				if ( path.folderExists( newItem ) ) 
+				{
+					if ( -1 == thisArray.indexOf( newItem.toLowerCase(  ) ) ) 
+					{
+						thisArray.splice( index + 1, 0, newItem.toLowerCase(  ) );
+					}
+				}
+				
+				newItem = path.combine( item, ".\\jsrt\\bin\\amd64" );
+
+				if ( path.folderExists( newItem ) ) 
+				{
+					if ( -1 == thisArray.indexOf( newItem.toLowerCase(  ) ) ) 
+					{
+						thisArray.splice( index + 1, 0, newItem.toLowerCase(  ) );
+					}
+				}
+			}
+			
+			
+			
+            newItem = path.combine( item, ".\\amd64" );
+
+            if ( path.folderExists( newItem ) ) 
+			{
+                if ( -1 == thisArray.indexOf( newItem.toLowerCase(  ) ) ) 
+				{
+                    thisArray.splice( index + 1, 0, newItem.toLowerCase(  ) );
+                }
+            }
+
+            newItem = path.combine( item, ".\\bin\\amd64" );
+
+            if ( path.folderExists( newItem ) ) 
+			{
+                if ( -1 == thisArray.indexOf( newItem.toLowerCase(  ) ) ) 
+				{
+                    thisArray.splice( index + 1, 0, newItem.toLowerCase(  ) );
+                }
+            }
+			
+        }
+
+    } );
 
     searchPaths = _.filter( searchPaths, function ( item ) 
 	{
@@ -732,7 +911,13 @@ function ffi_cleanDeclare( arg_declareText )
 {
     var declareText = '';
 
-	declareText = arg_declareText.trim(  );
+	declareText = arg_declareText.trim( );
+	
+	declareText = declareText.replaceAll( '\t' , ' ' );
+	
+	declareText = declareText.replaceAll( '\r' , ' ' );
+	
+	declareText = declareText.replaceAll( '\n' , ' ' );
 	
 
     var tempArray1 = declareText.split( "(" );
@@ -869,7 +1054,6 @@ function ffi_parseDeclare( arg_declareText )
 		throw new Error( sprintf('clean declare "%s" faild %s ' , arg_declareText , err.message ) );
 	}
 	
-	
     var lexInfo = null; 
 	
 	try
@@ -883,11 +1067,11 @@ function ffi_parseDeclare( arg_declareText )
 	
 
     // return type
-    if ( _.has( WIN_TYPE_TO_FFI_TYPE_TABLE, lexInfo.returnType )  ) 
+    if ( _.has( WIN_TYPE_TO_FFI_TYPE_TABLE , lexInfo.returnType )  ) 
 	{
-        lexInfo.returnType = WIN_TYPE_TO_FFI_TYPE_TABLE[lexInfo.returnType];
+        lexInfo.returnType = WIN_TYPE_TO_FFI_TYPE_TABLE[ lexInfo.returnType ];
     }
-    else if ( _.has( ENUM_TABLE_FFI_VALUE_TYPE, lexInfo.returnType ) ) 
+    else if ( _.has( ENUM_TABLE_FFI_VALUE_TYPE , lexInfo.returnType ) ) 
 	{
         // nop
     }
@@ -928,7 +1112,7 @@ function ffi_parseDeclare( arg_declareText )
     // argTypes
     lexInfo.argTypes = _.map( lexInfo.argTypes, function ( item ) 
 	{
-        if ( _.has( WIN_TYPE_TO_FFI_TYPE_TABLE, item )  ) 
+        if ( _.has( WIN_TYPE_TO_FFI_TYPE_TABLE , item )  ) 
 		{
             return WIN_TYPE_TO_FFI_TYPE_TABLE[item];
         }
@@ -1785,7 +1969,7 @@ function ffi_getLastError(  )
 exports.getLastError = ffi_getLastError;
 
 
-function ffi_bindFromRoutineAddressAndDeclareInfo( arg_address, declareInfo ) 
+function ffi_bindFromRoutineAddressAndDeclareInfo( arg_address , declareInfo ) 
 {
     var ffiHelper = {};
     var routineAddress = null;
@@ -1803,10 +1987,12 @@ function ffi_bindFromRoutineAddressAndDeclareInfo( arg_address, declareInfo )
         return ENUM_TABLE_FFI_VALUE_TYPE[item];
     } );
 
-    if ( Number64.isNumber64( arg_address ) ) {
+    if ( Number64.isNumber64( arg_address ) ) 
+	{
         routineAddress = arg_address;
     }
-    else if ( Buffer.isBuffer( arg_address ) ) {
+    else if ( Buffer.isBuffer( arg_address ) ) 
+	{
         routineAddress = arg_address.address;
     }
     else 
@@ -2141,7 +2327,7 @@ exports.loadAndBatchBind = ffi_loadAndBatchBind;
 
 function main(    )
 {
-
+		
 
 	return 0;
 }

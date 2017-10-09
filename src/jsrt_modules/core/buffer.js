@@ -162,7 +162,7 @@ Buffer.isBuffer = function(obj)
 	return false;
 }
 
-Buffer.alloc = function(length)
+Buffer.alloc = function( length  , arg_noTrack )
 {
 	var address = null;
 	var pNewBuf = null;
@@ -184,13 +184,17 @@ Buffer.alloc = function(length)
 	address = Number64(helper);
 	
 	pNewBuf = new Buffer(length, address);
+	
+	if ( !arg_noTrack )
+	{
+		add_to_buffer_table(address, length);
+	}
 
-	add_to_buffer_table(address, length);
 
 	return pNewBuf;
 }
 
-Buffer.allocEx = function(length)
+Buffer.allocEx = function( length , arg_noTrack )
 {
 	var address = null;
 	var pNewBuf = null;
@@ -212,11 +216,15 @@ Buffer.allocEx = function(length)
 	address = Number64(helper);
 	
 	pNewBuf = new Buffer(length, address);
-
-	add_to_buffer_table(address, length);
+	
+	if ( !arg_noTrack )
+	{
+		add_to_buffer_table(address, length);
+	}
 
 	return pNewBuf;
 }
+
 
 Buffer.attachNative = function(arg_address, arg_length)
 {
@@ -3373,6 +3381,20 @@ Buffer.dump = function(arg_address, length)
 
 	return 0;
 }
+
+Buffer.prototype.dump = function( length )
+{
+	if (!this.isValid())
+	{
+		throw new Error("try to operate with invalid buffer");
+	}
+
+	assert( _.isNumber(length)  , "length must be number" );
+
+	return Buffer.dump( this.address  , length );
+}
+
+
 
 function main()
 {

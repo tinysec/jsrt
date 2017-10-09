@@ -694,7 +694,7 @@ function cs_disasm_internal( hCapstone , codeBuffer , codeLength , codeBase )
 
 
 
-function cs_disasm( hCapstone , arg_code , arg_BaseAddress , arg_instNumber , arg_callback )
+function cs_disasm( hCapstone , arg_code , arg_BaseAddress , arg_instNumber , arg_callback , arg_codeoffset )
 {
 	var codeBuffer = null;
 	var baseAddress = 0;
@@ -756,7 +756,12 @@ function cs_disasm( hCapstone , arg_code , arg_BaseAddress , arg_instNumber , ar
 	var instArray = [];
 	var instCount = 0;
 	
-	for ( codeOffset = 0; codeOffset < codeBuffer.length; codeOffset = nextCodeOffset )
+	if ( arg_codeoffset )
+	{
+		codeOffset = arg_codeoffset;
+	}
+	
+	for ( ; codeOffset < codeBuffer.length; codeOffset = nextCodeOffset )
 	{
 		frameCode;
 		
@@ -827,6 +832,13 @@ function cs_disasm( hCapstone , arg_code , arg_BaseAddress , arg_instNumber , ar
 }
 exports.disasm = cs_disasm;
 
+function disassemble( hCapstone , arg_code , arg_codeoffset , arg_BaseAddress )
+{
+	return cs_disasm( hCapstone , arg_code , arg_BaseAddress , 1 , null , arg_codeoffset );
+}
+exports.disassemble = disassemble;
+
+
 
 function CCapstone( arg_arch , arg_mode )
 {
@@ -862,7 +874,13 @@ CCapstone.prototype.disasm = function()
 	return cs_disasm.apply(this , argv );
 }
 
-
+CCapstone.prototype.disasmBufferLine = function()
+{
+	var argv = Array.prototype.slice.call(arguments);
+	argv.unshift( this.hCapstone );
+	 
+	return cs_disasm_buffer_line.apply(this , argv );
+}
 
 //---------------------------------------------------------------
 
