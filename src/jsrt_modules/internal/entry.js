@@ -373,7 +373,7 @@
 		
 		var fileExports = Module.staticRunContentWithFilename( 
 				process.reserved.entryContext.fileContent ,
-				process.reserved.entryContext.fileName ,
+				process.reserved.entryContext.fileName 
 		);
 		
 		var fnRoutine = fileExports[ process.reserved.entryContext.routineName ];
