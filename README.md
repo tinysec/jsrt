@@ -75,8 +75,8 @@ more info is at https://github.com/tinysec/jsrt
 ## real multi thread support 
 ![thread_support](./img/thread.png)
 
-## visual studio debug support
-need windows 10
+## visual studio debug support( need windows 10 )
+
 ![visual_stduio_support](./img/debug.png)
 
 
