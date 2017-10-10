@@ -1,37 +1,37 @@
 'use strict';
 
 
-const _ = require("underscore");
-const assert = require("assert");
-const path = require("path");
+const _ = require( "underscore" );
+const assert = require( "assert" );
+const path = require( "path" );
 
-const printf = require("cprintf").printf;
-const sprintf = require("cprintf").sprintf;
-const vprintf = require("cprintf").vprintf;
+const printf = require( "cprintf" ).printf;
+const sprintf = require( "cprintf" ).sprintf;
+const vprintf = require( "cprintf" ).vprintf;
 
 // fs
-function fs_readTextFile(arg_filename) 
+function fs_readTextFile( arg_filename ) 
 {
     var param_codepage = 65001;
     var param_method = 0;
     var param_offset = 0;
     var param_length = -1;
 
-    return process.reserved.bindings.fs_readTextFile(arg_filename, param_codepage, param_method, param_offset, param_length);
+    return process.reserved.bindings.fs_readTextFile( arg_filename, param_codepage, param_method, param_offset, param_length );
 }
 
 
 
 //-------------------------------------------------
 
-function Module(id, parent) {
+function Module( id, parent ) {
     this.id = id;
     this.exports = {};
     this.parent = parent;
 
-    if (parent && parent.children) 
+    if ( parent && parent.children ) 
 	{
-        parent.children.push(this);
+        parent.children.push( this );
     }
 
     this.filename;
@@ -176,135 +176,135 @@ const BUILTIN_MODULE_NAME_TABLE = [
 ];
 process.builtInModules = BUILTIN_MODULE_NAME_TABLE;
 
-function stripBOM(content) 
+function stripBOM( content ) 
 {
-    if (content.charCodeAt(0) === 0xFEFF) 
+    if ( content.charCodeAt( 0 ) === 0xFEFF ) 
 	{
-        content = content.slice(1);
+        content = content.slice( 1 );
     }
 
     return content;
 }
 
-function removeSheBang(content) 
+function removeSheBang( content ) 
 {
-    if (content.charCodeAt(0) === 0xFEFF) 
+    if ( content.charCodeAt( 0 ) === 0xFEFF ) 
 	{
-        content = content.slice(1);
+        content = content.slice( 1 );
     }
 
     return content;
 }
 
 
-function addEnvPaths(destPaths, envKeyName) 
+function addEnvPaths( destPaths, envKeyName ) 
 {
     var envPaths = null;
     var envValue = process.env[envKeyName];
 
-    if (!envValue) 
+    if ( !envValue ) 
 	{
         return destPaths;
     }
 
-    envPaths = envValue.split(";");
+    envPaths = envValue.split( ";" );
 
-    envPaths = _.map(envPaths, function (item) 
+    envPaths = _.map( envPaths, function ( item ) 
 	{
-        return path.normalize(item.trim().toLowerCase());
-    });
+        return path.normalize( item.trim(  ).toLowerCase(  ) );
+    } );
 
-    envPaths = _.map(envPaths, function (item) 
+    envPaths = _.map( envPaths, function ( item ) 
 	{
-        return path.removeBackslash(item);
-    });
+        return path.removeBackslash( item );
+    } );
 
-    destPaths = _.union(destPaths, envPaths);
+    destPaths = _.union( destPaths, envPaths );
 
     return destPaths;
 }
 
-function buildSearchPaths(arg_name, arg_searchPaths) 
+function buildSearchPaths( arg_name, arg_searchPaths ) 
 {
     var searchPaths = [];
     var testPath = '';
 
 	
 	// system module first
-	searchPaths = addEnvPaths(searchPaths, "JSRT_SYSTEM_MODULE_PATH" );
+	searchPaths = addEnvPaths( searchPaths, "JSRT_SYSTEM_MODULE_PATH"  );
 	
-	testPath = path.combine( process.execDirectory.toLowerCase() , "jsrt_modules" );
-    if (-1 == searchPaths.indexOf(testPath)) 
+	testPath = path.combine(  process.execDirectory.toLowerCase(  ) , "jsrt_modules"  );
+    if ( -1 == searchPaths.indexOf( testPath ) ) 
 	{
-        searchPaths.push(testPath);
+        searchPaths.push( testPath );
     }
 
 
-	var findname = path.normalize(arg_name);
+	var findname = path.normalize( arg_name );
 
-    if ( path.folderExists(findname) ) 
+    if (  path.folderExists( findname )  ) 
 	{
-        searchPaths.push(findname.toLowerCase() );
+        searchPaths.push( findname.toLowerCase(  )  );
     }
 
-    if (arg_searchPaths) 
+    if ( arg_searchPaths ) 
 	{
-        searchPaths = _.union(searchPaths, arg_searchPaths);
+        searchPaths = _.union( searchPaths, arg_searchPaths );
     }
 
-    testPath = process.currentDirectory.toLowerCase();
+    testPath = process.currentDirectory.toLowerCase(  );
 
-    if (-1 == searchPaths.indexOf(testPath)) 
+    if ( -1 == searchPaths.indexOf( testPath ) ) 
 	{
-        searchPaths.push(testPath);
+        searchPaths.push( testPath );
     }
 
-    testPath = process.execDirectory.toLowerCase();
-    if (-1 == searchPaths.indexOf(testPath)) 
+    testPath = process.execDirectory.toLowerCase(  );
+    if ( -1 == searchPaths.indexOf( testPath ) ) 
 	{
-        searchPaths.push(testPath);
+        searchPaths.push( testPath );
     }
 
-    if ("windbg" == host.type) 
+    if ( "windbg" == host.type ) 
 	{
-        searchPaths = addEnvPaths(searchPaths, "JSRT_WINDBG_MODULE_PATH");
+        searchPaths = addEnvPaths( searchPaths, "JSRT_WINDBG_MODULE_PATH" );
     }
-    else if ("ida" == host.type) 
+    else if ( "ida" == host.type ) 
 	{
-        searchPaths = addEnvPaths(searchPaths, "JSRT_IDA_MODULE_PATH");
+        searchPaths = addEnvPaths( searchPaths, "JSRT_IDA_MODULE_PATH" );
     }
     else 
 	{
 
     }
 
-    searchPaths = addEnvPaths(searchPaths, "JSRT_MODULE_PATH");
+    searchPaths = addEnvPaths( searchPaths, "JSRT_MODULE_PATH" );
 
-    searchPaths = _.filter(searchPaths, function (item) 
+    searchPaths = _.filter( searchPaths, function ( item ) 
 	{
-        return (0 != item.length) && path.folderExists(item);
-    });
+        return ( 0 != item.length ) && path.folderExists( item );
+    } );
 
-    searchPaths.forEach(function (item, index, thisArray) 
+    searchPaths.forEach( function ( item, index, thisArray ) 
 	{
-        var newItem = path.combine(item, "jsrt_modules");
+        var newItem = path.combine( item, "jsrt_modules" );
 
-        if ( path.folderExists(newItem) ) 
+        if (  path.folderExists( newItem )  ) 
 		{
-            if (-1 == thisArray.indexOf(newItem)) 
+            if ( -1 == thisArray.indexOf( newItem ) ) 
 			{
-                thisArray.splice(index + 1, 0, newItem);
+                thisArray.splice( index + 1, 0, newItem );
             }
 
         }
-    });
+    } );
 
     return searchPaths;
 }
 
-function getMainFileFromDirectory(basefolder) 
+function getMainFileFromDirectory( basefolder ) 
 {
-    var package_json_filename = path.combine(basefolder, "package.json");
+    var package_json_filename = path.combine( basefolder, "package.json" );
     var package_json_filecontent = '';
     var package_json_object = null;
     var package_json_main_value = '';
@@ -312,106 +312,106 @@ function getMainFileFromDirectory(basefolder)
 
     var index_filename = '';
 
-    if (path.fileExists(package_json_file)) 
+    if ( path.fileExists( package_json_file ) ) 
 	{
-        package_json_filecontent = fs_readTextFile(package_json_file);
-        if (0 == package_json_filecontent.length) 
+        package_json_filecontent = fs_readTextFile( package_json_file );
+        if ( 0 == package_json_filecontent.length ) 
 		{
-            throw new Error(sprintf("empty package.json file %s\n", basefolder));
+            throw new Error( sprintf( "empty package.json file %s\n", basefolder ) );
         }
 
-        package_json_object = JSON.parse(package_json_filecontent);
-        if (!package_json_object) 
+        package_json_object = JSON.parse( package_json_filecontent );
+        if ( !package_json_object ) 
 		{
-            throw new Error(sprintf("invalid package.json file %s\n", basefolder));
+            throw new Error( sprintf( "invalid package.json file %s\n", basefolder ) );
         }
 
-        if (_.has(package_json_object, "main")) 
+        if ( _.has( package_json_object, "main" ) ) 
 		{
             package_json_main_value = package_json_object["main"];
 
-            if (!_.isString(package_json_main_value)) 
+            if ( !_.isString( package_json_main_value ) ) 
 			{
-                throw new Error(sprintf("invalid package.json file %s\n", basefolder));
+                throw new Error( sprintf( "invalid package.json file %s\n", basefolder ) );
             }
 
-            if (0 == package_json_main_value.length) 
+            if ( 0 == package_json_main_value.length ) 
 			{
-                throw new Error(sprintf("invalid package.json file %s\n", basefolder));
+                throw new Error( sprintf( "invalid package.json file %s\n", basefolder ) );
             }
 
-            package_json_main_value = path.normalize(package_json_main_value);
+            package_json_main_value = path.normalize( package_json_main_value );
 
-            if (path.fileExists(package_json_main_value)) 
+            if ( path.fileExists( package_json_main_value ) ) 
 			{
                 return package_json_main_value;
             }
             else 
 			{
-                package_json_main_filename = path.combine(basefolder, package_json_main_value);
-                if (path.fileExists(package_json_main_filename)) 
+                package_json_main_filename = path.combine( basefolder, package_json_main_value );
+                if ( path.fileExists( package_json_main_filename ) ) 
 				{
                     return package_json_main_filename;
                 }
 
                 package_json_main_filename = package_json_main_filename + ".js";
-                if (path.fileExists(package_json_main_filename)) 
+                if ( path.fileExists( package_json_main_filename ) ) 
 				{
                     return package_json_main_filename;
                 }
             }
 
-            throw new Error(sprintf("not foud %s in %s", package_json_object["main"], package_json_filename));
+            throw new Error( sprintf( "not foud %s in %s", package_json_object["main"], package_json_filename ) );
         }
     }
 
-    index_filename = path.combine(src_path, "index.js");
-    if (path.fileExists(index_filename)) {
+    index_filename = path.combine( src_path, "index.js" );
+    if ( path.fileExists( index_filename ) ) {
         return index_filename;
     }
 
     return;
 }
 
-Module.resolveFile = function (arg_name, arg_parent, arg_isMain) 
+Module.resolveFile = function ( arg_name, arg_parent, arg_isMain ) 
 {
     var searchPaths = [];
     var mainFileName = '';
     var index = 0;
     var testFileName = '';
 
-    assert(_.isString(arg_name));
+    assert( _.isString( arg_name ) );
 
-    var findName = path.normalize(arg_name);
+    var findName = path.normalize( arg_name );
 	
-    if ( path.fileExists(findName) ) 
+    if (  path.fileExists( findName )  ) 
 	{
         return findName;
     }
 
-    searchPaths = buildSearchPaths(findName, arg_parent ? arg_parent.searchPaths : null);
+    searchPaths = buildSearchPaths( findName, arg_parent ? arg_parent.searchPaths : null );
 
     // add 
-    for (index = 0; index < searchPaths.length; index++) 
+    for ( index = 0; index < searchPaths.length; index++ ) 
 	{
-        testFileName = path.combine(searchPaths[index], findName);
+        testFileName = path.combine( searchPaths[index], findName );
 
-        if (path.fileExists(testFileName)) 
+        if ( path.fileExists( testFileName ) ) 
 		{
             return testFileName;
         }
-        else if (path.folderExists(testFileName)) 
+        else if ( path.folderExists( testFileName ) ) 
 		{
-            mainFileName = getMainFileFromDirectory(searchPaths[index]);
-            if (mainFileName) 
+            mainFileName = getMainFileFromDirectory( searchPaths[index] );
+            if ( mainFileName ) 
 			{
                 return mainFileName;
             }
         }
         else 
 		{
-            testFileName = path.combine(searchPaths[index], findName + ".js");
-            if (path.fileExists(testFileName)) 
+            testFileName = path.combine( searchPaths[index], findName + ".js" );
+            if ( path.fileExists( testFileName ) ) 
 			{
                 return testFileName;
             }
@@ -421,40 +421,40 @@ Module.resolveFile = function (arg_name, arg_parent, arg_isMain)
     return;
 }
 
-Module.staticLoadFile = function (arg_requestName, arg_parent, arg_isMain) 
+Module.staticLoadFile = function ( arg_requestName, arg_parent, arg_isMain ) 
 {
-    if (!arg_requestName)
+    if ( !arg_requestName )
 	{
         return;
     }
 
-    var requestName = arg_requestName.toLowerCase();
+    var requestName = arg_requestName.toLowerCase(  );
     var filename = null;
     var cachedModule = null;
 	
-    filename = Module.resolveFile(requestName, arg_parent, arg_isMain);
+    filename = Module.resolveFile( requestName, arg_parent, arg_isMain );
 
     cachedModule = null;
 
-    if (!filename) 
+    if ( !filename ) 
 	{
-        throw new Error(sprintf("not found %s", arg_requestName));
+        throw new Error( sprintf( "not found %s", arg_requestName ) );
     }
 
-    filename = filename.toLowerCase();
+    filename = filename.toLowerCase(  );
 
-    if (!arg_isMain) 
+    if ( !arg_isMain ) 
 	{
         cachedModule = Module.staticCache[filename];
-        if (cachedModule) 
+        if ( cachedModule ) 
 		{
             return cachedModule.exports;
         }
     }
 
-    var NewModule = new Module(filename, arg_parent);
+    var NewModule = new Module( filename, arg_parent );
 
-    if (arg_isMain) 
+    if ( arg_isMain ) 
 	{
         process.mainModule = NewModule;
         NewModule.id = '.';
@@ -468,15 +468,15 @@ Module.staticLoadFile = function (arg_requestName, arg_parent, arg_isMain)
 
     try 
 	{
-        execRet = NewModule.loadFile(filename);
+        execRet = NewModule.loadFile( filename );
     }
-    catch (err) 
+    catch ( err ) 
 	{
         delete Module.staticCache[filename];
-        printf("load file %s error %s\n", filename, err);
+        printf( "load file %s error %s\n", filename, err );
     }
 
-    if (arg_isMain) 
+    if ( arg_isMain ) 
 	{
         return execRet;
     }
@@ -486,22 +486,22 @@ Module.staticLoadFile = function (arg_requestName, arg_parent, arg_isMain)
     }
 }
 
-Module.staticRunMainFile = function () 
+Module.staticRunMainFile = function (  ) 
 {
-    return Module.staticLoadFile(process.argv[1], null, true);
+    return Module.staticLoadFile( process.argv[1], null, true );
 }
 
 
-Module.staticRunEval = function () 
+Module.staticRunEval = function (  ) 
 {
     var filecontent = process.argv[1];
 
-    if (!filecontent) 
+    if ( !filecontent ) 
 	{
         return;
     }
 
-    var NewModule = new Module();
+    var NewModule = new Module(  );
 
     process.mainModule = NewModule;
     NewModule.id = '.';
@@ -510,119 +510,127 @@ Module.staticRunEval = function ()
 
     try 
 	{
-        execRet = NewModule.loadFromContent(filecontent );
+        execRet = NewModule.loadFromContent( filecontent , null   );
     }
-    catch (err) 
+    catch ( err ) 
 	{
-        printf("eval error %s\n", err);
+        printf( "eval error %s\n", err );
     }
 
     return execRet;
 }
 
-Module.staticRunContentWithFilename = function ( filecontent , fileName ) 
+Module.staticRunContentWithFilename = function (  filecontent , fileName   ) 
 {
-    var NewModule = new Module();
+    var NewModule = new Module(  );
 
     process.mainModule = NewModule;
     NewModule.id = '#';
 	NewModule.parent = {};
 	
-    NewModule.loadFromContent(filecontent , fileName );
+    NewModule.loadFromContent( filecontent , fileName  );
    
     return NewModule.exports;
 }
 
 
-Module.prototype.loadFile = function (arg_filename) 
+Module.prototype.loadFile = function ( arg_filename   ) 
 {
-    this.searchPaths.push(path.removeFileSpec(arg_filename));
+    this.searchPaths.push( path.removeFileSpec( arg_filename ) );
 
-    var fileContent = fs_readTextFile(arg_filename, "utf-8");
+    var fileContent = fs_readTextFile( arg_filename, "utf-8" );
 	
-	var extname = path.extname(arg_filename);
+	var extname = path.extname( arg_filename );
 	
-	if ( ".json" == extname )
+	if (  ".json" == extname  )
 	{
-		this.exports = JSON.parse( fileContent );
+		this.exports = JSON.parse(  fileContent  );
 		
 		return this.exports;
 	}
 	else
 	{
-		 return this.loadFromContent(fileContent, arg_filename);
+		 return this.loadFromContent( fileContent, arg_filename   );
 	}
 }
 
-Module.prototype.loadFromContent = function (fileContent, arg_filename ) 
+Module.prototype.loadFromContent = function ( fileContent, arg_filename   ) 
 {
     var self = this;
-    var dirname;
+    var dirname = '';
+	var fileAsRoutine = null;
 
-    if (arg_filename) 
+    if ( arg_filename ) 
 	{
-        dirname = path.removeFileSpec(arg_filename);
+        dirname = path.removeFileSpec( arg_filename );
         this.filename = arg_filename;
     }
 
-    if (this.parent && this.parent.searchPaths)
+    if ( this.parent && this.parent.searchPaths )
 	 {
-        this.searchPaths = _.union(this.searchPaths, this.parent.searchPaths);
+        this.searchPaths = _.union( this.searchPaths, this.parent.searchPaths );
     }
 
-    if (0 == fileContent.length) 
+    if ( 0 == fileContent.length ) 
 	{
         return;
     }
-
-    var fileAsRoutine = Module.prototype.compile(fileContent, arg_filename);
+	
+	if (  process.debug && (  '.' == this.id  )  )
+	{
+		//nop
+	}
+	else
+	{
+		fileAsRoutine = Module.prototype.compile( fileContent, arg_filename  );
+	}
 
     var param0_this = {};
 
-    var param2_require = function require(arg_requestName) 
+    var param2_require = function require( arg_requestName ) 
 	{
-        assert( _.isString(arg_requestName) );
-        assert( 0 != arg_requestName.length );
+        assert(  _.isString( arg_requestName )  );
+        assert(  0 != arg_requestName.length  );
 
-        var requestName = arg_requestName.toLowerCase();
+        var requestName = arg_requestName.toLowerCase(  );
         var cachedModule = null;
 		var newExports = null;
 
 		do 
 		{
 			cachedModule = process.reserved.NativeModule.staticCache[requestName];
-			if (cachedModule) 
+			if ( cachedModule ) 
 			{
 				 newExports =  cachedModule.exports;
 				 break;
 			}
 
 			cachedModule = Module.staticCache[requestName];
-			if (cachedModule) 
+			if ( cachedModule ) 
 			{
 				 newExports =  cachedModule.exports;
 				 break;
 			}
 
-			if ( -1 != BUILTIN_MODULE_NAME_TABLE.indexOf( requestName ) )
+			if (  -1 != BUILTIN_MODULE_NAME_TABLE.indexOf(  requestName  )  )
 			{
-				newExports = process.reserved.NativeModule.require(requestName);
+				newExports = process.reserved.NativeModule.require( requestName );
 				break;
 			}
 			else
 			{
-				newExports = Module.staticLoadFile(requestName, self, false);
+				newExports = Module.staticLoadFile( requestName, self, false );
 				break;
 			}
 				
-		} while( false );
+		} while(  false  );
 
 		return newExports;
     };
 
-	if ( process.debug && ( '.' == this.id ) )
+	if (  process.debug && (  '.' == this.id  )  )
 	{
-		return process.reserved.bindings.chakra_runScriptDebug(
+		return process.reserved.bindings.chakra_runScriptDebug( 
 				 fileContent , 
 				 arg_filename ,
 
@@ -633,55 +641,60 @@ Module.prototype.loadFromContent = function (fileContent, arg_filename )
 				 this.filename,
 				 dirname
 		);
+		
 	}
 	else
 	{
-		return fileAsRoutine.call(
+		return fileAsRoutine.call( 
 			param0_this,
 			this.exports,
 			param2_require,
 			this,
 			this.filename,
 			dirname
-		);
+		 );
 	}
 }
 
 
 const MODULE_WRAPPER = [
-    '"use strict";\n(function(exports, require, module, __filename, __dirname) { ',
-    '\n});'
+    '"use strict";\n( function( exports , require , module , __filename , __dirname ) { ',
+    '\n} );'
 ];
 
-function wrap_source(script) 
+function wrap_source( script ) 
 {
     return MODULE_WRAPPER[0] + script + MODULE_WRAPPER[1];
 };
 
 
-Module.prototype.compile = function (fileContent, filename) 
+Module.prototype.compile = function ( fileContent, filename ) 
 {
-    if (0 == fileContent.length) {
+    if ( 0 == fileContent.length ) 
+	{
         return;
     }
 
-    var wrappedContent = wrap_source( fileContent );
+    var wrappedContent = wrap_source(  fileContent  );
 
-    return process.reserved.bindings.chakra_runScript(wrappedContent, filename);
+    var fileAsRoutine = process.reserved.bindings.chakra_parseScript( wrappedContent, filename );
+
+	return fileAsRoutine();
 }
+
 
 module.exports = Module;
 //---------------------------------------------------------
 	
 	
-function main(  )
+function main(    )
 {
 	
 	
 	return 0;
 }
 
-if ( !module.parent )
+if (  !module.parent  )
 {
-	main();
+	main(  );
 }

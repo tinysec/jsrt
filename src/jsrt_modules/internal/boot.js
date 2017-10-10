@@ -54,7 +54,7 @@
 
         try 
 		{
-            NewModule._loadFromContent(
+            NewModule.loadFromContent(
 						builtInFileInfo.content, 
 						builtInFileInfo.fullname ? builtInFileInfo.fullname : builtInFileInfo.name
 				);
@@ -73,7 +73,7 @@
     }
 
 
-    NativeModule.prototype._loadFromContent = function (fileContent, arg_filename) 
+    NativeModule.prototype.loadFromContent = function (fileContent, arg_filename) 
 	{
         var self = this;
 
@@ -128,7 +128,9 @@
 
         var wrappedContent = wrap_source(fileContent);
 
-        return process.reserved.bindings.chakra_runScript( wrappedContent, filename );
+        var fileAsRoutine = process.reserved.bindings.chakra_parseScript( wrappedContent, filename , true );
+
+		return fileAsRoutine();
     }
 	
 
