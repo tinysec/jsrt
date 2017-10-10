@@ -265,11 +265,11 @@ function buildSearchPaths( arg_name, arg_searchPaths )
         searchPaths.push( testPath );
     }
 
-    if ( "windbg" == host.type ) 
+    if ( "windbg" == process.hostType ) 
 	{
         searchPaths = addEnvPaths( searchPaths, "JSRT_WINDBG_MODULE_PATH" );
     }
-    else if ( "ida" == host.type ) 
+    else if ( "ida" == process.hostType ) 
 	{
         searchPaths = addEnvPaths( searchPaths, "JSRT_IDA_MODULE_PATH" );
     }
@@ -560,6 +560,7 @@ Module.prototype.loadFromContent = function ( fileContent, arg_filename   )
     var dirname = '';
 	var fileAsRoutine = null;
 
+
     if ( arg_filename ) 
 	{
         dirname = path.removeFileSpec( arg_filename );
@@ -576,7 +577,7 @@ Module.prototype.loadFromContent = function ( fileContent, arg_filename   )
         return;
     }
 	
-	if (  process.debug && (  '.' == this.id  )  )
+	if (  ( 'console' == process.hostType ) && process.debug && (  '.' == this.id  )  )
 	{
 		//nop
 	}
@@ -628,7 +629,7 @@ Module.prototype.loadFromContent = function ( fileContent, arg_filename   )
 		return newExports;
     };
 
-	if (  process.debug && (  '.' == this.id  )  )
+	if (  ( 'console' == process.hostType ) && process.debug && (  '.' == this.id  )  )
 	{
 		return process.reserved.bindings.chakra_runScriptDebug( 
 				 fileContent , 

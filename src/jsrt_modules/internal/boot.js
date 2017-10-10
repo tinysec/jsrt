@@ -229,28 +229,28 @@
 	{
         // zero-depends
    
-		if ("console" == process.compiledType) 
+		if ("console" == process.compiledType ) 
 		{
             if ( process.env["GATEWAY_INTERFACE"] ) 
 			{
-                host.type = "cgi";
+                process.hostType = "cgi";
             }
             else 
 			{
-                host.type = "console";
+                process.hostType = "console";
             }
         }
         else if ( "window" == process.compiledType ) 
 		{
-            host.type = "window";
+            process.hostType = "window";
         }
         else if ( "windbg" == process.compiledType ) 
 		{
-            host.type = "windbg";
+            process.hostType = "windbg";
         }
         else if ( "ida" == process.compiledType ) 
 		{
-            host.type = "ida";
+            process.hostType = "ida";
         }
         else 
 		{
@@ -293,6 +293,7 @@
 		// console
 		const printf = NativeModule.require("cprintf").printf;
         const sprintf = NativeModule.require("cprintf").sprintf;
+		const OutputDebugStringA = NativeModule.require("cprintf").OutputDebugStringA;
 		const _ = NativeModule.require("underscore");
 		const assert = NativeModule.require("assert");
 		
@@ -307,6 +308,7 @@
 		console.log = function console_log() 
 		{
 			var totaltext = sprintf.apply(this , arguments);
+
 			printf(totaltext + "\n");
 		}
         

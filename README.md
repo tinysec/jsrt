@@ -67,13 +67,17 @@ JSRT_WINDBG_MODULE_PATH		jsrt-windbg module search path
 
 more info is at https://github.com/tinysec/jsrt
 ```
-![jsrt](jsrt.jpg)
+![jsrt](./img/jsrt.jpg)
 
-## xp ~ win10 rs2 support !!
-![xp_support](xp.png)
+## xp ~ win10 rs2 support 
+![xp_support](./img/xp.png)
 
-## real multi thread support !!
-![thread_support](thread.png)
+## real multi thread support 
+![thread_support](./img/thread.png)
+
+## visual studio debug support
+![visual_stduio_support](./img/debug.png)
+
 
 
 ## example

@@ -83,23 +83,23 @@
 	{
         var arg0Name = '';
 
-        if ("console" == host.type) 
+        if ("console" == process.hostType ) 
 		{
             arg0Name = "js";
         }
-        else if ("cgi" == host.type) 
+        else if ("cgi" == process.hostType) 
 		{
             arg0Name = "js";
         }
-        else if ("window" == host.type) 
+        else if ("window" == process.hostType) 
 		{
             arg0Name = "js";
         }
-        else if ("windbg" == host.type) 
+        else if ("windbg" == process.hostType) 
 		{
             arg0Name = "!js";
         }
-        else if ("ida" == host.type) 
+        else if ("ida" == process.hostType) 
 		{
             arg0Name = "";
         }
@@ -112,7 +112,7 @@
 		{
             if (item.name.length <= 4) 
 			{
-                if ("windbg" == host.type) 
+                if ("windbg" == process.hostType) 
 				{
                     printf(" --%s\t%s\n", item.name, item.description);
                 }
@@ -178,7 +178,7 @@
         process.execArgs = {};
 		
 
-        if ("ida" == host.type) 
+        if ("ida" == process.hostType) 
 		{
             if (0 == rawCmdline.length) 
 			{
@@ -205,9 +205,9 @@
             return;
         }
 
-        if (("console" == host.type)
-            || ("cgi" == host.type)
-            || ("window" == host.type)
+        if (("console" == process.hostType)
+            || ("cgi" == process.hostType)
+            || ("window" == process.hostType)
         ) 
 		{
             rawArgv.shift();

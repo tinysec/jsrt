@@ -120,6 +120,43 @@ function DbgPrint()
 }
 exports.DbgPrint = DbgPrint;
 
+function OutputDebugStringA()
+{
+	var totaltext = sprintf.apply(this, arguments);
+	if (0 == totaltext.length)
+	{
+		totaltext = null;
+		return;
+	}
+
+	var singletext = '';
+	var offset = 0;
+	var singlelength = 0;
+	var leftLength = totaltext.length;
+
+	for (offset = 0; offset < totaltext.length; offset += singlelength)
+	{
+		singlelength = Math.min(1024, leftLength);
+
+		singletext = totaltext.substring(offset, offset + singlelength);
+
+		if (0 != singletext.length)
+		{
+			process.reserved.bindings.host_outputdebugstring(singletext);
+		}
+
+		leftLength -= singlelength;
+
+		if (0 == leftLength)
+		{
+			break;
+		}
+
+		singlelength = null;
+	}
+}
+exports.OutputDebugStringA = OutputDebugStringA;
+
 function KdPrint()
 {
 	if ( process.verbose )
