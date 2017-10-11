@@ -15,6 +15,8 @@ const CONFIG_MAX_WORKER = 20;
 		
 //-----------------------------------------------------------------
 const assert = require("assert");
+const _ = require("underscore");
+const base = require("base");
 
 const printf = require("cprintf").printf;
 const sprintf = require("cprintf").sprintf;
