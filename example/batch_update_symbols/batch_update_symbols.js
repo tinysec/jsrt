@@ -6,7 +6,7 @@
 
 
 const CONFIG_CHECK_FOLDER = [
-			"c:\\windows" ,
+			"c:\\windows\\System32" ,
 			"C:\\Program Files" ,
 			"C:\\Program Files (x86)" ,
 		];
