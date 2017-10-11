@@ -8,7 +8,7 @@
 const CONFIG_CHECK_FOLDER = [
 			"c:\\windows" ,
 			"C:\\Program Files" ,
-			"C:\Program Files (x86)" ,
+			"C:\\Program Files (x86)" ,
 		];
 		
 const CONFIG_MAX_WORKER = 20;
