@@ -116,7 +116,19 @@ function pdb_loadSymbolFile( imageFile )
 		pszDbgFile ,
 		nDbgFileLength
 	);
+	
+	if ( !bFlag )
+	{
+		pszSymbolFile.free();
+		pszSymbolFile = null;
 		
+		pszDbgFile.free();
+		pszDbgFile = null;
+		
+	
+		return;
+	}
+
 	strSymbolFile = pszSymbolFile.toString('ucs2');
 		
 	pszSymbolFile.free();
@@ -124,7 +136,7 @@ function pdb_loadSymbolFile( imageFile )
 	
 	pszDbgFile.free();
 	pszDbgFile = null;
-	
+
 	return strSymbolFile;
 }
 exports.loadSymbolFile = pdb_loadSymbolFile;
