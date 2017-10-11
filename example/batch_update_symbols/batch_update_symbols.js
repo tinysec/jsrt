@@ -78,9 +78,13 @@ function sub_find_files( manager , arg_baseFolder )
 					
 		if ( path.folderExists( fullname ) )
 		{
-			manager.folderQueue.push( fullname );
+			if ( !_.has(manager.folderQueue , fullname) )
+			{
+				manager.folderQueue.push( fullname );
 					
-			findNewItem = true;
+				findNewItem = true;
+			}
+			
 		}
 		else
 		{
@@ -88,12 +92,15 @@ function sub_find_files( manager , arg_baseFolder )
 					
 			if ( isPEFile( fullname ) )
 			{
-				manager.fileQueue.push( fullname );
-						
-		
-				findNewItem = true;
-						
-				manager.pe_file_count++;
+				if ( !_.has(manager.fileQueue , fullname) )
+				{
+					manager.fileQueue.push( fullname );
+					
+					findNewItem = true;
+					
+					manager.pe_file_count++;
+				}
+				
 			}
 					
 			host_console.setTitle( sprintf( "[+] find %d/%d files\n" , 
@@ -192,12 +199,17 @@ function work_as_master( )
 						{
 							break;
 						}
-						
+				
 					}
 				}
 			}
 			
 			if ( noMoreFiles )
+			{
+				return;
+			}
+			
+			if ( 0 == manager.fileQueue.length  )
 			{
 				return;
 			}
