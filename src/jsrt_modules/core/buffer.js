@@ -847,7 +847,7 @@ Buffer.readInt8Array = function(arg_address, arg_offset, arg_count)
 
 	for (index = 0; index < arg_count; index++)
 	{
-		valueArray.push( Buffer.readInt8( address, param_offset.add( index * 1) ) );
+		valueArray.push( Buffer.readInt8( address, param_offset.add(  1 ) ) );
 	}
 
 	return valueArray;
@@ -916,7 +916,7 @@ Buffer.readUInt8Array = function(arg_address, arg_offset, arg_count)
 
 	for (index = 0; index < arg_count; index++)
 	{
-		valueArray.push(Buffer.readUInt8(address, param_offset.add( index * 1 )  )  );
+		valueArray.push(Buffer.readUInt8(address, param_offset.add( 1 )  )  );
 	}
 
 	return valueArray;
@@ -984,7 +984,7 @@ Buffer.readInt16BEArray = function(arg_address, arg_offset, arg_count)
 
 	for (index = 0; index < arg_count; index++)
 	{
-		valueArray.push(Buffer.readInt16BE(address, param_offset.add( index * 2 ) ));
+		valueArray.push(Buffer.readInt16BE(address, param_offset.add( 2  ) ));
 	}
 
 	return valueArray;
@@ -1052,7 +1052,7 @@ Buffer.readInt16LEArray = function(arg_address, arg_offset, arg_count)
 
 	for (index = 0; index < arg_count; index++)
 	{
-		valueArray.push(Buffer.readInt16LE(address, param_offset.add( index * 2 ) ));
+		valueArray.push(Buffer.readInt16LE(address, param_offset.add( 2  ) ));
 	}
 
 	return valueArray;
@@ -1121,7 +1121,7 @@ Buffer.readUInt16BEArray = function(arg_address, arg_offset, arg_count)
 	
 	for (index = 0; index < arg_count; index++)
 	{
-		valueArray.push(Buffer.readUInt16BE(address, param_offset.add( index * 2 ) ));
+		valueArray.push(Buffer.readUInt16BE(address, param_offset.add( 2  ) ));
 	}
 
 	return valueArray;
@@ -1190,7 +1190,7 @@ Buffer.readUInt16LEArray = function(arg_address, arg_offset, arg_count)
 
 	for (index = 0; index < arg_count; index++)
 	{
-		valueArray.push(Buffer.readUInt16LE(address, param_offset.add( index * 2 ) ));
+		valueArray.push(Buffer.readUInt16LE(address, param_offset.add( 2  ) ));
 	}
 
 	return valueArray;
@@ -1259,7 +1259,7 @@ Buffer.readInt32BEArray = function(arg_address, arg_offset, arg_count)
 
 	for (index = 0; index < arg_count; index++)
 	{
-		valueArray.push( Buffer.readInt32BE(address, param_offset.add( index * 4 ) ) );
+		valueArray.push( Buffer.readInt32BE(address, param_offset.add(  4  ) ) );
 	}
 
 	return valueArray;
@@ -1326,7 +1326,7 @@ Buffer.readInt32LEArray = function(arg_address, arg_offset, arg_count)
 
 	for (index = 0; index < arg_count; index++)
 	{
-		valueArray.push( Buffer.readInt32LE(address, param_offset.add( index * 4 ) ) );
+		valueArray.push( Buffer.readInt32LE(address, param_offset.add(  4  ) ) );
 	}
 
 	return valueArray;
@@ -1396,7 +1396,7 @@ Buffer.readUInt32BEArray = function(arg_address, arg_offset, arg_count)
 
 	for (index = 0; index < arg_count; index++)
 	{
-		valueArray.push( Buffer.readUInt32BE(address, param_offset.add( index * 4 ) ) );
+		valueArray.push( Buffer.readUInt32BE(address, param_offset.add(  4  ) ) );
 	}
 
 	return valueArray;
@@ -1464,7 +1464,7 @@ Buffer.readUInt32LEArray = function(arg_address, arg_offset, arg_count)
 
 	for (index = 0; index < arg_count; index++)
 	{
-		valueArray.push( Buffer.readUInt32LE(address , param_offset.add( index * 4 ) ) );
+		valueArray.push( Buffer.readUInt32LE(address , param_offset.add(  4  ) ) );
 	}
 
 	return valueArray;
@@ -1536,7 +1536,7 @@ Buffer.readNumber32BEArray = function(arg_address, arg_offset, arg_count)
 
 	for (index = 0; index < arg_count; index++)
 	{
-		valueArray.push(Buffer.readNumber32BE(address , param_offset.add( index * 4 ) ));
+		valueArray.push(Buffer.readNumber32BE(address , param_offset.add(  4  ) ));
 	}
 
 	return valueArray;
@@ -1604,7 +1604,7 @@ Buffer.readNumber32LEArray = function(arg_address, arg_offset, arg_count)
 
 	for (index = 0; index < arg_count; index++)
 	{
-		valueArray.push(Buffer.readNumber32LE(address , param_offset.add( index * 4 ) ));
+		valueArray.push(Buffer.readNumber32LE(address , param_offset.add(  4  ) ));
 	}
 
 	return valueArray;
@@ -1672,7 +1672,7 @@ Buffer.readUNumber32BEArray = function(arg_address, arg_offset, arg_count)
 	
 	for (index = 0; index < arg_count; index++)
 	{
-		valueArray.push(Buffer.readUNumber32BE(address , param_offset.add( index * 4 ) ));
+		valueArray.push(Buffer.readUNumber32BE(address , param_offset.add(  4  ) ));
 	}
 
 	return valueArray;
@@ -1740,7 +1740,7 @@ Buffer.readUNumber32LEArray = function(arg_address, arg_offset, arg_count)
 	
 	for (index = 0; index < arg_count; index++)
 	{
-		valueArray.push( Buffer.readUNumber32LE(address, param_offset.add( index * 4 ) ) );
+		valueArray.push( Buffer.readUNumber32LE(address, param_offset.add(  4  ) ) );
 	}
 
 	return valueArray;
@@ -1811,7 +1811,7 @@ Buffer.readInt64BEArray = function(arg_address, arg_offset, arg_count)
 
 	for (index = 0; index < arg_count; index++)
 	{
-		valueArray.push(Buffer.readInt64BE(address , param_offset.add( index * 8 ) ) );
+		valueArray.push(Buffer.readInt64BE(address , param_offset.add(  8  ) ) );
 	}
 
 	return valueArray;
@@ -1878,7 +1878,7 @@ Buffer.readInt64LEArray = function(arg_address, arg_offset, arg_count)
 
 	for (index = 0; index < arg_count; index++)
 	{
-		valueArray.push(Buffer.readInt64LE(address , param_offset.add( index * 8 ) ));
+		valueArray.push(Buffer.readInt64LE(address , param_offset.add(  8  ) ));
 	}
 
 	return valueArray;
@@ -1945,7 +1945,7 @@ Buffer.readUInt64BEArray = function(arg_address, arg_offset, arg_count)
 
 	for (index = 0; index < arg_count; index++)
 	{
-		valueArray.push(Buffer.readUInt64BE(address , param_offset.add( index * 8 ) ));
+		valueArray.push(Buffer.readUInt64BE(address , param_offset.add(  8  ) ));
 	}
 
 	return valueArray;
@@ -2012,7 +2012,7 @@ Buffer.readUInt64LEArray = function(arg_address, arg_offset, arg_count)
 
 	for (index = 0; index < arg_count; index++)
 	{
-		valueArray.push(Buffer.readUInt64LE(address , param_offset.add( index * 8 ) ));
+		valueArray.push(Buffer.readUInt64LE(address , param_offset.add(  8  ) ));
 	}
 
 	return valueArray;
@@ -3060,7 +3060,7 @@ Buffer.prototype.writeULONG_PTR = function( arg_value , offset)
 		}
 		else
 		{
-			assert( Number64.isNumber64(arg_value) , sprintf('type is %s' , typeof arg_value) );
+			assert( ( Number64.isNumber64(arg_value) || Number32.isNumber32(arg_value) ) , sprintf('[Buffer.prototype.writeULONG_PTR]type is %s' , typeof arg_value) );
 			value = arg_value;	
 		}
 	}
@@ -3108,7 +3108,7 @@ Buffer.writeULONG_PTR = function(arg_address, arg_value, offset)
 		}
 		else
 		{
-			assert( Number64.isNumber64(arg_value) , sprintf('type is %s' , typeof arg_value) );
+			assert( ( Number64.isNumber64(arg_value) || Number32.isNumber32(arg_value)  ) , sprintf('[Buffer.writeULONG_PTR ]type is %s' , typeof arg_value) );
 			value = arg_value;	
 		}
 	}
