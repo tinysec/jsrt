@@ -38,7 +38,7 @@ const host_console = require("host/console");
 //-----------------------------------------------------------------
 function build_worker_commandline( arg_filefullname , symbolpath  )
 {
-	return sprintf( '%s %s --worker=1 --file=%s --symbolpath="%s"' ,
+	return sprintf( '"%s" "%s" --worker=1 --file="%s" --symbolpath="%s"' ,
 		
 		process.argv[0] ,
 		
@@ -75,7 +75,7 @@ function sub_find_files( manager , arg_baseFolder )
 	_.each( items , function( basename )
 	{
 		fullname = path.combine( arg_baseFolder , basename );
-					
+		
 		if ( path.folderExists( fullname ) )
 		{
 			if ( !_.has(manager.folderQueue , fullname) )
@@ -86,7 +86,7 @@ function sub_find_files( manager , arg_baseFolder )
 			}
 			
 		}
-		else
+		else if ( path.fileExists( fullname ) )
 		{
 			manager.total_file_count++;
 					
@@ -131,7 +131,7 @@ function work_as_master( )
 		{
 			printf('batch update symbols tool.\n');
 			
-			printf('v0.0.0.1\n');
+			printf('v0.0.0.2\n');
 			
 			printf('--symbolpath\tlocal symbol folder\n');
 			
