@@ -130,7 +130,7 @@ function work_as_master( )
 			
 			printf('usage:\n');
 			
-			printf('js.exe batch_update_symbols.js --symbolpath=c:\symbols\n' );
+			printf('js.exe batch_update_symbols.js --symbolpath=c:\\symbols\n' );
 			
 			printf('\n\n');
 			
