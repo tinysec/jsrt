@@ -47,7 +47,9 @@ var ENUM_TABLE_FFI_VALUE_TYPE = {
 	
 	"number32_long" : 19 ,
 	
-	"number32_ulong" : 20
+	"number32_ulong" : 20 ,
+	
+	"?" : 21
 };
 
 var ENUM_TABLE_FFI_STACK_TYPE = {
@@ -1536,6 +1538,46 @@ function _castTo_number32_ulong( argValue )
     }
 }
 
+function _castTo_native( argValue ) 
+{
+	if ( _.isUndefined( argValue ) )
+	{
+		return argValue;
+	}
+	else if ( _.isNull( argValue ) )
+	{
+		return argValue;
+	}
+	else if ( _.isBoolean( argValue ) )
+	{
+		return argValue;
+	}
+	else if ( Buffer.isBuffer( argValue ) )
+	{
+		return argValue;
+	}
+	else if ( Number64.isNumber64( argValue ) )
+	{
+		return argValue;
+	}
+	else if ( Number32.isNumber32( argValue ) )
+	{
+		return argValue;
+	}
+	else if ( _.isNumber( argValue ) )
+	{
+		return argValue;
+	}
+	else if ( _.isString( argValue ) )
+	{
+		return argValue;
+	}
+	else
+	{
+		throw new Error(sprintf('not supported arg type "%s" for ? mode' ,  typeof argValue ) );
+	}
+}
+
 
 var TYPE_CAST_TABLE = {
     "char" : _castTo_char,
@@ -1567,7 +1609,9 @@ var TYPE_CAST_TABLE = {
 	
 	"number32_long" : _castTo_number32_long ,
 	
-	"number32_ulong" : _castTo_number32_ulong 
+	"number32_ulong" : _castTo_number32_ulong ,
+	
+	"?" : _castTo_native
 };
 
 function _castJsValueToFFISupportValue( valueType, argValue ) 
@@ -1679,6 +1723,10 @@ function rawArgsToTypedArgs( argTypes, rawArgs )
             neededRawArgc++;
         }
 		else if ( "number32_ulong" == argTypes[typeIndex] ) 
+		{
+            neededRawArgc++;
+        }
+		else if ( "?" == argTypes[typeIndex] ) 
 		{
             neededRawArgc++;
         }
@@ -1854,6 +1902,10 @@ function rawArgsToTypedArgs( argTypes, rawArgs )
             typedArgv.push(  Number32( rawArgs[rawIndex] )   );
             rawIndex++;
         }
+		else if (  "?" == argTypes[typeIndex]  ) 
+		{
+			throw new Error(sprintf('not supported arg type "%s" for ? mode' ,  typeof rawArgs[rawIndex] ) );
+        }
     }
 
     return typedArgv;
@@ -1973,6 +2025,11 @@ function ffi_bindFromRoutineAddressAndDeclareInfo( arg_address , declareInfo )
 {
     var ffiHelper = {};
     var routineAddress = null;
+	
+	if ( '?' == declareInfo.returnType )
+	{
+		throw new Error( sprintf( "not support unknown return type"  ) );	
+	}
 
     ffiHelper["returnType"] = ENUM_TABLE_FFI_VALUE_TYPE[declareInfo.returnType];
 
@@ -1982,7 +2039,7 @@ function ffi_bindFromRoutineAddressAndDeclareInfo( arg_address , declareInfo )
 
     ffiHelper["argTypes"] = _.map( declareInfo.argTypes, function ( item ) 
 	{
-        assert( _.has( ENUM_TABLE_FFI_VALUE_TYPE, item ) );
+        assert( _.has( ENUM_TABLE_FFI_VALUE_TYPE, item ) , sprintf('unknown arg type "%s"' , item ) );
 
         return ENUM_TABLE_FFI_VALUE_TYPE[item];
     } );
@@ -1997,29 +2054,31 @@ function ffi_bindFromRoutineAddressAndDeclareInfo( arg_address , declareInfo )
     }
     else 
 	{
-        throw new Error( sprintf( "invalid address type %s\n" , typeof arg_address ) );
+        throw new Error( sprintf( "invalid address type %s" , typeof arg_address ) );
     }
 
-    if ( routineAddress.isZero( 0x10000 ) ) 
+    if ( routineAddress.isZero(  ) ) 
 	{
+		vprintf( "invalid address 0x%X\n" , routineAddress ) ;
         return null;
     }
 
     if ( routineAddress.lessThan( 0x10000 ) ) 
 	{
-        throw new Error( sprintf( "invalid address 0x%X\n" , routineAddress ) );
+        throw new Error( sprintf( "invalid address 0x%X" , routineAddress ) );
     }
 
-    assert( ffiHelper["returnType"] );
-    assert( ffiHelper["stackType"] );
-    assert( ffiHelper["name"] );
+    assert( ffiHelper["returnType"] , sprintf('[ffi]invalid return type') );
+    assert( ffiHelper["stackType"] , sprintf('[ffi]invalid stack type') );
+    assert( ffiHelper["name"] , sprintf('[ffi]invalid name') );
 
 
     var argIndex = 0;
     var singleType = 0;
 
     // name
-    if ( !declareInfo.name ) {
+    if ( !declareInfo.name ) 
+	{
         declareInfo.name = "unknown";
     }
 
