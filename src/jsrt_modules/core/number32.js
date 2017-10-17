@@ -26,8 +26,23 @@ function cast2Number32(arg_1)
 
 function Number32(arg_1, arg_2)
 {
-    if (!(this instanceof Number32)) 
+    if ( !( this instanceof Number32 ) ) 
 	{
+		if ('object' == typeof arg_1) 
+		{
+			if ( arg_1 ) 
+			{
+				if (arg_1 instanceof Number32) 
+				{
+					return arg_1;
+				}
+				else if ( "Number32" == arg_1.__TYPE__ ) 
+				{
+					return arg_1;
+				}
+			}
+		}
+	
         return new Number32(arg_1, arg_2);
     }
 
@@ -193,7 +208,7 @@ Number32.prototype.isZero = function ()
 
 Number32.isZero = function ( item ) 
 {
-    return Number32(item).isZero();
+    return cast2Number32(item).isZero();
 }
 
 
@@ -347,8 +362,8 @@ Number32.prototype.compare = function (arg_other)
 
 Number32.compare = function ( arg_1 , arg_2 ) 
 {
-    var n1 = Number32( arg_1 );
-	var n2 = Number32( arg_2 );
+    var n1 = cast2Number32( arg_1 );
+	var n2 = cast2Number32( arg_2 );
 	
 	return process.reserved.bindings.Number32_cmp(n1 , n2 );
 }
@@ -360,8 +375,8 @@ Number32.prototype.compareSigned = function (arg_other)
 
 Number32.compareSigned = function ( arg_1 , arg_2 ) 
 {
-    var n1 = Number32( arg_1 );
-	var n2 = Number32( arg_2 );
+    var n1 = cast2Number32( arg_1 );
+	var n2 = cast2Number32( arg_2 );
 	
 	return process.reserved.bindings.Number32_scmp(n1 , n2 );
 }
@@ -381,7 +396,7 @@ Number32.prototype.add = function (arg_other)
 
 Number32.add = function ( item , other ) 
 {
-    return Number32(item).add(other);
+    return cast2Number32(item).add(other);
 }
 
 Number32.prototype.addSigned = function (arg_other)
@@ -398,7 +413,7 @@ Number32.prototype.addSigned = function (arg_other)
 
 Number32.addSigned = function ( item , other ) 
 {
-    return Number32(item).addSigned(other);
+    return cast2Number32(item).addSigned(other);
 }
 
 
@@ -416,7 +431,7 @@ Number32.prototype.sub = function (arg_other)
 
 Number32.sub = function ( item , other ) 
 {
-    return Number32(item).sub(other);
+    return cast2Number32(item).sub(other);
 }
 
 Number32.prototype.subSigned = function (arg_other) 
@@ -433,7 +448,7 @@ Number32.prototype.subSigned = function (arg_other)
 
 Number32.subSigned = function ( item , other ) 
 {
-    return Number32(item).subSigned(other);
+    return cast2Number32(item).subSigned(other);
 }
 
 Number32.prototype.mul = function (arg_other)
@@ -450,7 +465,7 @@ Number32.prototype.mul = function (arg_other)
 
 Number32.mul = function ( item , other ) 
 {
-    return Number32(item).mul(other);
+    return cast2Number32(item).mul(other);
 }
 
 Number32.prototype.div = function (arg_other)
@@ -467,7 +482,7 @@ Number32.prototype.div = function (arg_other)
 
 Number32.div = function ( item , other ) 
 {
-    return Number32(item).div(other);
+    return cast2Number32(item).div(other);
 }
 
 Number32.prototype.mod = function (arg_other) 
@@ -495,7 +510,7 @@ Number32.mod = function ( item , other )
 		throw new Error("other must not be zero");
 	}
 	
-    return Number32(item).mod(other);
+    return cast2Number32(item).mod(other);
 }
 
 Number32.prototype.not = function (arg_other) 
@@ -512,7 +527,7 @@ Number32.prototype.not = function (arg_other)
 
 Number32.not = function ( item , other ) 
 {
-    return Number32(item).not(other);
+    return cast2Number32(item).not(other);
 }
 
 Number32.prototype.neg = function (arg_other) 
@@ -529,7 +544,7 @@ Number32.prototype.neg = function (arg_other)
 
 Number32.neg = function ( item , other ) 
 {
-    return Number32(item).neg(other);
+    return cast2Number32(item).neg(other);
 }
 
 Number32.prototype.and = function (arg_other) 
@@ -546,7 +561,7 @@ Number32.prototype.and = function (arg_other)
 
 Number32.and = function ( item , other ) 
 {
-    return Number32(item).and(other);
+    return cast2Number32(item).and(other);
 }
 
 Number32.prototype.or = function (arg_other) 
@@ -563,7 +578,7 @@ Number32.prototype.or = function (arg_other)
 
 Number32.or = function ( item , other ) 
 {
-    return Number32(item).or(other);
+    return cast2Number32(item).or(other);
 }
 
 Number32.prototype.xor = function (arg_other) 
@@ -580,7 +595,7 @@ Number32.prototype.xor = function (arg_other)
 
 Number32.xor = function ( item , other ) 
 {
-    return Number32(item).xor(other);
+    return cast2Number32(item).xor(other);
 }
 
 Number32.prototype.shl = function (arg_other) 
@@ -598,7 +613,7 @@ Number32.prototype.shiftLeft = Number32.prototype.shl;
 
 Number32.shiftLeft = function ( item , other ) 
 {
-    return Number32(item).shiftLeft(other);
+    return cast2Number32(item).shiftLeft(other);
 }
 Number32.shl = Number32.shiftLeft;
 
@@ -617,49 +632,49 @@ Number32.prototype.shiftRight = Number32.prototype.shr;
 
 Number32.shiftRight = function ( item , other ) 
 {
-    return Number32(item).shiftRight(other);
+    return cast2Number32(item).shiftRight(other);
 }
 Number32.shr = Number32.shiftRight;
 
 
 Number32.prototype.setBit = function ( index ) 
 {
-    return this.or( Number32(1).shiftLeft(index) );
+    return this.or( cast2Number32(1).shiftLeft(index) );
 }
 
 Number32.setBit = function ( item , index ) 
 {
-    return Number32(item).setBit(index);
+    return cast2Number32(item).setBit(index);
 }
 
 Number32.prototype.clearBit = function ( index ) 
 {
-    return this.and( Number32(1).shiftLeft(index).not() );
+    return this.and( cast2Number32(1).shiftLeft(index).not() );
 }
 
 Number32.clearBit = function ( item , index ) 
 {
-    return Number32(item).clearBit(index);
+    return cast2Number32(item).clearBit(index);
 }
 
 Number32.prototype.negBit = function ( index ) 
 {
-    return this.xor( Number32(1).shiftLeft(index).not() );
+    return this.xor( cast2Number32(1).shiftLeft(index).not() );
 }
 
 Number32.negBit = function ( item , index ) 
 {
-    return Number32(item).negBit(index);
+    return cast2Number32(item).negBit(index);
 }
 
 Number32.prototype.testBit = function ( index ) 
 {
-	return ( 1 == Number32(this).shiftRight(index).and(1).toUInt8() );
+	return ( 1 == cast2Number32(this).shiftRight(index).and(1).toUInt8() );
 }
 
 Number32.testBit = function ( item , index ) 
 {
-    return Number32(item).testBit(index);
+    return cast2Number32(item).testBit(index);
 }
 
 
@@ -739,12 +754,12 @@ Number32.prototype.toDoubleBE = function ()
 // swap
 Number32.swap16 = function Number32_swap16(value) 
 {
-    return process.reserved.bindings.Number32_swap16(Number32(16) );
+    return process.reserved.bindings.Number32_swap16( cast2Number32(value) );
 }
 
 Number32.swap32 = function Number32_swap32(value) 
 {
-    return process.reserved.bindings.Number32_swap32(Number32(16) );
+    return process.reserved.bindings.Number32_swap32( cast2Number32(value) );
 }
 
 
@@ -758,7 +773,73 @@ Number32.IS_ALIGN_BY = function ( value , align )
     return ( 0 == Number32.mod( value , align) );
 }
 
+//----------------------------------------
+// arg_min <= value < arg_max
+var g_next_seed = 0;
 
+Number32.srand = function(  arg_seed ) 
+{
+	g_next_seed = cast2Number32(arg_seed);
+}
+
+Number32.random = function( arg_min , arg_max , arg_seed ) 
+{
+  var min = null;
+  
+  var max = null;
+  
+  var value = 0;
+  
+  var helper = null;
+  
+
+  if ( arguments.length >= 2  )
+  {
+	  min = cast2Number32( arg_min );
+	  
+	  max = cast2Number32( arg_max );
+  }
+  else
+  {
+	  min = cast2Number32( 0 );
+	  
+	  max = cast2Number32( "0xFFFFFFFE" );
+  }
+  
+  if ( arguments.length >= 3 )
+  {
+	  if ( 
+		 ( Number32.isNumber32( arg_seed ) )
+		 || ( Number64.isNumber64( arg_seed ) )
+		 || ( 'number' == typeof arg_seed )
+		)
+	  {
+		  //nop
+	  }
+	  else
+	  {
+		  throw new Error("invalid typeof seed");
+	  }
+
+	  helper = process.reserved.bindings.host_random( arg_seed );
+	  
+	  value = cast2Number32( helper.value );
+	  
+	  g_next_seed = cast2Number32( helper.seed );
+  }
+  else
+  {
+	  helper = process.reserved.bindings.host_random( g_next_seed );
+	  
+	  value = cast2Number32( helper.value );
+	  
+	  g_next_seed = cast2Number32( helper.seed );
+  }
+  
+  value.mod( max.sub(min).add(1) ).add(min);
+  
+  return value;
+}
 
 
 
@@ -770,8 +851,7 @@ module.exports = Number32;
 
 function main(  )
 {
-	
-	
+
 	return 0;
 }
 

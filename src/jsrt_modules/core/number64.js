@@ -7,11 +7,11 @@ function cast2Number64(arg_1)
 	{
         if (arg_1) 
 		{
-            if (arg_1 instanceof Number64) 
+            if ( arg_1 instanceof Number64 ) 
 			{
                 return arg_1;
             }
-			else if ("Number64" == arg_1.__TYPE__) 
+			else if ( "Number64" == arg_1.__TYPE__ ) 
 			{
 				return arg_1;
 			}
@@ -26,8 +26,23 @@ function cast2Number64(arg_1)
 
 function Number64(arg_1, arg_2)
 {
-    if (!(this instanceof Number64)) 
+    if ( !(this instanceof Number64) ) 
 	{
+		if ( 'object' == typeof arg_1 ) 
+		{
+			if ( arg_1 ) 
+			{
+				if ( arg_1 instanceof Number64 ) 
+				{
+					return arg_1;
+				}
+				else if ( "Number64" == arg_1.__TYPE__ ) 
+				{
+					return arg_1;
+				}
+			}
+		}
+	
         return new Number64(arg_1, arg_2);
     }
 
@@ -218,7 +233,7 @@ Number64.prototype.isZero = function ()
 
 Number64.isZero = function ( item ) 
 {
-    return Number64(item).isZero();
+    return cast2Number64(item).isZero();
 }
 
 Number64.prototype.isZero32 = function () 
@@ -228,7 +243,7 @@ Number64.prototype.isZero32 = function ()
 
 Number64.isZero32 = function ( item ) 
 {
-    return Number64(item).isZero32();
+    return cast2Number64(item).isZero32();
 }
 
 Number64.prototype.isNegative = function () 
@@ -498,8 +513,8 @@ Number64.prototype.compare = function (arg_other)
 
 Number64.compare = function ( arg_1 , arg_2 ) 
 {
-    var n1 = Number64( arg_1 );
-	var n2 = Number64( arg_2 );
+    var n1 = cast2Number64( arg_1 );
+	var n2 = cast2Number64( arg_2 );
 	
 	return process.reserved.bindings.Number64_cmp(n1 , n2 );
 }
@@ -511,8 +526,8 @@ Number64.prototype.compareSigned = function (arg_other)
 
 Number64.compareSigned = function ( arg_1 , arg_2 ) 
 {
-    var n1 = Number64( arg_1 );
-	var n2 = Number64( arg_2 );
+    var n1 = cast2Number64( arg_1 );
+	var n2 = cast2Number64( arg_2 );
 	
 	return process.reserved.bindings.Number64_scmp(n1 , n2 );
 }
@@ -530,8 +545,8 @@ Number64.prototype.compareSigned32 = function (arg_other)
 
 Number64.compareSigned32 = function ( arg_1 , arg_2 ) 
 {
-    var n1 = Number64( arg_1 );
-	var n2 = Number64( arg_2 );
+    var n1 = cast2Number64( arg_1 );
+	var n2 = cast2Number64( arg_2 );
 	
 	return process.reserved.bindings.Number64_scmp32(n1 , n2 );
 }
@@ -557,7 +572,7 @@ Number64.prototype.add = function (arg_other)
 
 Number64.add = function ( item , other ) 
 {
-    return Number64(item).add(other);
+    return cast2Number64(item).add(other);
 }
 
 Number64.prototype.addSigned = function (arg_other)
@@ -579,7 +594,7 @@ Number64.prototype.addSigned = function (arg_other)
 
 Number64.addSigned = function ( item , other ) 
 {
-    return Number64(item).addSigned(other);
+    return cast2Number64(item).addSigned(other);
 }
 
 
@@ -602,7 +617,7 @@ Number64.prototype.sub = function (arg_other)
 
 Number64.sub = function ( item , other ) 
 {
-    return Number64(item).sub(other);
+    return cast2Number64(item).sub(other);
 }
 
 Number64.prototype.subSigned = function (arg_other) 
@@ -624,7 +639,7 @@ Number64.prototype.subSigned = function (arg_other)
 
 Number64.subSigned = function ( item , other ) 
 {
-    return Number64(item).subSigned(other);
+    return cast2Number64(item).subSigned(other);
 }
 
 Number64.prototype.mul = function (arg_other)
@@ -646,7 +661,7 @@ Number64.prototype.mul = function (arg_other)
 
 Number64.mul = function ( item , other ) 
 {
-    return Number64(item).mul(other);
+    return cast2Number64(item).mul(other);
 }
 
 Number64.prototype.div = function (arg_other)
@@ -668,7 +683,7 @@ Number64.prototype.div = function (arg_other)
 
 Number64.div = function ( item , other ) 
 {
-    return Number64(item).div(other);
+    return cast2Number64(item).div(other);
 }
 
 Number64.prototype.mod = function (arg_other) 
@@ -700,7 +715,7 @@ Number64.mod = function ( item , other )
 		throw new Error("other must not be zero");
 	}
 	
-    return Number64(item).mod(other);
+    return cast2Number64(item).mod(other);
 }
 
 Number64.prototype.not = function (arg_other) 
@@ -722,7 +737,7 @@ Number64.prototype.not = function (arg_other)
 
 Number64.not = function ( item , other ) 
 {
-    return Number64(item).not(other);
+    return cast2Number64(item).not(other);
 }
 
 
@@ -745,7 +760,7 @@ Number64.prototype.neg = function (arg_other)
 
 Number64.neg = function ( item , other ) 
 {
-    return Number64(item).neg(other);
+    return cast2Number64(item).neg(other);
 }
 
 
@@ -770,7 +785,7 @@ Number64.prototype.and = function (arg_other)
 
 Number64.and = function ( item , other ) 
 {
-    return Number64(item).and(other);
+    return cast2Number64(item).and(other);
 }
 
 Number64.prototype.or = function (arg_other) 
@@ -792,7 +807,7 @@ Number64.prototype.or = function (arg_other)
 
 Number64.or = function ( item , other ) 
 {
-    return Number64(item).or(other);
+    return cast2Number64(item).or(other);
 }
 
 Number64.prototype.xor = function (arg_other) 
@@ -814,7 +829,7 @@ Number64.prototype.xor = function (arg_other)
 
 Number64.xor = function ( item , other ) 
 {
-    return Number64(item).xor(other);
+    return cast2Number64(item).xor(other);
 }
 
 Number64.prototype.shl = function (arg_other) 
@@ -837,7 +852,7 @@ Number64.prototype.shiftLeft = Number64.prototype.shl;
 
 Number64.shiftLeft = function ( item , other ) 
 {
-    return Number64(item).shiftLeft(other);
+    return cast2Number64(item).shiftLeft(other);
 }
 Number64.shl = Number64.shiftLeft;
 
@@ -861,48 +876,48 @@ Number64.prototype.shiftRight = Number64.prototype.shr;
 
 Number64.shiftRight = function ( item , other ) 
 {
-    return Number64(item).shiftRight(other);
+    return cast2Number64(item).shiftRight(other);
 }
 Number64.shr = Number64.shiftRight;
 
 Number64.prototype.setBit = function ( index ) 
 {
-    return this.or( Number64(1).shiftLeft(index) );
+    return this.or( cast2Number64(1).shiftLeft(index) );
 }
 
 Number64.setBit = function ( item , index ) 
 {
-    return Number64(item).setBit(index);
+    return cast2Number64(item).setBit(index);
 }
 
 Number64.prototype.clearBit = function ( index ) 
 {
-    return this.and( Number64(1).shiftLeft(index).not() );
+    return this.and( cast2Number64(1).shiftLeft(index).not() );
 }
 
 Number64.clearBit = function ( item , index ) 
 {
-    return Number64(item).clearBit(index);
+    return cast2Number64(item).clearBit(index);
 }
 
 Number64.prototype.negBit = function ( index ) 
 {
-    return this.xor( Number64(1).shiftLeft(index).not() );
+    return this.xor( cast2Number64(1).shiftLeft(index).not() );
 }
 
 Number64.negBit = function ( item , index ) 
 {
-    return Number64(item).negBit(index);
+    return cast2Number64(item).negBit(index);
 }
 
 Number64.prototype.testBit = function ( index ) 
 {
-	return ( 1 == Number64(this).shiftRight(index).and(1).toUInt8() );
+	return ( 1 == cast2Number64(this).shiftRight(index).and(1).toUInt8() );
 }
 
 Number64.testBit = function ( item , index ) 
 {
-    return Number64(item).testBit(index);
+    return cast2Number64(item).testBit(index);
 }
 
 
@@ -982,17 +997,17 @@ Number64.prototype.toDoubleBE = function ()
 // swap
 Number64.swap16 = function Number64_swap16(value) 
 {
-    return process.reserved.bindings.Number64_swap16(Number64(16) );
+    return process.reserved.bindings.Number64_swap16( cast2Number64(value) );
 }
 
 Number64.swap32 = function Number64_swap32(value) 
 {
-    return process.reserved.bindings.Number64_swap32(Number64(16) );
+    return process.reserved.bindings.Number64_swap32( cast2Number64(value) );
 }
 
 Number64.swap64 = function Number64_swap64(value) 
 {
-    return Number64(process.reserved.bindings.Number64_swap64(Number64(16) ));
+    return cast2Number64(process.reserved.bindings.Number64_swap64( cast2Number64(value) ));
 }
 
 
@@ -1010,8 +1025,73 @@ Number64.IS_ALIGN_BY = function ( value , align )
 
 
 
+//----------------------------------------
+// arg_min <= value < arg_max
+var g_next_seed = 0;
 
+Number64.srand = function(  arg_seed ) 
+{
+	g_next_seed = cast2Number64(arg_seed);
+}
 
+Number64.random = function( arg_min , arg_max , arg_seed ) 
+{
+  var min = null;
+  
+  var max = null;
+  
+  var value = 0;
+  
+  var helper = null;
+  
+
+  if ( arguments.length >= 2  )
+  {
+	  min = cast2Number64( arg_min );
+	  
+	  max = cast2Number64( arg_max );
+  }
+  else
+  {
+	  min = cast2Number64( 0 );
+	  
+	  max = cast2Number64( "0xFFFFFFFFFFFFFFFE" );
+  }
+  
+  if ( arguments.length >= 3 )
+  {
+	  if ( 
+		 ( Number32.isNumber32( arg_seed ) )
+		 || ( Number64.isNumber64( arg_seed ) )
+		 || ( 'number' == typeof arg_seed )
+		)
+	  {
+		  //nop
+	  }
+	  else
+	  {
+		  throw new Error("invalid typeof seed");
+	  }
+
+	  helper = process.reserved.bindings.host_random( arg_seed );
+	  
+	  value = cast2Number64( helper.value );
+	  
+	  g_next_seed = cast2Number64( helper.seed );
+  }
+  else
+  {
+	  helper = process.reserved.bindings.host_random( g_next_seed );
+	  
+	  value = cast2Number64( helper.value );
+	  
+	  g_next_seed = cast2Number64( helper.seed );
+  }
+  
+  value.mod( max.sub(min).add(1) ).add(min);
+  
+  return value;
+}
 
 
 //--------------------------------
@@ -1020,7 +1100,7 @@ module.exports = Number64;
 function main(  )
 {
 	
-	
+
 	return 0;
 }
 

@@ -392,7 +392,7 @@ function stringToFlags( maskTable , arg_textFlags )
 			{
 				finalFlags.or( tableValue );
 			}
-			else if ( Number32.isNumber32(tableValue) )
+			else if ( Number32.iscast2cast2Number32(tableValue) )
 			{
 				finalFlags.or( tableValue );
 			}
@@ -431,6 +431,18 @@ function findKey( table , findValue )
 	});
 }
 exports.findKey = findKey;
+
+
+// arg_min <= value <= arg_max
+function random( arg_min , arg_max ) 
+{
+  var min = Math.ceil( arg_min );
+  
+  var max = Math.floor( arg_max );
+  
+  return Math.floor( Math.random() * ( max - min + 1 ) ) + min; 
+}
+exports.random = random;
 
 
 function main(  )

@@ -69,10 +69,50 @@ function color_printf( arg_color , ...arg_left )
 exports.color_printf = color_printf;
 
 
+function input( max_len , ...arg_left )
+{
+	var argv = Array.prototype.slice.call( arguments );
+	var helper = null;
+	
+	if ( 0 == argv.length )
+	{
+		helper = process.reserved.hostDependBindings.console_input( 1024 ); 
+	}
+	else if ( 1 == argv.length )
+	{
+		assert( _.isNumber(max_len) , "input first arg must be number as len");
+		
+		assert( ( ( max_len >1 ) && ( max_len < 65534 ) ) , "invalid input buffer length");
+
+		helper = process.reserved.hostDependBindings.console_input( max_len ); 
+	}
+	else
+	{
+		assert( _.isNumber(max_len) , "input first arg must be number as len");
+		
+		assert( ( ( max_len >1 ) && ( max_len < 65534 ) ) , "invalid input buffer length");
+		
+		argv.shift();
+		
+		printf.apply(this , argv );
+	
+		helper = process.reserved.hostDependBindings.console_input( max_len ); 
+	}
+	
+	if ( helper.length >= 1 )
+	{
+		// drop .\n
+		helper = helper.substring( 0 , helper.length - 1);
+	}
+
+	return helper;
+}
+exports.input = input;
+
+
 
 function main(  )
 {
-	
 	
 	
 	return 0;
