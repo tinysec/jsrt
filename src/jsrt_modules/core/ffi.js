@@ -2082,7 +2082,7 @@ function ffi_bindFromRoutineAddressAndDeclareInfo( arg_address , declareInfo )
         declareInfo.name = "unknown";
     }
 
-    return function _ffi_wrapper(  ) 
+    var wrapper_routine =  function(  ) 
 	{
         var invokeArgv = Array.prototype.slice.call( arguments );
         var rawInvokeRet = 0;
@@ -2119,6 +2119,10 @@ function ffi_bindFromRoutineAddressAndDeclareInfo( arg_address , declareInfo )
 
         return rawInvokeRet;
     }
+	
+	wrapper_routine.__ADDRESS__ = arg_address;
+	
+	return wrapper_routine;
 }
 exports.bindFromRoutineAddressAndDeclareInfo = ffi_bindFromRoutineAddressAndDeclareInfo;
 
