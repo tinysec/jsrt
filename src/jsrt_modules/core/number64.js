@@ -28,22 +28,7 @@ function Number64(arg_1, arg_2)
 {
     if ( !(this instanceof Number64) ) 
 	{
-		if ( 'object' == typeof arg_1 ) 
-		{
-			if ( arg_1 ) 
-			{
-				if ( arg_1 instanceof Number64 ) 
-				{
-					return arg_1;
-				}
-				else if ( "Number64" == arg_1.__TYPE__ ) 
-				{
-					return arg_1;
-				}
-			}
-		}
-	
-        return new Number64(arg_1, arg_2);
+        return new Number64(arg_1 , arg_2);
     }
 
     this.__TYPE__ = "Number64";

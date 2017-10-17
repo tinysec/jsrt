@@ -28,21 +28,6 @@ function Number32(arg_1, arg_2)
 {
     if ( !( this instanceof Number32 ) ) 
 	{
-		if ('object' == typeof arg_1) 
-		{
-			if ( arg_1 ) 
-			{
-				if (arg_1 instanceof Number32) 
-				{
-					return arg_1;
-				}
-				else if ( "Number32" == arg_1.__TYPE__ ) 
-				{
-					return arg_1;
-				}
-			}
-		}
-	
         return new Number32(arg_1, arg_2);
     }
 

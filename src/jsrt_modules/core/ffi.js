@@ -1980,7 +1980,7 @@ function ffi_loadLibrary( arg_name )
     }
 	
     hModule = Number64( process.reserved.bindings.ffi_loadLibrary( resolvedName ) );
-	
+
 	if (  hModule.isZero(  )  )
 	{
 		return null;

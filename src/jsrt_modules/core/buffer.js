@@ -16,7 +16,7 @@ const encoding2codepage = base.encoding2codepage;
 
 process.reserved.tables.bufferTable = {};
 
-function add_to_buffer_table(address, length)
+function add_to_buffer_table( address, length , auto_free  )
 {
 	var address_text = sprintf( "0x%p" , address );
 
@@ -26,7 +26,8 @@ function add_to_buffer_table(address, length)
 	process.reserved.tables.bufferTable[address_text] = {
 		"address": address_text,
 		"length": length,
-		"stack": base.stackTrace(1)
+		"stack": base.stackTrace(0) ,
+		"auto_free" : auto_free ? true : false 
 	};
 }
 
@@ -162,6 +163,36 @@ Buffer.isBuffer = function(obj)
 	return false;
 }
 
+
+Buffer.prototype.free = function()
+{
+	if (0 == this.length)
+	{
+		throw new Error("try to free zero bytes memory");
+	}
+
+	if (this.alreadyFreed)
+	{
+		throw new Error("double-free");
+	}
+
+
+	var address_text = sprintf( "0x%p" , this.address );
+
+	var bufferNode = process.reserved.tables.bufferTable[address_text];
+
+	if (!bufferNode)
+	{
+		throw new Error(sprintf("free a buffer %s not alloc by jsrt", address_text));
+	}
+
+	process.reserved.bindings.buffer_free(this.address, this.length);
+
+	delete process.reserved.tables.bufferTable[address_text];
+
+	this.alreadyFreed = base.stackTrace();
+}
+
 Buffer.alloc = function( length  , arg_noTrack )
 {
 	var address = null;
@@ -221,6 +252,35 @@ Buffer.allocEx = function( length , arg_noTrack )
 	{
 		add_to_buffer_table(address, length);
 	}
+
+	return pNewBuf;
+}
+
+
+Buffer.alloc_auto_free = function( length  )
+{
+	var address = null;
+	var pNewBuf = null;
+
+	assert(_.isNumber(length), "invalid buffer length");
+
+	if (length <= 0)
+	{
+		throw new Error("invalid param");
+	}
+
+	var helper = Number64(process.reserved.bindings.buffer_alloc(length));
+	
+	if ( !helper )
+	{
+		return null;
+	}
+	
+	address = Number64(helper);
+	
+	pNewBuf = new Buffer(length, address);
+	
+	add_to_buffer_table(address, length , true );
 
 	return pNewBuf;
 }
@@ -378,36 +438,6 @@ Buffer.from = function (arg_string, arg_encoding)
 }
 
 
-Buffer.prototype.free = function()
-{
-	if (0 == this.length)
-	{
-		throw new Error("try to free zero bytes memory");
-	}
-
-	if (this.alreadyFreed)
-	{
-		throw new Error("double-free");
-	}
-
-
-	var address_text = sprintf( "0x%p" , this.address );
-
-	var bufferNode = process.reserved.tables.bufferTable[address_text];
-
-	if (!bufferNode)
-	{
-		throw new Error(sprintf("free a buffer %s not alloc by jsrt", address_text));
-	}
-
-	process.reserved.bindings.buffer_free(this.address, this.length);
-
-	delete process.reserved.tables.bufferTable[address_text];
-
-
-	this.alreadyFreed = base.stackTrace();
-
-}
 
 Buffer.prototype.isValid = function()
 {
@@ -3032,10 +3062,20 @@ process.reserved.dumpBufferLeaks = function dumpBufferLeaks()
 	for (address_text in process.reserved.tables.bufferTable)
 	{
 		mem_node = process.reserved.tables.bufferTable[address_text];
+		
+		if ( mem_node.auto_free )
+		{
+			delete process.reserved.tables.bufferTable[mem_node.address];
+			
+			process.reserved.bindings.buffer_free( Number64( mem_node.address ) , mem_node.length );
+		}
+		else
+		{
+			printf("[mem-leak] leak %d bytes , stack : %s\n",
+				mem_node.length, mem_node.stack
+			);
+		}
 
-		printf("[mem-leak] leak %d bytes , stack : %s\n",
-			mem_node.length, mem_node.stack
-		);
 	}
 }
 

@@ -147,7 +147,7 @@ function stackTrace(arg_skip)
         return item.trim();
     });
 
-    tempArray.shift();
+    //tempArray.shift();
 
     for (index = 0; index < skips; index++) 
 	{
