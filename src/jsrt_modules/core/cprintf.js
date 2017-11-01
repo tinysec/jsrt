@@ -1386,29 +1386,27 @@ function _inspect_Error(input, level)
 		strText += strTab + '\t"' + key + '" : ' + strItem + ' ,\n';
 	}
 	
-	if ( input.stack )
+	if ( 'string' == typeof input.stack )
 	{
 		stack_array = input.stack.split('\n');
-
+			
 		stack_array.shift();
+			
+		item = stack_array[index].trim();
 
-		for (index = 0; index < stack_array.length; index++)
+		if (0 == index)
 		{
-			item = stack_array[index].trim();
-
-			if (0 == index)
-			{
-				error_stack += '\t\t"' + strTab + item + '\n';
-			}
-			else if (index == stack_array.length - 1)
-			{
-				error_stack += '\t\t' + strTab + item + '"\n';
-			}
-			else
-			{
-				error_stack += '\t\t' + strTab + item + '\n';
-			}
+			error_stack += '\t\t"' + strTab + item + '\n';
 		}
+		else if (index == stack_array.length - 1)
+		{
+			error_stack += '\t\t' + strTab + item + '"\n';
+		}
+		else
+		{
+			error_stack += '\t\t' + strTab + item + '\n';
+		}
+
 	}
 
 

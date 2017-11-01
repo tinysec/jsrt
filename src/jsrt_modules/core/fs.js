@@ -2,6 +2,8 @@
 const assert = require("assert");
 const _ = require("underscore");
 
+const base = require("base");
+
 const printf = require("cprintf").printf;
 const sprintf = require("cprintf").sprintf;
 const vprintf = require("cprintf").vprintf;
@@ -203,13 +205,13 @@ function fs_read( fd , arg_buffer , arg_buffer_start , arg_buffer_length , arg_f
 
 	var readSize = 0;
 
-	assert( arguments.length == 5 );
+	assert( ( arguments.length == 5 ) , "invalid fs_read arguments count" );
 	
 	assert( _.isNumber( fd ) , "invalid fd"  );
 
-	assert( Buffer.isBuffer( arg_buffer ) );
+	assert( Buffer.isBuffer( arg_buffer )  , "arg_buffer must be a buffer" );
 
-	assert( _.isNumber( arg_buffer_start ) );
+	assert( _.isNumber( arg_buffer_start ) , "arg_buffer_start must be a number" );
 
 	assert( _.isNumber( arg_buffer_length ) );
 	
@@ -427,11 +429,11 @@ function fs_readFile( arg_fd_or_name  )
 
 	var fileContent = null;
 
-	assert( arguments.length >= 1 );
+	assert( arguments.length >= 1 , "invalid arguments length" );
 
 	if ( arguments.length >= 2 )
 	{
-		assert( _.isString( arguments[1] ) );
+		assert( _.isString( arguments[1] ) ,  "arguments[1] must be string"  );
 	}
 
 	if ( _.isNumber( arguments[0] ) )
