@@ -557,7 +557,7 @@ Number64.prototype.add = function (arg_other)
 
 Number64.add = function ( item , other ) 
 {
-    return cast2Number64(item).add(other);
+    return Number64(item).add(other);
 }
 
 Number64.prototype.addSigned = function (arg_other)
@@ -579,7 +579,7 @@ Number64.prototype.addSigned = function (arg_other)
 
 Number64.addSigned = function ( item , other ) 
 {
-    return cast2Number64(item).addSigned(other);
+    return Number64(item).addSigned(other);
 }
 
 
@@ -602,7 +602,7 @@ Number64.prototype.sub = function (arg_other)
 
 Number64.sub = function ( item , other ) 
 {
-    return cast2Number64(item).sub(other);
+    return Number64(item).sub(other);
 }
 
 Number64.prototype.subSigned = function (arg_other) 
@@ -624,7 +624,7 @@ Number64.prototype.subSigned = function (arg_other)
 
 Number64.subSigned = function ( item , other ) 
 {
-    return cast2Number64(item).subSigned(other);
+    return Number64(item).subSigned(other);
 }
 
 Number64.prototype.mul = function (arg_other)
@@ -646,7 +646,7 @@ Number64.prototype.mul = function (arg_other)
 
 Number64.mul = function ( item , other ) 
 {
-    return cast2Number64(item).mul(other);
+    return Number64(item).mul(other);
 }
 
 Number64.prototype.div = function (arg_other)
@@ -668,7 +668,7 @@ Number64.prototype.div = function (arg_other)
 
 Number64.div = function ( item , other ) 
 {
-    return cast2Number64(item).div(other);
+    return Number64(item).div(other);
 }
 
 Number64.prototype.mod = function (arg_other) 
@@ -700,7 +700,7 @@ Number64.mod = function ( item , other )
 		throw new Error("other must not be zero");
 	}
 	
-    return cast2Number64(item).mod(other);
+    return Number64(item).mod(other);
 }
 
 Number64.prototype.not = function (arg_other) 
@@ -722,7 +722,7 @@ Number64.prototype.not = function (arg_other)
 
 Number64.not = function ( item , other ) 
 {
-    return cast2Number64(item).not(other);
+    return Number64(item).not(other);
 }
 
 
@@ -745,7 +745,7 @@ Number64.prototype.neg = function (arg_other)
 
 Number64.neg = function ( item , other ) 
 {
-    return cast2Number64(item).neg(other);
+    return Number64(item).neg(other);
 }
 
 
@@ -770,7 +770,7 @@ Number64.prototype.and = function (arg_other)
 
 Number64.and = function ( item , other ) 
 {
-    return cast2Number64(item).and(other);
+    return Number64(item).and(other);
 }
 
 Number64.prototype.or = function (arg_other) 
@@ -792,7 +792,7 @@ Number64.prototype.or = function (arg_other)
 
 Number64.or = function ( item , other ) 
 {
-    return cast2Number64(item).or(other);
+    return Number64(item).or(other);
 }
 
 Number64.prototype.xor = function (arg_other) 
@@ -814,7 +814,7 @@ Number64.prototype.xor = function (arg_other)
 
 Number64.xor = function ( item , other ) 
 {
-    return cast2Number64(item).xor(other);
+    return Number64(item).xor(other);
 }
 
 Number64.prototype.shl = function (arg_other) 
@@ -837,7 +837,7 @@ Number64.prototype.shiftLeft = Number64.prototype.shl;
 
 Number64.shiftLeft = function ( item , other ) 
 {
-    return cast2Number64(item).shiftLeft(other);
+    return Number64(item).shiftLeft(other);
 }
 Number64.shl = Number64.shiftLeft;
 
@@ -861,7 +861,7 @@ Number64.prototype.shiftRight = Number64.prototype.shr;
 
 Number64.shiftRight = function ( item , other ) 
 {
-    return cast2Number64(item).shiftRight(other);
+    return Number64(item).shiftRight(other);
 }
 Number64.shr = Number64.shiftRight;
 
@@ -872,7 +872,7 @@ Number64.prototype.setBit = function ( index )
 
 Number64.setBit = function ( item , index ) 
 {
-    return cast2Number64(item).setBit(index);
+    return Number64(item).setBit(index);
 }
 
 Number64.prototype.clearBit = function ( index ) 
@@ -882,7 +882,7 @@ Number64.prototype.clearBit = function ( index )
 
 Number64.clearBit = function ( item , index ) 
 {
-    return cast2Number64(item).clearBit(index);
+    return Number64(item).clearBit(index);
 }
 
 Number64.prototype.negBit = function ( index ) 
@@ -892,17 +892,17 @@ Number64.prototype.negBit = function ( index )
 
 Number64.negBit = function ( item , index ) 
 {
-    return cast2Number64(item).negBit(index);
+    return Number64(item).negBit(index);
 }
 
 Number64.prototype.testBit = function ( index ) 
 {
-	return ( 1 == cast2Number64(this).shiftRight(index).and(1).toUInt8() );
+	return ( 1 == Number64(this).shiftRight(index).and(1).toUInt8() );
 }
 
 Number64.testBit = function ( item , index ) 
 {
-    return cast2Number64(item).testBit(index);
+    return Number64(item).testBit(index);
 }
 
 
