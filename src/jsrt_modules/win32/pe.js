@@ -547,7 +547,7 @@ function foa2rva( ntHeader , sectionHeaderArray , foa_offset )
 	var sectionHeader = null;
 	
 	var begin_foa = 0;
-	var end_roa = 0;
+	var end_foa = 0;
 	var count = 0;
 	
 	var rva_offset = -1;
@@ -1189,7 +1189,7 @@ exports.isPEFile = isPEFile;
 
 function main(  )
 {
-	
+
 	
 	return 0;
 }
