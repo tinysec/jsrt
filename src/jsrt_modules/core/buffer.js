@@ -3104,7 +3104,8 @@ Buffer.prototype.writeULONG_PTR = function( arg_value , offset)
 		}
 		else
 		{
-			assert( ( Number64.isNumber64(arg_value) || Number32.isNumber32(arg_value) ) , sprintf('[Buffer.prototype.writeULONG_PTR]type is %s' , typeof arg_value) );
+			assert(    ( _.isNumber(arg_value) || Number64.isNumber64(arg_value) || Number32.isNumber32(arg_value) ) , sprintf('[Buffer.prototype.writeULONG_PTR]type is %s' , typeof arg_value) );
+			
 			value = arg_value;	
 		}
 	}
@@ -3156,7 +3157,7 @@ Buffer.writeULONG_PTR = function(arg_address, arg_value, offset)
 		}
 		else
 		{
-			assert( ( Number64.isNumber64(arg_value) || Number32.isNumber32(arg_value)  ) , sprintf('[Buffer.writeULONG_PTR ]type is %s' , typeof arg_value) );
+			assert( ( _.isNumber(arg_value) || Number64.isNumber64(arg_value) || Number32.isNumber32(arg_value)  ) , sprintf('[Buffer.writeULONG_PTR ]type is %s' , typeof arg_value) );
 			value = arg_value;	
 		}
 	}
