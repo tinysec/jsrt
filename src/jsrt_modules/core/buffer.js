@@ -3387,7 +3387,7 @@ Buffer.dump = function(arg_address, length)
 	{
 		if (0 == (offset % 16))
 		{
-			offsetText = sprintf("0x%p\t", Number64.add(address, offset));
+			offsetText = sprintf("0x%05X\t0x%p\t", offset , Number64.add(address, offset) );
 
 			lineText += offsetText;
 		}
@@ -3433,14 +3433,26 @@ Buffer.dump = function(arg_address, length)
 
 Buffer.prototype.dump = function( length )
 {
+	var arg_length = 0;
+	
 	if (!this.isValid())
 	{
 		throw new Error("try to operate with invalid buffer");
 	}
+	
+	if ( arguments.length < 1 )
+	{
+		arg_length = this.length;
+	}
+	else
+	{
+		assert( _.isNumber(length)  , "length must be number" );
+		
+		arg_length = length;
+	}
 
-	assert( _.isNumber(length)  , "length must be number" );
 
-	return Buffer.dump( this.address  , length );
+	return Buffer.dump( this.address  , arg_length );
 }
 
 
