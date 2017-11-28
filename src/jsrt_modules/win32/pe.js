@@ -1187,10 +1187,84 @@ function isPEFile( arg_filename )
 exports.isPEFile = isPEFile;
 
 
+function get_pe_file_type( arg_filename )
+{
+	var fd = 0;
+	
+	var dosHeader = null;
+	
+	var ntHeader = null;
+	
+	var filetype = null;
+	
+	do
+	{
+		fd = fs.open( arg_filename , 'r' );
+		if ( fd <= 0 )
+		{
+			break;
+		}
+		
+		dosHeader = fd_read_IMAGE_DOS_HEADER( fd );
+		if ( !dosHeader )
+		{
+			break;
+		}
+		
+		if ( 0x5A4D != dosHeader.e_magic )
+		{
+			break;
+		}
+		
+		ntHeader = fd_read_IMAGE_NT_HEADER( fd , dosHeader.e_lfanew );
+		if ( !ntHeader )
+		{
+			break;
+		}
+		
+		if ( 0x4550 != ntHeader.Signature )
+		{
+			break;
+		}
+		
+		// IMAGE_FILE_EXECUTABLE_IMAGE	0x0002
+		
+		// IMAGE_FILE_DLL	0x2000
+		
+		// NATIVE 1
+		
+		if ( 1 == ntHeader.OptionalHeader.Subsystem )
+		{
+				filetype = 'sys';
+		}
+		else if ( base.FlagOn( ntHeader.FileHeader.Characteristics ,  0x2000 ) )
+		{
+			filetype = 'dll';
+		}
+		else if ( base.FlagOn( ntHeader.FileHeader.Characteristics ,  0x0002 ) )
+		{
+			filetype = 'exe';
+		}
+		else
+		{
+			filetype = '';
+		}
+		
+	}while(false);
+	
+	if ( fd > 0 )
+	{
+		fs.close( fd );
+		fd = 0;
+	}
+	
+	return filetype;
+}
+exports.get_pe_file_type = get_pe_file_type;
+
+
 function main(  )
 {
-
-	
 	return 0;
 }
 
