@@ -1401,8 +1401,8 @@ function multi_exec( fnProvider ,  arg_maxInstances )
 			if ( 0 == Number64.compareSigned32( waitRet , -1 ) )
 			{	
 				// wait faild
-				finalRet = false;
-				break;
+				base.sleep( 1000 );
+				continue;
 			}
 			else if ( 0x102 == waitRet )
 			{
@@ -1433,7 +1433,15 @@ function multi_exec( fnProvider ,  arg_maxInstances )
 			provideInfo = fnProvider( );
 			if ( !provideInfo )
 			{
-				break;
+				if ( 0 == handleArray.length )
+				{
+					break;
+				}
+				else
+				{
+					continue;
+				}
+				
 			}
 			
 			if ( _.isString(provideInfo) )
@@ -1449,13 +1457,21 @@ function multi_exec( fnProvider ,  arg_maxInstances )
 	
 			if ( !child )
 			{
-				break;
+				continue;
 			}
 			
-			help_close_handles_all_but_hProcess( child );
+			if ( provideInfo.timeout )
+			{
+				child.waitForExit( provideInfo.timeout );
+			}
+			else
+			{
+				help_close_handles_all_but_hProcess( child );
 			
-			childArray.push( child );
-			handleArray.push( child.hProcess );
+				childArray.push( child );
+				handleArray.push( child.hProcess );
+			}
+	
 		}
 	}
 	
@@ -1463,20 +1479,7 @@ function multi_exec( fnProvider ,  arg_maxInstances )
 	// wait left all childs
 	if ( handleArray.length > 0 )
 	{
-		waitRet = WaitForMultipleObjects( handleArray , true , -1 );
-		
-		for( index = 0; index < handleArray.length; index++ )
-		{
-			// find and remove handle
-					
-			// close handle handle
-			signalHandle = handleArray[ index ];
-			handleArray.splice( index , 1 );
-			ffi_kernel32.CloseHandle( signalHandle ) ;
-					
-			// remove from childArray
-			childArray.splice( index , 1 );
-		}
+		assert( false );
 	}
 	
 	return finalRet;
