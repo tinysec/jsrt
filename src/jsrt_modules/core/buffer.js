@@ -3218,7 +3218,7 @@ Buffer.readPointer = function(arg_address, offset)
 	}
 	else
 	{
-		return Number64(process.reserved.bindings.buffer_readUInt32LE(address, offset || 0));
+		return Number32(process.reserved.bindings.buffer_readUInt32LE(address, offset || 0));
 	}
 }
 

@@ -68,7 +68,7 @@ function deviceIoControl( hDevice , IoControlCode , arg_input , arg_output , IoS
 	var param_lpIoStatusBlock = Buffer.alloc( 0x10 );
 	var Status = 0;
 
-	assert( Number64.isNumber64(hDevice) , "invalid device handle" );
+	assert( ( Number64.isNumber64(hDevice) || Number32.isNumber32(hDevice)  ) , "invalid device handle" );
 	
 	assert(  ( Number64.isNumber64(IoControlCode) || Number32.isNumber32(IoControlCode)  || ( _.isNumber(IoControlCode) ) ) , "invalid IoControlCode" );
 	
